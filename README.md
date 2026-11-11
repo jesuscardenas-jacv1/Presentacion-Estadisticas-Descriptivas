@@ -28,13 +28,14 @@ graficos/         ← gráficos exportados en PNG
 docs/             ← documento de avance del proyecto (puntos, resultados, correcciones)
 ```
 
-## Contenido (20 diapositivas)
+## Contenido (24 diapositivas)
 
 1. Portada · 2. La base de datos · 3. ¿Quiénes estudian? (paisaje de Parinacota) · 4. Flujo de trabajo
 5. Carga de datos · 6. Pregunta de investigación · 7. Covarianza y correlación · 8. Gráfico de dispersión · 9. Regresión lineal · 10. Interpretación
 11. Probabilidad: 3 preguntas · 12. Simple · 13. Conjunta · 14. Condicional
 15. Nuevas preguntas (Lab 07) · 16. Unión · 17. Conjunta con rango · 18. Condicional para decidir
-19. Conclusiones · 20. Cierre
+19. Forma de la distribución · 20. Asimetría y curtosis · 21. Histogramas · 22. Interpretación de la forma
+23. Conclusiones · 24. Cierre
 
 ### Resultados principales
 
@@ -49,6 +50,9 @@ docs/             ← documento de avance del proyecto (puntos, resultados, corr
 | P(Vespertino ∪ No acreditada) | 34,38% |
 | P(Mujer ∩ 30 años o más) | 12,19% |
 | P(Vespertino \| CFT) | 57,96% (CRUCH: 10,49%) |
+| Edad: asimetría · curtosis | 1,8238 (positiva) · 3,5899 (leptocúrtica) |
+| Matrícula: asimetría · curtosis | −0,8906 (negativa) · 0,0874 (≈ mesocúrtica) |
+| Arancel: asimetría · curtosis | 0,0580 (≈ simétrica) · −0,8083 (platicúrtica) |
 
 ## Cómo editar la presentación
 
@@ -59,7 +63,7 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 | Atributo | Para qué sirve | Valores |
 |---|---|---|
 | `class="slide dark"` / `class="slide light"` | Fondo negro o fondo papel | `dark`, `light` |
-| `data-mode` | Animación de partículas del fondo | `constellation`, `grid`, `wind`, `flow`, `rain`, `orbit`, `orbit3`, `correlation`, `dim`, `line`, `proportion`, `universe`, `waves`, `text` |
+| `data-mode` | Animación de partículas del fondo | `constellation`, `grid`, `wind`, `flow`, `rain`, `orbit`, `orbit3`, `correlation`, `dim`, `line`, `proportion`, `universe`, `waves`, `skew`, `text` |
 | `data-p` | Proporción de partículas iluminadas (modos `proportion` y `universe`) | entre `0` y `1` |
 | `data-enter` | Transición de entrada | `blur`, `zoom`, `iris`, `wipe`, `rise` |
 
@@ -72,7 +76,7 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 **Otros detalles**
 - Elementos con clase `r` y `style="--d:300"` aparecen con 300 ms de retraso.
 - Las notas del orador van en `<aside class="notes">…</aside>` al final de cada `<section>`.
-- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 20`) en la barra de navegación.
+- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 24`) en la barra de navegación.
 
 ## Trabajo en equipo
 

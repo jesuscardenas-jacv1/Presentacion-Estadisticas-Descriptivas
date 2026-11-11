@@ -127,7 +127,7 @@ aside.notes{display:none}
 .flowline{position:relative;height:2px;background:rgba(243,242,238,.25);margin:0 70px}
 .flowline .pulse{position:absolute;top:-5px;left:0;width:12px;height:12px;border-radius:50%;background:var(--bone);box-shadow:0 0 18px 4px rgba(243,242,238,.6);animation:travel 4.5s cubic-bezier(.45,0,.55,1) infinite}
 @keyframes travel{from{left:0}to{left:calc(100% - 12px)}}
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:28px}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:24px}
 .step{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .step .dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bone);background:var(--night);margin-top:-12px;margin-left:58px}
 .ink path,.ink line,.ink circle{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
@@ -159,12 +159,39 @@ aside.notes{display:none}
 .light .card{border-top:1px solid rgba(18,18,18,.3)}
 .concl{display:grid;grid-template-columns:330px 1fr;align-items:baseline;gap:40px;padding:18px 0;border-bottom:1px solid rgba(18,18,18,.16)}
 .concl:last-child{border-bottom:0}
+/* forma de la distribución */
+.shape-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:72px;min-height:0}
+.shape-col{display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(18,18,18,.3);padding-top:22px}
+.shape-top{display:flex;justify-content:space-between;align-items:baseline}
+.shapes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+.shapes figure{margin:0;display:flex;flex-direction:column;gap:12px}
+.shapes svg{width:100%;height:auto;display:block;overflow:visible}
+.shapes figcaption{font-size:21px;line-height:1.4;color:var(--slate)}
+.shapes figcaption b{display:block;font-weight:500;color:var(--ink);font-size:23px}
+.ink .base{stroke-width:1;opacity:.35}
+.ink .mk{stroke-width:1.4}
+.ink .mk.dash{stroke-dasharray:4 5;stroke-dashoffset:0;opacity:0}
+.slide.active .ink .mk.dash{animation:fadein .6s ease forwards;animation-delay:calc(var(--d,0) * 1ms)}
+@keyframes fadein{to{opacity:1}}
+.ink text{font-family:var(--f-mono);font-size:13px;fill:var(--slate);stroke:none}
+.t.sk td{vertical-align:top;padding:16px 12px}
+.t.sk td:first-child{font-family:var(--f-mono);font-size:22px;padding-top:24px}
+.t.sk b{display:block;font-family:var(--f-display);font-weight:400;font-size:52px;line-height:1}
+.t.sk td > span{display:block;font-size:19px;color:var(--mist);margin-top:6px}
+.hist .hb{fill:var(--bone);opacity:.85;transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0)}
+.slide.ran .hist .hb{animation:hb .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i) * 22ms + var(--d,0) * 1ms + 200ms)}
+@keyframes hb{to{transform:scaleY(1)}}
+.hist .mean,.hist .med{stroke:var(--bone);stroke-width:2;opacity:0}
+.hist .mean{stroke-dasharray:7 6}
+.slide.ran .hist .mean,.slide.ran .hist .med{animation:fadein .5s ease forwards;animation-delay:calc(var(--d,0) * 1ms + 1100ms)}
+.chart.hist .ttl{font-size:17px;fill:var(--bone)}
 @media (prefers-reduced-motion: reduce){
   .slide.active,.slide.active .r,.slide.ran .out{animation:none!important;opacity:1}
   .r,.out,pre.code .ln{opacity:1!important;clip-path:none!important}
   .slide.active pre.code .ln{animation:none}
   .ink path,.ink line,.ink circle{stroke-dashoffset:0}
   .chart .pt{opacity:var(--o)} .chart .reg{stroke-dashoffset:0}
+  .hist .hb{transform:none} .hist .mean,.hist .med,.ink .mk.dash{opacity:1}
   .marquee span,.flowline .pulse{animation:none}
 }
 </style>
@@ -229,15 +256,16 @@ aside.notes{display:none}
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0">
     <div class="flowline r" style="--d:500"><div class="pulse"></div></div>
     <div class="steps">
-      <div class="step r" style="--d:650"><div class="dot"></div><p class="num" style="font-size:58px">Carga</p><p class="body muted">Leer el Excel y revisar su estructura</p><p class="small" style="font-family:var(--f-mono)">read_excel()</p></div>
-      <div class="step r" style="--d:800"><div class="dot"></div><p class="num" style="font-size:58px">Asociación</p><p class="body muted">Medir cómo se mueven matrícula y arancel</p><p class="small" style="font-family:var(--f-mono)">cov() · corr()</p></div>
-      <div class="step r" style="--d:950"><div class="dot"></div><p class="num" style="font-size:58px">Gráfico</p><p class="body muted">Ver la relación en una dispersión</p><p class="small" style="font-family:var(--f-mono)">scatter()</p></div>
-      <div class="step r" style="--d:1100"><div class="dot"></div><p class="num" style="font-size:58px">Modelo</p><p class="body muted">Ajustar una recta y medir su ajuste</p><p class="small" style="font-family:var(--f-mono)">polyfit() · r2_score()</p></div>
-      <div class="step r" style="--d:1250"><div class="dot"></div><p class="num" style="font-size:58px">Probabilidad</p><p class="body muted">Tres preguntas con tablas cruzadas</p><p class="small" style="font-family:var(--f-mono)">crosstab()</p></div>
+      <div class="step r" style="--d:650"><div class="dot"></div><p class="num" style="font-size:50px">Carga</p><p class="body muted">Leer el Excel y revisar su estructura</p><p class="small" style="font-family:var(--f-mono)">read_excel()</p></div>
+      <div class="step r" style="--d:800"><div class="dot"></div><p class="num" style="font-size:50px">Asociación</p><p class="body muted">Medir cómo se mueven matrícula y arancel</p><p class="small" style="font-family:var(--f-mono)">cov() · corr()</p></div>
+      <div class="step r" style="--d:950"><div class="dot"></div><p class="num" style="font-size:50px">Gráfico</p><p class="body muted">Ver la relación en una dispersión</p><p class="small" style="font-family:var(--f-mono)">scatter()</p></div>
+      <div class="step r" style="--d:1100"><div class="dot"></div><p class="num" style="font-size:50px">Modelo</p><p class="body muted">Ajustar una recta y medir su ajuste</p><p class="small" style="font-family:var(--f-mono)">polyfit() · r2_score()</p></div>
+      <div class="step r" style="--d:1250"><div class="dot"></div><p class="num" style="font-size:50px">Probabilidad</p><p class="body muted">Preguntas con tablas cruzadas</p><p class="small" style="font-family:var(--f-mono)">crosstab()</p></div>
+      <div class="step r" style="--d:1400"><div class="dot"></div><p class="num" style="font-size:50px">Forma</p><p class="body muted">Asimetría y curtosis de cada variable</p><p class="small" style="font-family:var(--f-mono)">skew() · kurt()</p></div>
     </div>
   </div>
-  <p class="body r muted" style="--d:1500">Google Colab · pandas · numpy · matplotlib · scikit-learn</p>
-  <aside class="notes">Este es el recorrido completo. Cargamos la base con pandas, medimos la asociación entre matrícula y arancel con covarianza y correlación, lo visualizamos con un gráfico de dispersión, ajustamos un modelo de regresión lineal con su coeficiente de determinación y, al final, respondimos tres preguntas de probabilidad con tablas bivariadas.</aside>
+  <p class="body r muted" style="--d:1650">Google Colab · pandas · numpy · matplotlib · scikit-learn</p>
+  <aside class="notes">Este es el recorrido completo. Cargamos la base con pandas, medimos la asociación entre matrícula y arancel con covarianza y correlación, lo visualizamos con un gráfico de dispersión, ajustamos un modelo de regresión lineal con su coeficiente de determinación respondimos preguntas de probabilidad con tablas bivariadas y, al final, describimos la forma de cada variable con los coeficientes de asimetría y curtosis.</aside>
 </section>
 
 <!-- 5 · CARGA -->
@@ -572,20 +600,122 @@ Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
   <aside class="notes">Esta pregunta apoya una decisión: si queremos abrir más cupos vespertinos para personas que trabajan, ¿dónde conviene hacerlo? Usamos crosstab con normalize='index', que calcula la proporción dentro de cada fila; eso es justamente la probabilidad condicional P(Vespertino dado el tipo de institución). En los CFT el 57,96% estudia vespertino, en los IP el 46,57%, en las universidades privadas el 42,80% y en las del CRUCH solo el 10,49%. La demanda vespertina se concentra en los CFT.</aside>
 </section>
 
-<!-- 15 · CONCLUSIONES -->
+<!-- 19 · PARTE 4 · FORMA DE LA DISTRIBUCIÓN -->
+<section class="slide light" id="forma" data-mode="skew" data-enter="iris" style="gap:40px">
+  <div class="head"><p class="eyebrow r" style="--d:300">Parte 4 · Forma de la distribución</p><h2 class="h2 r" style="--d:420">Asimetría y <em>curtosis</em></h2></div>
+  <div class="shape-grid">
+    <div class="shape-col r" style="--d:600">
+      <div class="shape-top"><p class="num" style="font-size:60px">Asimetría</p><p class="small" style="font-family:var(--f-mono)">df[col].skew()</p></div>
+      <p class="body">¿Hacia qué lado se estira la <b style="font-weight:500">cola</b> de los datos?</p>
+      <div class="shapes">
+        <figure><svg class="ink curve" data-curve="neg" data-mark="1" viewBox="0 0 240 178" role="img" aria-label="Curva con cola larga hacia la izquierda"></svg><figcaption><b>&lt; 0 · negativa</b>cola a la izquierda<br>media &lt; mediana</figcaption></figure>
+        <figure><svg class="ink curve" data-curve="sym" data-mark="1" viewBox="0 0 240 178" role="img" aria-label="Curva simétrica"></svg><figcaption><b>≈ 0 · simétrica</b>colas iguales<br>media ≈ mediana</figcaption></figure>
+        <figure><svg class="ink curve" data-curve="pos" data-mark="1" viewBox="0 0 240 178" role="img" aria-label="Curva con cola larga hacia la derecha"></svg><figcaption><b>&gt; 0 · positiva</b>cola a la derecha<br>media &gt; mediana</figcaption></figure>
+      </div>
+    </div>
+    <div class="shape-col r" style="--d:800">
+      <div class="shape-top"><p class="num" style="font-size:60px">Curtosis</p><p class="small" style="font-family:var(--f-mono)">df[col].kurt()</p></div>
+      <p class="body">¿Qué tan <b style="font-weight:500">apuntada</b> es, comparada con la normal?</p>
+      <div class="shapes">
+        <figure><svg class="ink curve" data-curve="lep" viewBox="0 0 240 178" role="img" aria-label="Curva alta y puntiaguda"></svg><figcaption><b>&gt; 0 · leptocúrtica</b>pico alto, colas largas</figcaption></figure>
+        <figure><svg class="ink curve" data-curve="mes" viewBox="0 0 240 178" role="img" aria-label="Curva normal"></svg><figcaption><b>≈ 0 · mesocúrtica</b>como la normal</figcaption></figure>
+        <figure><svg class="ink curve" data-curve="pla" viewBox="0 0 240 178" role="img" aria-label="Curva achatada"></svg><figcaption><b>&lt; 0 · platicúrtica</b>achatada, sin pico</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <p class="small r" style="--d:1100;color:var(--slate)">pandas entrega la asimetría de Fisher‑Pearson y el <b style="font-weight:500">exceso</b> de curtosis: en ambas, la distribución normal vale 0. Criterio usado: entre −0,5 y 0,5 se considera ≈ 0.</p>
+  <aside class="notes">Hasta ahora miramos relaciones entre variables. Ahora miramos la forma de cada variable por separado, con dos coeficientes. La asimetría dice hacia qué lado se estira la cola: si es positiva, hay pocos valores muy altos que alargan la cola a la derecha y tiran la media por sobre la mediana; si es negativa, pasa lo contrario; cerca de cero es simétrica. La curtosis compara qué tan apuntada es la distribución respecto de la normal: positiva es leptocúrtica, con un pico alto y colas largas; cerca de cero es mesocúrtica; negativa es platicúrtica, achatada. En pandas se calculan con skew() y kurt(); kurt() entrega el exceso de curtosis, por eso la normal vale 0 y no 3.</aside>
+</section>
+
+<!-- 20 · CÁLCULO ASIMETRÍA Y CURTOSIS -->
+<section class="slide dark code-slide" id="asimetria-curtosis" data-mode="skew" data-enter="blur">
+  <div class="head"><p class="eyebrow r">15 · Asimetría y curtosis</p><h2 class="h2 r" style="--d:120">Tres variables, tres <em>formas</em></h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [19]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:23px"># Coeficiente de asimetria y curtosis
+variables = ['EDAD',
+             'VALOR MATRICULA (PESOS)',
+             'VALOR ARANCEL (PESOS)']
+
+asimetria = df[variables].skew()  # 0 = simetrica
+curtosis = df[variables].kurt()   # 0 = normal
+
+resumen = pd.DataFrame({'asimetria': asimetria,
+                        'curtosis': curtosis})
+print(resumen.round(4))</pre></div>
+    <div class="panel" style="gap:18px"><div class="panel-top out"><span>Out [19]</span><span>resultado</span></div>
+      <p class="console out" style="--d:100;font-size:19px;white-space:pre">                         asimetria  curtosis
+EDAD                        1.8238    3.5899
+VALOR MATRICULA (PESOS)    -0.8906    0.0874
+VALOR ARANCEL (PESOS)       0.0580   -0.8083</p>
+      <table class="t sk out" style="--d:300">
+        <thead><tr><th>Variable</th><th>Asimetría</th><th>Curtosis</th></tr></thead>
+        <tbody>
+          <tr><td>Edad</td><td><b data-count="1.8238" data-dec="4" data-on="run">1,8238</b><span>positiva · cola derecha</span></td><td><b data-count="3.5899" data-dec="4" data-on="run">3,5899</b><span>leptocúrtica</span></td></tr>
+          <tr><td>Matrícula</td><td><b>−<span data-count="0.8906" data-dec="4" data-on="run">0,8906</span></b><span>negativa · cola izquierda</span></td><td><b data-count="0.0874" data-dec="4" data-on="run">0,0874</b><span>≈ mesocúrtica</span></td></tr>
+          <tr><td>Arancel</td><td><b data-count="0.058" data-dec="4" data-on="run">0,0580</b><span>≈ simétrica</span></td><td><b>−<span data-count="0.8083" data-dec="4" data-on="run">0,8083</span></b><span>platicúrtica</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">Calculamos los dos coeficientes para las tres variables numéricas que más usamos: la edad, el valor de la matrícula y el valor del arancel. Con df[variables].skew() y .kurt() pandas calcula cada coeficiente por columna, y los juntamos en un DataFrame de resumen. La edad tiene asimetría 1,82, claramente positiva, y curtosis 3,59, leptocúrtica. La matrícula tiene asimetría −0,89, negativa, y curtosis 0,09, prácticamente como la normal. El arancel tiene asimetría 0,06, casi simétrico, y curtosis −0,81, platicúrtico. Justo nos tocó un ejemplo de cada caso.</aside>
+</section>
+
+<!-- 21 · HISTOGRAMAS -->
+<section class="slide dark code-slide" id="histogramas" data-mode="dim" data-enter="rise">
+  <div class="head"><p class="eyebrow r">16 · Histogramas</p><h2 class="h2 r" style="--d:120">Ver la forma de cada <em>variable</em></h2></div>
+  <div class="split" style="grid-template-columns:1fr 1.02fr">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [20]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:21px">import matplotlib.pyplot as plt
+
+fig, axs = plt.subplots(3, 1, figsize=(10, 9))
+for ax, col in zip(axs, variables):
+    ax.hist(df[col], bins=30, edgecolor='white')
+    ax.axvline(df[col].mean(), linestyle='--',
+               label='media')
+    ax.axvline(df[col].median(), label='mediana')
+    ax.set_title(f'{col} · '
+                 f'As = {df[col].skew():.2f} · '
+                 f'K = {df[col].kurt():.2f}')
+    ax.legend()
+plt.tight_layout()
+plt.show()</pre></div>
+    <div class="panel" style="padding:24px 28px 18px;gap:6px"><div class="panel-top out"><span>Out [20]</span><span>30 intervalos · <span style="letter-spacing:-.1em">- -</span> media · — mediana</span></div>
+      <svg class="chart hist out" id="h-edad" viewBox="0 0 800 220" style="--d:0;width:100%;height:auto" role="img" aria-label="Histograma de edad: la mayoría entre 18 y 24 años, con una cola larga hacia la derecha hasta los 75; la media 25,5 queda a la derecha de la mediana 23"></svg>
+      <svg class="chart hist out" id="h-matricula" viewBox="0 0 800 220" style="--d:200;width:100%;height:auto" role="img" aria-label="Histograma de valor de matrícula: gran pico en 155.000 pesos y un grupo en 0 pesos que alarga la cola a la izquierda; la media 131.952 queda a la izquierda de la mediana 155.000"></svg>
+      <svg class="chart hist out" id="h-arancel" viewBox="0 0 800 220" style="--d:400;width:100%;height:auto" role="img" aria-label="Histograma de valor de arancel: valores repartidos entre 1,3 y 4 millones sin un pico dominante; media y mediana casi juntas"></svg>
+    </div>
+  </div>
+  <aside class="notes">Con un histograma de 30 intervalos por variable se ve lo que dicen los coeficientes. La línea punteada es la media y la continua, la mediana. En la edad, casi dos de cada tres estudiantes tienen 24 años o menos, pero hay estudiantes de hasta 75 años que alargan la cola a la derecha y empujan la media (25,5) por sobre la mediana (23). En la matrícula, el gran pico está en 155.000 pesos y hay 1.902 estudiantes con matrícula 0 que alargan la cola a la izquierda: la media (131.952) queda bajo la mediana. En el arancel los valores se reparten entre 1,3 y 4 millones sin un pico dominante, por eso es achatado, y la media y la mediana quedan cerca.</aside>
+</section>
+
+<!-- 22 · INTERPRETACIÓN DE LA FORMA -->
+<section class="slide light" id="forma-interpretacion" data-mode="dim" data-enter="wipe">
+  <div class="head"><p class="eyebrow r" style="--d:300">17 · Interpretación de la forma</p><h2 class="h2 r" style="--d:420">Lo que dice cada <em>coeficiente</em></h2></div>
+  <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:56px;min-height:0">
+    <div class="card r" style="--d:600;padding-top:22px;display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="opacity:.6">Edad</p><p class="num" style="font-size:64px">As 1,82 · K 3,59</p><p class="body" style="font-weight:500">Asimétrica positiva · leptocúrtica</p><p class="small" style="font-family:var(--f-mono)">media 25,5 &gt; mediana 23 &gt; moda 19</p><p class="body">El 63,7% tiene 24 años o menos; unos pocos estudiantes mayores (hasta 75) estiran la cola a la derecha y suben la media.</p></div>
+    <div class="card r" style="--d:800;padding-top:22px;display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="opacity:.6">Valor matrícula</p><p class="num" style="font-size:64px">As −0,89 · K 0,09</p><p class="body" style="font-weight:500">Asimétrica negativa · ≈ mesocúrtica</p><p class="small" style="font-family:var(--f-mono)">media $131.952 &lt; mediana $155.000</p><p class="body">Casi la mitad (49,5%) paga $155.000; los 1.902 estudiantes con matrícula $0 forman la cola izquierda y bajan la media.</p></div>
+    <div class="card r" style="--d:1000;padding-top:22px;display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="opacity:.6">Valor arancel</p><p class="num" style="font-size:64px">As 0,06 · K −0,81</p><p class="body" style="font-weight:500">≈ Simétrica · platicúrtica</p><p class="small" style="font-family:var(--f-mono)">media $2,71 M ≈ mediana $2,86 M</p><p class="body">Aranceles repartidos entre $1,3 M y $4 M sin un valor dominante: la distribución es ancha y achatada.</p></div>
+  </div>
+  <p class="lead r" style="--d:1250;font-size:30px;max-width:1600px">Con asimetría marcada, como en la edad y la matrícula, la <b style="font-weight:500">mediana</b> describe mejor el centro que la media.</p>
+  <aside class="notes">Resumen de la forma. La edad es asimétrica positiva y leptocúrtica: se concentra en los jóvenes de 18 a 24 años, con pocos estudiantes mayores que alargan la cola; media mayor que mediana mayor que moda, el orden típico de la asimetría positiva. La matrícula es asimétrica negativa: casi la mitad de los estudiantes, el 49,5%, paga 155.000 pesos, que es a la vez la mediana y la moda, y los 1.902 con matrícula cero bajan la media; su curtosis es casi cero. El arancel es casi simétrico pero platicúrtico: no hay un arancel dominante, los valores se reparten en un rango amplio. La consecuencia práctica: cuando la distribución es asimétrica, la mediana representa mejor al estudiante típico que la media. Además, la concentración de la matrícula en pocos valores es la que produce las franjas verticales de la dispersión y ayuda a entender el R² bajo.</aside>
+</section>
+
+<!-- 23 · CONCLUSIONES -->
 <section class="slide light" id="conclusiones" data-mode="waves" data-enter="wipe">
-  <div class="head"><p class="eyebrow r" style="--d:300">15 · Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
+  <div class="head"><p class="eyebrow r" style="--d:300">18 · Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
     <div class="concl r" style="--d:600"><p class="num" style="font-size:88px">r = 0,50</p><p class="lead">Matrícula y arancel se mueven juntos: relación positiva moderada.</p></div>
     <div class="concl r" style="--d:750"><p class="num" style="font-size:88px">R² 25%</p><p class="lead">La matrícula sola no basta para predecir el arancel.</p></div>
     <div class="concl r" style="--d:900"><p class="num" style="font-size:88px">50,43%</p><p class="lead">La U. de Tarapacá concentra 1 de cada 2 matrículas de la región.</p></div>
     <div class="concl r" style="--d:1050"><p class="num" style="font-size:88px">17,49%</p><p class="lead">del total son mujeres en Carreras Técnicas.</p></div>
     <div class="concl r" style="--d:1200"><p class="num" style="font-size:88px">90,86%</p><p class="lead">En Salud, 9 de cada 10 estudian en instituciones acreditadas.</p></div>
+    <div class="concl r" style="--d:1350"><p class="num" style="font-size:88px">As 1,82</p><p class="lead">Edad con cola a la derecha: la mediana (23 años) la describe mejor.</p></div>
   </div>
-  <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas.</aside>
+  <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: la edad es asimétrica positiva (1,82) y leptocúrtica, así que la mediana de 23 años describe mejor al estudiante típico que la media; la matrícula es asimétrica negativa y el arancel, casi simétrico pero achatado.</aside>
 </section>
 
-<!-- 16 · CIERRE -->
+<!-- 24 · CIERRE -->
 <section class="slide dark" id="cierre" data-mode="text" data-enter="blur" style="justify-content:flex-end;align-items:center;gap:24px;padding-bottom:150px">
   <h2 class="sr">Gracias</h2>
   <p class="lead r" style="--d:1600;font-size:48px;font-family:var(--f-display);font-style:italic">¿Preguntas?</p>
@@ -596,7 +726,7 @@ Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
 </main>
 
 <nav id="bar" aria-label="Navegación de diapositivas">
-  <span class="count" id="count">01 / 20</span>
+  <span class="count" id="count">01 / 24</span>
   <div class="track"><div class="fill" id="fill"></div></div>
   <button id="prev" type="button" aria-label="Diapositiva anterior">←</button>
   <button id="next" type="button" aria-label="Diapositiva siguiente">→</button>
@@ -629,6 +759,54 @@ function chart(svg,withLine){
 }
 chart(document.getElementById('ch1'),false);
 chart(document.getElementById('ch2'),true);
+
+/* ---------- curvas de forma (asimetría / curtosis) ---------- */
+(function curves(){
+  const phi=x=>Math.exp(-x*x/2);
+  const erf=x=>{const t=1/(1+.3275911*Math.abs(x)),y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return x<0?-y:y};
+  const Phi=x=>.5*(1+erf(x/Math.SQRT2));
+  const lap=x=>.707*Math.exp(-Math.abs(x)*1.414);
+  const logn=x=>x<=0?0:Math.exp(-Math.pow(Math.log(x),2)/.72)/x;
+  const F={neg:[x=>logn(4-x),0,4],sym:[phi,-3.2,3.2],pos:[logn,0,4],
+    lep:[lap,-3.4,3.4,.707],mes:[x=>phi(x)/2.5066,-3.4,3.4,.707],pla:[x=>Math.exp(-Math.pow(Math.abs(x)/1.6,5))/(3.2*.9182),-3.4,3.4,.707]};
+  document.querySelectorAll('svg.curve').forEach((svg,k)=>{
+    const [f,lo,hi,top]=F[svg.dataset.curve],n=80,ys=[];
+    for(let i=0;i<=n;i++)ys.push(f(lo+(hi-lo)*i/n));
+    const m=top||Math.max(...ys),X=i=>10+220*i/n,Y=y=>156-124*y/m,delay=700+k*120;
+    el('path',{d:'M4 156 L236 156',class:'d base',pathLength:1},svg).style.setProperty('--d',delay);
+    el('path',{d:'M'+ys.map((y,i)=>X(i).toFixed(1)+' '+Y(y).toFixed(1)).join(' L'),class:'d',pathLength:1,'stroke-width':2.2},svg).style.setProperty('--d',delay+150);
+    if(!svg.dataset.mark)return;
+    // media y mediana de la curva
+    const tot=ys.reduce((a,b)=>a+b,0);let acc=0,med=0,mean=0;ys.forEach((y,i)=>{mean+=i*y/tot});
+    for(let i=0;i<=n;i++){acc+=ys[i];if(acc>=tot/2){med=i;break}}
+    const mk=(i,cls,lab,ty)=>{const a={x1:X(i),x2:X(i),y1:156,y2:24,class:cls};if(cls.includes(' d'))a.pathLength=1;
+      el('line',a,svg).style.setProperty('--d',delay+1300);
+      el('text',{x:X(i),y:ty,'text-anchor':'middle'},svg).textContent=lab};
+    if(Math.abs(mean-med)<1)mk(med,'mk d','media = mediana',16);
+    else{mk(med,'mk d','mediana',16);mk(mean,'mk dash','media',174)}
+  });
+})();
+
+/* ---------- histogramas de forma (30 intervalos, como plt.hist) ---------- */
+(function hists(){
+  const H={
+    'h-edad':{t:'EDAD · As = 1,82 · K = 3,59',lo:18,hi:75,mean:25.54,med:23,f:v=>fmt(v,0)+' años',ticks:[20,30,40,50,60,70],
+      h:[2429,2364,2647,1920,1087,927,410,422,396,150,273,237,182,160,128,115,98,57,42,12,25,10,6,10,6,1,0,0,1,1]},
+    'h-matricula':{t:'VALOR MATRÍCULA · As = −0,89 · K = 0,09',lo:0,hi:290504,mean:131952,med:155000,f:v=>v?fmt(v/1000,0)+' mil':'0',ticks:[0,50000,100000,150000,200000,250000],
+      h:[1902,0,0,0,0,62,717,0,2,546,273,54,713,605,0,15,6983,78,254,0,94,4,1798,0,0,0,0,8,0,8]},
+    'h-arancel':{t:'VALOR ARANCEL · As = 0,06 · K = −0,81',lo:0,hi:5595000,mean:2714574,med:2857000,f:v=>v?fmt(v/1e6,0)+' M':'0',ticks:[0,1e6,2e6,3e6,4e6,5e6],
+      h:[5,1,0,44,4,0,216,1629,1136,942,874,927,95,293,192,1397,463,373,2800,746,1154,668,0,0,0,0,0,0,0,157]}};
+  for(const id in H){
+    const svg=document.getElementById(id),d=H[id],L=20,R=780,T=34,B=182,n=d.h.length,mx=Math.max(...d.h);
+    const X=v=>L+(v-d.lo)/(d.hi-d.lo)*(R-L),bw=(R-L)/n,dl=parseFloat(svg.style.getPropertyValue('--d'))||0;
+    el('text',{x:L,y:20,class:'ttl'},svg).textContent=d.t;
+    d.h.forEach((c,i)=>{if(!c)return;const h=Math.max(1.5,(c/mx)*(B-T));const r=el('rect',{x:L+i*bw+1,y:B-h,width:bw-2,height:h,class:'hb'},svg);r.style.setProperty('--i',i);r.style.setProperty('--d',dl)});
+    el('line',{x1:L,x2:R,y1:B,y2:B,class:'ax'},svg);
+    d.ticks.forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:B,y2:B+5,class:'ax'},svg);el('text',{x:X(v),y:B+24,'text-anchor':'middle'},svg).textContent=d.f(v)});
+    el('line',{x1:X(d.mean),x2:X(d.mean),y1:T-6,y2:B,class:'mean'},svg).style.setProperty('--d',dl);
+    el('line',{x1:X(d.med),x2:X(d.med),y1:T-6,y2:B,class:'med'},svg).style.setProperty('--d',dl);
+  }
+})();
 
 /* ---------- paisaje a tinta ---------- */
 (function land(){
@@ -761,6 +939,7 @@ function frame(now){
       case 'proportion':if(p.r1<prob){ta=.95;sz=1.9}else ta=.14;break;
       case 'universe':if(p.r2<uni){if(p.r1<prob){ta=.95;sz=1.9}else ta=.3}else ta=.03;break;
       case 'waves':{const row=Math.floor(p.r1*5);tx=(p.r2*W+t*14)%W;ty=H*(.18+.16*row)+Math.sin(tx/W*6.2832*(1+row*.3)+t*(.5+row*.12))*24;ta=.35;tele=true;break}
+      case 'skew':{const u=Math.min(1,(-Math.log(p.r1+1e-6)-Math.log(1-p.r3*.999))/7),dens=u*7*Math.exp(1-u*7);tx=W*(.06+.88*u)+Math.sin(t*.7+p.r2*20)*3;ty=H*.92-H*.6*dens*p.r2;ta=.4+.3*p.r3;break}
       case 'text':if(textPts&&i<textPts.length){tx=textPts[i][0];ty=textPts[i][1];ta=.95;sz=1.5}else ta=.12;break;
     }
     if(reduce&&tx!=null){p.x=tx;p.y=ty}
