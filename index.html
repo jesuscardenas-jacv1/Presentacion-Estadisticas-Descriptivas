@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matrículas Arica y Parinacota 2021</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+
+/* Escenario 1920×1080 escalado; fondo de partículas a pantalla completa; blanco y negro con diapositivas "papel" intercaladas */
+:root{
+  --night:#09090A;     /* fondo oscuro */
+  --paper:#ECEBE6;     /* fondo claro, papel */
+  --bone:#F3F2EE;      /* texto sobre oscuro */
+  --ink:#121212;       /* texto sobre claro */
+  --mist:#9C9B96;      /* texto secundario sobre oscuro */
+  --slate:#55544F;     /* texto secundario sobre claro */
+  --f-display:'Instrument Serif', 'Times New Roman', Georgia, serif;
+  --f-body:'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:'Geist Mono', 'Courier New', monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--night);color:var(--bone);font-family:var(--f-body);overflow:hidden;transition:background-color .9s ease;-webkit-font-smoothing:antialiased}
+body.is-light{background:var(--paper)}
+#fx{position:fixed;inset:0;width:100%;height:100%;display:block}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.slide{position:absolute;inset:0;padding:96px 128px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:48px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s ease,visibility 0s linear .7s}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .7s ease,visibility 0s}
+.slide.dark{color:var(--bone)} .slide.light{color:var(--ink)}
+.slide.active[data-enter="blur"]{animation:e-blur 1s cubic-bezier(.2,.7,.2,1) both}
+.slide.active[data-enter="zoom"]{animation:e-zoom 1.1s cubic-bezier(.2,.7,.2,1) both}
+.slide.active[data-enter="iris"]{animation:e-iris 1.2s cubic-bezier(.6,0,.2,1) both}
+.slide.active[data-enter="wipe"]{animation:e-wipe 1s cubic-bezier(.6,0,.2,1) both}
+.slide.active[data-enter="rise"]{animation:e-rise 1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes e-blur{from{filter:blur(14px);transform:scale(1.03)}to{filter:none;transform:none}}
+@keyframes e-zoom{from{transform:scale(.94)}to{transform:none}}
+@keyframes e-iris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(75% at 50% 50%)}}
+@keyframes e-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes e-rise{from{transform:translateY(60px)}to{transform:none}}
+.r{opacity:0}
+.slide.active .r{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 1ms)}
+@keyframes rise{from{opacity:0;transform:translateY(26px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.out{opacity:0}
+.slide.ran .out{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 1ms)}
+
+/* tipografía */
+.eyebrow{font-family:var(--f-mono);font-size:22px;letter-spacing:.24em;text-transform:uppercase;opacity:.75;margin:0}
+h1,h2,h3,p{margin:0}
+.display{font-family:var(--f-display);font-weight:400;font-size:150px;line-height:.95;letter-spacing:-.01em;text-wrap:balance}
+.h2{font-family:var(--f-display);font-weight:400;font-size:88px;line-height:1;letter-spacing:-.005em;text-wrap:balance}
+.h2 em,.display em{font-style:italic}
+.lead{font-size:34px;line-height:1.4;font-weight:300}
+.body{font-size:28px;line-height:1.45;font-weight:300}
+.small{font-size:22px;line-height:1.45}
+.muted{color:var(--mist)} .light .muted{color:var(--slate)}
+.num{font-family:var(--f-display);font-weight:400;line-height:.9;font-variant-numeric:tabular-nums}
+.head{display:flex;flex-direction:column;gap:16px}
+.rule{height:1px;background:currentColor;opacity:.22;border:0;margin:0}
+
+/* paneles de código */
+.split{flex:1;display:grid;grid-template-columns:1.12fr 1fr;gap:56px;min-height:0}
+.panel{border:1px solid rgba(243,242,238,.16);border-radius:20px;padding:34px 36px;display:flex;flex-direction:column;gap:20px;min-width:0;background:rgba(9,9,10,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.light .panel{border-color:rgba(18,18,18,.18);background:rgba(236,235,230,.6)}
+.panel-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-mono);font-size:22px;color:var(--mist)}
+.status{display:flex;align-items:center;gap:12px}
+.status i{width:12px;height:12px;border-radius:50%;border:1.5px solid currentColor;display:inline-block}
+.slide.running .status i{border-color:var(--bone);border-top-color:transparent;animation:spin .6s linear infinite}
+.slide.ran .status i{background:var(--bone);border-color:var(--bone)}
+@keyframes spin{to{transform:rotate(360deg)}}
+pre.code{margin:0;font-family:var(--f-mono);font-size:24px;line-height:1.65;color:#E6E5E0;white-space:pre;overflow:hidden}
+pre.code .ln{display:block;opacity:0;clip-path:inset(0 100% 0 0)}
+.slide.active pre.code .ln{animation:type .5s steps(18) both;animation-delay:calc(var(--i) * 70ms + 450ms)}
+@keyframes type{from{opacity:1;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.tk-c{color:#6F6E69;font-style:italic} .tk-s{color:#BEBDB7;font-style:italic} .tk-k{color:#FFFFFF;font-weight:500} .tk-n{color:#FFFFFF;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:5px} .tk-f{color:#FFFFFF}
+.console{font-family:var(--f-mono);font-size:24px;line-height:1.6;color:var(--bone);background:rgba(243,242,238,.05);border-radius:12px;padding:20px 24px;white-space:pre-wrap}
+.kv{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(243,242,238,.14)}
+.kv:last-child{border-bottom:0}
+.kv > span{font-family:var(--f-mono);font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+.kv b{font-family:var(--f-display);font-weight:400;font-size:64px;line-height:1}
+
+/* tablas */
+table.t{width:100%;border-collapse:collapse;font-size:24px;font-variant-numeric:tabular-nums}
+.t th{font-family:var(--f-mono);font-weight:400;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);text-align:right;padding:10px 12px;border-bottom:1px solid rgba(243,242,238,.22)}
+.t th:first-child,.t td:first-child{text-align:left}
+.t td{padding:12px;text-align:right;border-bottom:1px solid rgba(243,242,238,.1)}
+.t td{white-space:nowrap}
+.t.tight td{padding:8px 12px}
+.t tr.hl td{background:rgba(243,242,238,.1);font-weight:500}
+.t td.key{text-decoration:underline;text-underline-offset:6px}
+
+/* waffle */
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;width:250px;flex:none}
+.waffle i{aspect-ratio:1;border:1px solid rgba(243,242,238,.35);border-radius:3px;display:block}
+.slide.ran .waffle i.on{animation:fill .4s ease both;animation-delay:calc(var(--i) * 14ms + 400ms)}
+@keyframes fill{to{background:var(--bone);border-color:var(--bone)}}
+
+/* barra de navegación */
+#bar{position:fixed;left:0;right:0;bottom:0;padding:0 max(20px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));display:flex;align-items:center;gap:16px;font-family:var(--f-mono);font-size:13px;color:var(--mist);z-index:5;transition:opacity .4s}
+body.idle #bar{opacity:0}
+#bar .count{min-width:72px;letter-spacing:.1em}
+#bar .track{flex:1;height:2px;background:rgba(150,150,145,.25);border-radius:2px;overflow:hidden}
+#bar .fill{height:100%;width:0;background:currentColor;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+#bar button{font:inherit;color:inherit;background:transparent;border:1px solid rgba(150,150,145,.35);border-radius:999px;padding:7px 14px;cursor:pointer;letter-spacing:.06em}
+#bar button:hover,#bar button:focus-visible{color:var(--bone);border-color:var(--bone);outline:none}
+body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:var(--ink);border-color:var(--ink)}
+#notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
+#notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
+aside.notes{display:none}
+.vb{display:grid;grid-template-columns:1fr auto;row-gap:10px;font-size:28px}
+.vb b{font-family:var(--f-display);font-weight:400;font-size:44px;line-height:1}
+.vb .b{grid-column:1 / -1;height:12px;background:rgba(243,242,238,.12);border-radius:6px;overflow:hidden}
+.vb .b i{display:block;height:100%;width:0;background:var(--bone);border-radius:6px}
+.slide.ran .vb .b i{animation:grow 1.4s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 1ms)}
+
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* específicos */
+.marquee{position:absolute;left:0;right:0;bottom:150px;overflow:hidden;white-space:nowrap;font-family:var(--f-mono);font-size:22px;letter-spacing:.14em;color:var(--mist);opacity:.6;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee span{display:inline-block;padding-right:40px;animation:mq 60s linear infinite}
+@keyframes mq{to{transform:translateX(-100%)}}
+.flowline{position:relative;height:2px;background:rgba(243,242,238,.25);margin:0 70px}
+.flowline .pulse{position:absolute;top:-5px;left:0;width:12px;height:12px;border-radius:50%;background:var(--bone);box-shadow:0 0 18px 4px rgba(243,242,238,.6);animation:travel 4.5s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes travel{from{left:0}to{left:calc(100% - 12px)}}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:28px}
+.step{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.step .dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bone);background:var(--night);margin-top:-12px;margin-left:58px}
+.ink path,.ink line,.ink circle{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.slide.active .ink .d{animation:draw 1.6s cubic-bezier(.6,0,.3,1) forwards;animation-delay:calc(var(--d,0) * 1ms)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ink .solid{fill:var(--paper);stroke:none}
+.bars{display:flex;flex-direction:column;gap:18px}
+.bar-row{display:grid;grid-template-columns:300px 1fr 120px;align-items:center;gap:20px;font-size:24px}
+.bar-row .b{height:10px;background:rgba(18,18,18,.12);border-radius:5px;overflow:hidden}
+.bar-row .b i{display:block;height:100%;width:0;background:var(--ink);border-radius:5px}
+.slide.active .bar-row .b i{animation:grow 1.4s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 1ms)}
+@keyframes grow{to{width:var(--w)}}
+.bar-row b{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.scale{position:relative;height:60px;margin-top:8px}
+.scale .track{position:absolute;left:0;right:0;top:14px;height:2px;background:linear-gradient(90deg,rgba(243,242,238,.15),rgba(243,242,238,.9))}
+.scale .mk{position:absolute;top:4px;left:50%;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--bone);box-shadow:0 0 22px 6px rgba(243,242,238,.45);transition:left 1.6s cubic-bezier(.2,.7,.2,1) .2s}
+.slide.ran .scale .mk{left:74.98%}
+.scale span{position:absolute;top:32px;font-family:var(--f-mono);font-size:20px;color:var(--mist)}
+.chart text{font-family:var(--f-mono);font-size:16px;fill:var(--mist)}
+.chart .ax{stroke:rgba(243,242,238,.35);stroke-width:1}
+.chart .gr{stroke:rgba(243,242,238,.08);stroke-width:1}
+.chart .pt{fill:var(--bone);opacity:0;transform-box:fill-box;transform-origin:center}
+.slide.ran .chart .pt{animation:pop .6s cubic-bezier(.2,1.4,.4,1) forwards;animation-delay:calc(var(--i) * 12ms + 200ms)}
+@keyframes pop{from{opacity:0;transform:scale(0)}to{opacity:var(--o);transform:scale(1)}}
+.chart .reg{fill:none;stroke:var(--bone);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1}
+.slide.ran .chart .reg,.slide.active .chart.now .reg{animation:draw 1.4s cubic-bezier(.6,0,.3,1) forwards;animation-delay:1.4s}
+.light .chart text{fill:var(--slate)} .light .chart .ax{stroke:rgba(18,18,18,.4)} .light .chart .gr{stroke:rgba(18,18,18,.08)} .light .chart .pt{fill:var(--ink)} .light .chart .reg{stroke:var(--ink)}
+.slide.active .chart.now .pt{animation:pop .6s cubic-bezier(.2,1.4,.4,1) forwards;animation-delay:calc(var(--i) * 8ms + 300ms)}
+.light .card{border-top:1px solid rgba(18,18,18,.3)}
+.concl{display:grid;grid-template-columns:330px 1fr;align-items:baseline;gap:40px;padding:18px 0;border-bottom:1px solid rgba(18,18,18,.16)}
+.concl:last-child{border-bottom:0}
+@media (prefers-reduced-motion: reduce){
+  .slide.active,.slide.active .r,.slide.ran .out{animation:none!important;opacity:1}
+  .r,.out,pre.code .ln{opacity:1!important;clip-path:none!important}
+  .slide.active pre.code .ln{animation:none}
+  .ink path,.ink line,.ink circle{stroke-dashoffset:0}
+  .chart .pt{opacity:var(--o)} .chart .reg{stroke-dashoffset:0}
+  .marquee span,.flowline .pulse{animation:none}
+}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<main id="stage" aria-live="polite">
+
+<!-- 1 · PORTADA -->
+<section class="slide dark" id="portada" data-mode="constellation" data-enter="blur" style="justify-content:center;gap:40px">
+  <p class="eyebrow r" style="--d:200">Estadística descriptiva · Python</p>
+  <h1 class="display r" style="--d:350;font-size:176px;max-width:1300px">Matrículas de Educación <em>Superior</em></h1>
+  <p class="lead r muted" style="--d:600">Arica y Parinacota · 2021</p>
+  <div class="r" style="--d:800;display:flex;gap:60px;margin-top:40px">
+    <p class="small"><span class="muted">Equipo</span><br>[Integrantes del equipo]</p>
+    <p class="small"><span class="muted">Curso</span><br>DUOC UC · [Asignatura]</p>
+    <p class="small"><span class="muted">Docente</span><br>[Docente]</p>
+  </div>
+  <aside class="notes">Presentamos el análisis estadístico de la base de matrículas de educación superior 2021 de la región de Arica y Parinacota, la misma base de la primera evaluación. Todo se hizo en Google Colab con Python (pandas, numpy, matplotlib y scikit-learn). En cada paso mostramos el código al lado de su resultado.</aside>
+</section>
+
+<!-- 2 · CONTEXTO -->
+<section class="slide dark" id="contexto" data-mode="grid" data-enter="zoom">
+  <div class="head"><p class="eyebrow r">01 · Contexto</p><h2 class="h2 r" style="--d:120">La base de datos</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:40px">
+    <div class="r" style="--d:300"><p class="num" style="font-size:190px" data-count="14116" data-dec="0">14.116</p><hr class="rule" style="margin:22px 0 16px"><p class="body">matrículas · una fila por estudiante</p></div>
+    <div class="r" style="--d:420"><p class="num" style="font-size:190px" data-count="28" data-dec="0">28</p><hr class="rule" style="margin:22px 0 16px"><p class="body">variables por registro</p></div>
+    <div class="r" style="--d:540"><p class="num" style="font-size:190px" data-count="11" data-dec="0">11</p><hr class="rule" style="margin:22px 0 16px"><p class="body">instituciones de educación superior</p></div>
+    <div class="r" style="--d:660"><p class="num" style="font-size:190px" data-count="4" data-dec="0">4</p><hr class="rule" style="margin:22px 0 16px"><p class="body">tipos: CFT, IP, U. CRUCH y U. privadas</p></div>
+  </div>
+  <p class="body r muted" style="--d:900;max-width:1200px">Base de matrículas 2021 de la región de Arica y Parinacota, la misma que trabajamos en la Evaluación 1.</p>
+  <div class="marquee" aria-hidden="true"><span>ID · GENERO · EDAD · RANGO EDAD · AÑO INGRESO · SEMESTRE INGRESO · TIPO DE INSTITUCION · NOMBRE DE INSTITUCION · ACREDITACION INSTITUCIONAL · PERIODO DE ACREDITACION · AÑOS DE ACREDITACION · NOMBRE CARRERA · REQUISITO INGRESO · VIA DE INGRESO · MODALIDAD · JORNADA · TIPO PLAN CARRERA · NIVEL DE ESTUDIO CARRERA · NIVEL CARRERA · AREA CONOCIMIENTO · DURACION PLAN DE ESTUDIO · DURACION PROCESO TITULACION · DURACION TOTAL CARRERA · VALOR MATRICULA · VALOR ARANCEL · REGION SEDE · PROVINCIA SEDE · COMUNA SEDE ·</span><span>ID · GENERO · EDAD · RANGO EDAD · AÑO INGRESO · SEMESTRE INGRESO · TIPO DE INSTITUCION · NOMBRE DE INSTITUCION · ACREDITACION INSTITUCIONAL · PERIODO DE ACREDITACION · AÑOS DE ACREDITACION · NOMBRE CARRERA · REQUISITO INGRESO · VIA DE INGRESO · MODALIDAD · JORNADA · TIPO PLAN CARRERA · NIVEL DE ESTUDIO CARRERA · NIVEL CARRERA · AREA CONOCIMIENTO · DURACION PLAN DE ESTUDIO · DURACION PROCESO TITULACION · DURACION TOTAL CARRERA · VALOR MATRICULA · VALOR ARANCEL · REGION SEDE · PROVINCIA SEDE · COMUNA SEDE ·</span></div>
+  <aside class="notes">La base tiene 14.116 registros, uno por estudiante matriculado, y 28 variables: género, edad, institución, acreditación, carrera, área del conocimiento, valor de matrícula y de arancel, entre otras (son las que pasan abajo). Hay 11 instituciones agrupadas en 4 tipos: centros de formación técnica, institutos profesionales, universidades del CRUCH y universidades privadas.</aside>
+</section>
+
+<!-- 3 · PARINACOTA -->
+<section class="slide light" id="parinacota" data-mode="wind" data-enter="iris" style="gap:36px">
+  <div class="head"><p class="eyebrow r" style="--d:300">02 · Arica y Parinacota</p><h2 class="h2 r" style="--d:420">¿Quiénes <em>estudian</em> en la región?</h2></div>
+  <div style="display:grid;grid-template-columns:1fr 1.05fr;gap:90px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px 48px">
+      <div class="r" style="--d:600"><p class="num" style="font-size:76px"><span data-count="56.62" data-dec="1">56,6</span>%</p><p class="small muted">son mujeres (7.993)</p></div>
+      <div class="r" style="--d:700"><p class="num" style="font-size:76px"><span data-count="23" data-dec="0">23</span> años</p><p class="small muted">mediana de edad</p></div>
+      <div class="r" style="--d:800"><p class="num" style="font-size:76px"><span data-count="46.46" data-dec="0">46</span>%</p><p class="small muted">tiene entre 20 y 24 años</p></div>
+      <div class="r" style="--d:900"><p class="num" style="font-size:76px">Arica</p><p class="small muted">comuna de todas las sedes</p></div>
+    </div>
+    <div class="bars r" style="--d:700">
+      <p class="eyebrow" style="opacity:.6">Dónde estudian · matrículas por tipo</p>
+      <div class="bar-row"><span>Universidades CRUCH</span><div class="b"><i style="--w:100%;--d:900"></i></div><b>7.849</b></div>
+      <div class="bar-row"><span>Centros de Form. Técnica</span><div class="b"><i style="--w:45.8%;--d:1050"></i></div><b>3.594</b></div>
+      <div class="bar-row"><span>Institutos Profesionales</span><div class="b"><i style="--w:18.2%;--d:1200"></i></div><b>1.430</b></div>
+      <div class="bar-row"><span>Universidades privadas</span><div class="b"><i style="--w:15.8%;--d:1350"></i></div><b>1.243</b></div>
+    </div>
+  </div>
+  <svg class="ink" id="landscape" viewBox="0 0 1920 560" style="position:absolute;left:0;bottom:0;width:1920px;height:560px" role="img" aria-label="Dibujo a tinta de los volcanes Parinacota y Pomerape sobre el lago Chungará, con vicuñas y pastos de altiplano en primer plano"></svg>
+  <p class="small r" style="--d:2600;position:absolute;left:128px;bottom:96px;background:var(--paper);padding:6px 12px;color:var(--slate);font-family:var(--f-mono);font-size:18px;letter-spacing:.08em">Volcanes Parinacota y Pomerape · Lago Chungará · más de 4.500 m</p>
+  <aside class="notes">Antes de los cálculos, una mirada a quiénes son los estudiantes. El 56,6% son mujeres, la mediana de edad es 23 años y casi la mitad tiene entre 20 y 24. Todas las sedes de la base están en la comuna de Arica. Por tipo de institución, las universidades del CRUCH concentran 7.849 matrículas, seguidas por los CFT con 3.594, los IP con 1.430 y las universidades privadas con 1.243. De fondo, los volcanes Parinacota y Pomerape sobre el lago Chungará, en el altiplano de la región.</aside>
+</section>
+
+<!-- 4 · FLUJO -->
+<section class="slide dark" id="flujo" data-mode="flow" data-enter="wipe">
+  <div class="head"><p class="eyebrow r" style="--d:300">03 · Método</p><h2 class="h2 r" style="--d:420">El flujo de <em>trabajo</em></h2></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0">
+    <div class="flowline r" style="--d:500"><div class="pulse"></div></div>
+    <div class="steps">
+      <div class="step r" style="--d:650"><div class="dot"></div><p class="num" style="font-size:58px">Carga</p><p class="body muted">Leer el Excel y revisar su estructura</p><p class="small" style="font-family:var(--f-mono)">read_excel()</p></div>
+      <div class="step r" style="--d:800"><div class="dot"></div><p class="num" style="font-size:58px">Asociación</p><p class="body muted">Medir cómo se mueven matrícula y arancel</p><p class="small" style="font-family:var(--f-mono)">cov() · corr()</p></div>
+      <div class="step r" style="--d:950"><div class="dot"></div><p class="num" style="font-size:58px">Gráfico</p><p class="body muted">Ver la relación en una dispersión</p><p class="small" style="font-family:var(--f-mono)">scatter()</p></div>
+      <div class="step r" style="--d:1100"><div class="dot"></div><p class="num" style="font-size:58px">Modelo</p><p class="body muted">Ajustar una recta y medir su ajuste</p><p class="small" style="font-family:var(--f-mono)">polyfit() · r2_score()</p></div>
+      <div class="step r" style="--d:1250"><div class="dot"></div><p class="num" style="font-size:58px">Probabilidad</p><p class="body muted">Tres preguntas con tablas cruzadas</p><p class="small" style="font-family:var(--f-mono)">crosstab()</p></div>
+    </div>
+  </div>
+  <p class="body r muted" style="--d:1500">Google Colab · pandas · numpy · matplotlib · scikit-learn</p>
+  <aside class="notes">Este es el recorrido completo. Cargamos la base con pandas, medimos la asociación entre matrícula y arancel con covarianza y correlación, lo visualizamos con un gráfico de dispersión, ajustamos un modelo de regresión lineal con su coeficiente de determinación y, al final, respondimos tres preguntas de probabilidad con tablas bivariadas.</aside>
+</section>
+
+<!-- 5 · CARGA -->
+<section class="slide dark code-slide" id="carga" data-mode="rain" data-enter="blur">
+  <div class="head"><p class="eyebrow r">04 · Carga de datos</p><h2 class="h2 r" style="--d:120">Leer la base con <em>pandas</em></h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [1]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Base de datos
+import pandas as pd
+
+df = pd.read_excel(
+    '01_MATRICULAS_ED_SUPERIOR_'
+    'ARICA_Y_PARINACOTA_2021.xlsx')
+df</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out [1]</span><span>resultado</span></div>
+      <p class="num out" style="--d:100;font-size:110px"><span data-count="14116" data-dec="0" data-on="run">14.116</span> <span class="muted" style="font-size:60px">×</span> 28</p>
+      <p class="console out" style="--d:250">[14116 rows x 28 columns]</p>
+      <p class="small muted out" style="--d:400">Columnas que usamos en el análisis</p>
+      <p class="out" style="--d:500;font-family:var(--f-mono);font-size:22px;line-height:1.75">VALOR MATRICULA (PESOS) · VALOR ARANCEL (PESOS) · NOMBRE DE INSTITUCION · TIPO DE INSTITUCION · NIVEL CARRERA · GENERO · AREA CONOCIMIENTO · ACREDITACION INSTITUCIONAL</p>
+    </div>
+  </div>
+  <aside class="notes">Con pd.read_excel cargamos el archivo en un DataFrame llamado df. Al mostrarlo, pandas confirma el tamaño: 14.116 filas por 28 columnas. A la derecha están las columnas que usamos: los valores de matrícula y arancel para la asociación y el modelo, y las variables categóricas para las tablas de probabilidad.</aside>
+</section>
+
+<!-- 6 · PREGUNTA -->
+<section class="slide dark" id="pregunta" data-mode="orbit" data-enter="zoom" style="justify-content:center;gap:56px">
+  <p class="eyebrow r" style="--d:200">Parte 1 · Asociación entre variables</p>
+  <h2 class="display r" style="--d:350;font-size:132px;max-width:1500px">¿El valor de la matrícula <em>explica</em> el valor del arancel?</h2>
+  <div class="r" style="--d:700;display:flex;gap:80px">
+    <div><p class="eyebrow" style="opacity:.6">x · independiente</p><p style="font-family:var(--f-mono);font-size:32px;margin-top:10px">VALOR MATRICULA (PESOS)</p></div>
+    <div><p class="eyebrow" style="opacity:.6">y · dependiente</p><p style="font-family:var(--f-mono);font-size:32px;margin-top:10px">VALOR ARANCEL (PESOS)</p></div>
+  </div>
+  <aside class="notes">Esta pregunta guía la primera parte. La matrícula es la variable independiente, x, y el arancel es la variable dependiente, y. Queremos saber si cuando sube la matrícula también sube el arancel, con qué fuerza, y si podemos modelarlo con una recta.</aside>
+</section>
+
+<!-- 7 · ASOCIACIÓN -->
+<section class="slide dark code-slide" id="asociacion" data-mode="correlation" data-enter="rise">
+  <div class="head"><p class="eyebrow r">05 · Asociación</p><h2 class="h2 r" style="--d:120">Covarianza y <em>correlación</em></h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [2]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Covarianza
+corv = df['VALOR MATRICULA (PESOS)'].cov(
+    df['VALOR ARANCEL (PESOS)'])
+print(corv)
+print("la covarianza seria directa")
+
+# Correlacion
+corr = df['VALOR MATRICULA (PESOS)'].corr(
+    df['VALOR ARANCEL (PESOS)'])
+print(corr)</pre></div>
+    <div class="panel" style="gap:16px"><div class="panel-top out"><span>Out [2]</span><span>resultado</span></div>
+      <div class="out" style="--d:100"><p class="eyebrow" style="opacity:.6">Covarianza</p><p class="num" style="font-size:64px;margin-top:10px"><span data-count="30456470119.18" data-dec="2" data-on="run">30.456.470.119,18</span></p><p class="body muted" style="margin-top:6px">Positiva → relación <b style="color:var(--bone);font-weight:500">directa</b></p></div>
+      <hr class="rule out" style="--d:250">
+      <div class="out" style="--d:350"><p class="eyebrow" style="opacity:.6">Correlación · r de Pearson</p><p class="num" style="font-size:110px;margin-top:10px"><span data-count="0.4996" data-dec="4" data-on="run">0,4996</span></p>
+        <div class="scale"><div class="track"></div><div class="mk"></div><span style="left:0">−1</span><span style="left:calc(50% - 6px)">0</span><span style="right:0">+1</span></div>
+        <p class="body muted" style="margin-top:6px">Positiva <b style="color:var(--bone);font-weight:500">moderada</b>: suben juntas, con dispersión</p></div>
+    </div>
+  </div>
+  <aside class="notes">La covarianza da 30.456.470.119. Es un número enorme porque está en pesos al cuadrado, así que no mide fuerza; lo que importa es el signo: positivo, relación directa. Para medir la fuerza usamos la correlación de Pearson, que va de −1 a +1: r = 0,4996, una correlación positiva moderada. Las partículas del fondo están dibujando una nube con esa misma correlación.</aside>
+</section>
+
+<!-- 8 · DISPERSIÓN -->
+<section class="slide dark code-slide" id="dispersion" data-mode="dim" data-enter="blur">
+  <div class="head"><p class="eyebrow r">06 · Gráfico de dispersión</p><h2 class="h2 r" style="--d:120">Relación entre matrícula y <em>arancel</em></h2></div>
+  <div class="split" style="grid-template-columns:1fr 1.02fr">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [3]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:22px"># Declaramos las variables
+valores_indep = df_ASOC['VALOR MATRICULA (PESOS)']
+valor_dep = df_ASOC['VALOR ARANCEL (PESOS)']
+
+# Grafico
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.scatter(valores_indep, valor_dep, alpha=0.6)
+ax.set_title(
+    'Relación entre gastos de Matrícula y Arancel')
+ax.set_xlabel('VALOR MATRICULA (PESOS)')
+ax.set_ylabel('VALOR ARANCEL (PESOS)')
+ax.grid(True, linestyle='--', alpha=0.7)
+plt.show()</pre></div>
+    <div class="panel" style="padding:24px 24px 16px"><div class="panel-top out"><span>Out [3]</span><span>Relación entre gastos de Matrícula y Arancel</span></div>
+      <svg class="chart out" id="ch1" viewBox="0 0 840 560" style="--d:0;width:100%;height:auto" role="img" aria-label="Gráfico de dispersión: valor de matrícula en el eje x contra valor de arancel en el eje y; los puntos forman franjas verticales y tienden a subir"></svg>
+    </div>
+  </div>
+  <aside class="notes">Con matplotlib dibujamos cada matrícula como un punto: x es la matrícula, y es el arancel. La nube sube hacia la derecha, lo que confirma la relación positiva. Se ven franjas verticales: muchas carreras cobran la misma matrícula pero aranceles distintos, y eso explica por qué la correlación es solo moderada. Aquí cada punto es una combinación matrícula–arancel y su intensidad indica cuántos estudiantes la comparten.</aside>
+</section>
+
+<!-- 9 · REGRESIÓN -->
+<section class="slide dark code-slide" id="regresion" data-mode="line" data-enter="rise">
+  <div class="head"><p class="eyebrow r">07 · Modelo lineal</p><h2 class="h2 r" style="--d:120">Regresión lineal con <em>numpy</em></h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [4]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:22px">modelo_lineal = np.polyfit(Valores_indep,
+                           Valores_dep, 1)
+pendiente, intercepto = modelo_lineal
+
+# Coeficiente de determinación
+predicciones = np.polyval(modelo_lineal,
+                          Valores_indep)
+R2 = r2_score(Valores_dep, predicciones)
+
+print(f'pendiente: {pendiente:.3f}')
+print(f'intercepto: {intercepto:.3f}')
+print(f'la ecuacion del modelo lineal es '
+      f'y = {pendiente:.3f}x + {intercepto:.3f}')
+print(f'El coeficiente de determinación '
+      f'es {R2*100:.1f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out [4]</span><span>resultado</span></div>
+      <p class="console out" style="--d:100;font-size:21px">pendiente: 7.502
+intercepto: 1724716.316
+la ecuacion del modelo lineal es y = 7.502x + 1724716.316
+El coeficiente de determinación es 25.0%</p>
+      <div class="out" style="--d:300">
+        <div class="kv"><span>Pendiente</span><b data-count="7.502" data-dec="3" data-on="run">7,502</b></div>
+        <div class="kv"><span>Intercepto</span><b data-count="1724716" data-dec="0" data-on="run">1.724.716</b></div>
+        <div class="kv"><span>R²</span><b><span data-count="25" data-dec="1" data-on="run">25,0</span>%</b></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Con np.polyfit de grado 1 ajustamos la recta de mínimos cuadrados, que nos entrega la pendiente y el intercepto. Con np.polyval calculamos el arancel que predice el modelo para cada matrícula, y con r2_score de scikit-learn comparamos esas predicciones con los valores reales. Resultado: pendiente 7,502, intercepto 1.724.716 y R² de 25%. En el fondo, una de cada cuatro partículas se alinea con la recta.</aside>
+</section>
+
+<!-- 10 · INTERPRETACIÓN -->
+<section class="slide light" id="interpretacion" data-mode="dim" data-enter="iris">
+  <div class="head"><p class="eyebrow r" style="--d:300">08 · Interpretación del modelo</p><h2 class="h2 r" style="--d:420;font-size:104px">y = 7,502x + 1.724.716</h2></div>
+  <div style="flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:64px;min-height:0">
+    <svg class="chart now r" id="ch2" viewBox="0 0 840 560" style="--d:500;width:100%;height:auto" role="img" aria-label="Dispersión de matrícula contra arancel con la recta de regresión y = 7,502x + 1.724.716"></svg>
+    <div style="display:flex;flex-direction:column;justify-content:space-between">
+      <div class="card r" style="--d:900;padding-top:22px"><p class="eyebrow" style="opacity:.6">Pendiente</p><p class="num" style="font-size:72px;margin:8px 0">7,502</p><p class="body">Por cada $1 más de matrícula, el arancel sube en promedio <b style="font-weight:500">$7,50</b>.</p></div>
+      <div class="card r" style="--d:1100;padding-top:22px"><p class="eyebrow" style="opacity:.6">Intercepto</p><p class="num" style="font-size:72px;margin:8px 0">$1.724.716</p><p class="body">Arancel base estimado cuando la matrícula es $0.</p></div>
+      <div class="card r" style="--d:1300;padding-top:22px"><p class="eyebrow" style="opacity:.6">R² · determinación</p><p class="num" style="font-size:72px;margin:8px 0">25,0%</p><p class="body">La matrícula explica ¼ de la variación del arancel; el 75% depende de otros factores. <span style="font-family:var(--f-mono);font-size:22px">(0,4996² ≈ 0,25)</span></p></div>
+    </div>
+  </div>
+  <aside class="notes">La ecuación es y = 7,502x + 1.724.716. La pendiente dice que por cada peso adicional de matrícula el arancel aumenta en promedio 7,50 pesos. El intercepto indica que, con matrícula cero, el arancel base estimado sería 1.724.716 pesos; en la base sí hay carreras con matrícula 0. El R² de 25% significa que la matrícula sola explica una cuarta parte de la variación del arancel, coherente con la correlación: 0,4996 al cuadrado es aproximadamente 0,25. Hay relación, pero el modelo no basta para predecir el arancel con precisión.</aside>
+</section>
+
+<!-- 11 · PROBABILIDAD -->
+<section class="slide dark" id="probabilidad" data-mode="orbit3" data-enter="zoom" style="justify-content:center;gap:72px">
+  <div class="head"><p class="eyebrow r" style="--d:200">Parte 2 · Probabilidad</p><h2 class="display r" style="--d:350;font-size:140px">Tres preguntas a la <em>base</em></h2></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px">
+    <div class="r" style="--d:600"><p class="num" style="font-size:88px">P(A)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Simple</p><p class="body" style="margin-top:12px">¿Que un estudiante al azar sea de la Universidad de Tarapacá?</p></div>
+    <div class="r" style="--d:750"><p class="num" style="font-size:88px">P(A ∩ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Conjunta</p><p class="body" style="margin-top:12px">¿Que sea de género femenino y esté en Carreras Técnicas?</p></div>
+    <div class="r" style="--d:900"><p class="num" style="font-size:88px">P(A | B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Condicional</p><p class="body" style="margin-top:12px">Si es del área de Salud, ¿que su institución esté acreditada?</p></div>
+  </div>
+  <aside class="notes">En la segunda parte respondimos tres preguntas: una simple, la probabilidad de un solo evento; una conjunta, que ocurran dos eventos a la vez; y una condicional, la probabilidad de un evento sabiendo que ya ocurrió otro, donde el universo se reduce. Para las tres usamos tablas bivariadas con pd.crosstab y margins=True, que agrega los totales.</aside>
+</section>
+
+<!-- 12 · P SIMPLE -->
+<section class="slide dark code-slide" id="p-simple" data-mode="proportion" data-p="0.5043" data-enter="blur">
+  <div class="head"><p class="eyebrow r">09 · Probabilidad simple · P(A)</p><h2 class="h2 r" style="--d:120">¿Universidad de <em>Tarapacá</em>?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [8] · In [9]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Tabla bivariada
+Tabla1 = pd.crosstab(df['NOMBRE DE INSTITUCION'],
+                     df['GENERO'], margins=True)
+Tabla1
+
+# P(A) = casos favorables / total
+a = (7119 / 14116) * 100
+print(f'la probabilidad de que ... '
+      f'es de {a:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100"><tr><th>Institución</th><th>Fem.</th><th>Masc.</th><th>All</th></tr>
+        <tr class="hl"><td>U. de Tarapacá</td><td>3854</td><td>3265</td><td class="key">7119</td></tr>
+        <tr><td>Total (All)</td><td>7993</td><td>6123</td><td class="key">14116</td></tr></table>
+      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center;margin-top:10px">
+        <div class="waffle" data-on="50"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="50.43" data-dec="2" data-on="run">50,43</span>%</p><p class="body muted" style="margin-top:10px">7.119 / 14.116<br>≈ 1 de cada 2 estudiantes</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Construimos una tabla bivariada de institución por género con pd.crosstab; margins=True agrega la fila y columna All con los totales. Los casos favorables son 7.119 estudiantes de la Universidad de Tarapacá, sobre un total de 14.116. La probabilidad simple es 50,43%: uno de cada dos estudiantes de la región estudia en la U. de Tarapacá. En el fondo, la mitad de las partículas se iluminan.</aside>
+</section>
+
+<!-- 13 · P CONJUNTA -->
+<section class="slide dark code-slide" id="p-conjunta" data-mode="proportion" data-p="0.1749" data-enter="rise">
+  <div class="head"><p class="eyebrow r">10 · Probabilidad conjunta · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Femenino <em>y</em> Carreras Técnicas?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [10] · In [11]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Tabla bivariada
+Tabla2 = pd.crosstab(df['NIVEL CARRERA'],
+                     df['GENERO'], margins=True)
+Tabla2
+
+# P(A ∩ B) = intersección / total
+b = (2469 / 14116) * 100
+print(f'la probabilidad de que ... '
+      f'es de {b:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100"><tr><th>Nivel carrera</th><th>Fem.</th><th>Masc.</th><th>All</th></tr>
+        <tr><td>C. Profesionales</td><td>5456</td><td>4545</td><td>10001</td></tr>
+        <tr class="hl"><td>C. Técnicas</td><td class="key">2469</td><td>1518</td><td>3987</td></tr>
+        <tr><td>Total (All)</td><td>7993</td><td>6123</td><td class="key">14116</td></tr></table>
+      <p class="small muted out" style="--d:200">Se omiten Magíster, Doctorado y Postítulo (128 en total).</p>
+      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
+        <div class="waffle" data-on="17"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="17.49" data-dec="2" data-on="run">17,49</span>%</p><p class="body muted" style="margin-top:10px">2.469 / 14.116<br>intersección ÷ total general</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Cruzamos nivel de carrera con género. Buscamos la intersección: estudiantes que son de género femenino y están en carreras técnicas a la vez, que son 2.469. Como es conjunta, se divide por el total general de 14.116, no por el total de la fila. Resultado: 17,49%. Si dividiéramos por el total de carreras técnicas estaríamos calculando una condicional, que es otra pregunta.</aside>
+</section>
+
+<!-- 14 · P CONDICIONAL -->
+<section class="slide dark code-slide" id="p-condicional" data-mode="universe" data-p="0.9086" data-u="0.2054" data-enter="blur">
+  <div class="head"><p class="eyebrow r">11 · Probabilidad condicional · P(A | B)</p><h2 class="h2 r" style="--d:120">Si es de Salud, ¿<em>acreditada</em>?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [12] · In [13]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Tabla bivariada
+Tabla1 = pd.crosstab(
+    df['ACREDITACION INSTITUCIONAL'],
+    df['AREA CONOCIMIENTO'], margins=True)
+Tabla1
+
+# P(A|B) = intersección / total de B
+c = (2634 / 2899) * 100
+print(f'la probabilidad ... '
+      f'es de : {c:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100"><tr><th>Acreditación</th><th>Salud</th><th>All</th></tr>
+        <tr class="hl"><td>ACREDITADA</td><td class="key">2634</td><td>11773</td></tr>
+        <tr><td>NO ACREDITADA</td><td>265</td><td>2343</td></tr>
+        <tr><td>Total (All)</td><td class="key">2899</td><td>14116</td></tr></table>
+      <p class="small muted out" style="--d:200">Solo la columna Salud, de las 10 áreas.</p>
+      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
+        <div class="waffle" data-on="91"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="90.86" data-dec="2" data-on="run">90,86</span>%</p><p class="body muted" style="margin-top:10px">2.634 / 2.899<br>el universo se reduce a Salud</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">En la condicional ya sabemos algo del estudiante: es del área de Salud. Eso reduce el universo: no dividimos por 14.116, sino por los 2.899 estudiantes de Salud. De ellos, 2.634 están en instituciones acreditadas: 90,86%, nueve de cada diez. En el fondo, la mayoría de las partículas se apagan (quedan solo las de Salud) y de esas se ilumina el 91%.</aside>
+</section>
+
+<!-- 15 · PARTE 3 -->
+<section class="slide dark" id="lab07" data-mode="orbit3" data-enter="iris" style="justify-content:center;gap:64px">
+  <div class="head"><p class="eyebrow r" style="--d:300">Parte 3 · Nuevas preguntas · referencia Laboratorio 07</p><h2 class="display r" style="--d:420;font-size:130px">Tres preguntas <em>más</em></h2></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px">
+    <div class="r" style="--d:650"><p class="num" style="font-size:80px">P(A ∪ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Unión</p><p class="lead" style="margin-top:12px;font-size:32px">¿Jornada Vespertina <b style="font-weight:500">o</b> institución No acreditada?</p></div>
+    <div class="r" style="--d:800"><p class="num" style="font-size:80px">P(A ∩ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Conjunta con rango</p><p class="lead" style="margin-top:12px;font-size:32px">¿Mujer <b style="font-weight:500">y</b> de al menos 30 años?</p></div>
+    <div class="r" style="--d:950"><p class="num" style="font-size:80px">P(A | B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Condicional para decidir</p><p class="lead" style="margin-top:12px;font-size:32px">¿En qué tipo de institución es más probable estudiar en jornada Vespertina?</p></div>
+  </div>
+  <aside class="notes">Siguiendo el Laboratorio 07, formulamos tres preguntas nuevas a nuestra base, con tipos de probabilidad que no habíamos usado: una unión, que usa el "o"; una conjunta con un rango de edad, donde hay que sumar varias categorías; y una condicional comparativa, pensada para apoyar una decisión.</aside>
+</section>
+
+<!-- 16 · UNIÓN -->
+<section class="slide dark code-slide" id="p-union" data-mode="proportion" data-p="0.3438" data-enter="blur">
+  <div class="head"><p class="eyebrow r">12 · Unión · P(A ∪ B)</p><h2 class="h2 r" style="--d:120">¿Vespertina <em>o</em> No acreditada?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [14] · In [15]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:25px"># Tabla bivariada
+Tabla4 = pd.crosstab(df['JORNADA'],
+           df['ACREDITACION INSTITUCIONAL'],
+           margins=True)
+Tabla4
+
+# P(A ∪ B) = P(A) + P(B) - P(A ∩ B)
+d = (4104 + 2343 - 1594) / 14116 * 100
+print(f'P(Vespertino o No acreditada)'
+      f' = {d:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100;font-size:27px"><tr><th>Jornada</th><th>Acred.</th><th>No acred.</th><th>All</th></tr>
+        <tr><td>Diurno</td><td>9212</td><td>749</td><td>9961</td></tr>
+        <tr class="hl"><td>Vespertino</td><td>2510</td><td class="key">1594</td><td class="key">4104</td></tr>
+        <tr><td>Otro · Semipres.</td><td>51</td><td>0</td><td>51</td></tr>
+        <tr><td>Total (All)</td><td>11773</td><td class="key">2343</td><td>14116</td></tr></table>
+      <div class="out" style="--d:350;display:flex;gap:40px;align-items:center">
+        <div class="waffle" data-on="34"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="34.38" data-dec="2" data-on="run">34,38</span>%</p><p class="body muted" style="margin-top:10px">29,07% + 16,60% − 11,29%<br>se resta la intersección</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Para la unión usamos la tabla de jornada por acreditación. La probabilidad de "A o B" es la de A más la de B menos la intersección: 29,07% de vespertinos, más 16,60% de no acreditadas, menos 11,29% que cumplen ambas. Si no restamos, contaríamos dos veces a esos 1.594 estudiantes. El resultado es 34,38%: un tercio de los estudiantes estudia de vespertino o en una institución no acreditada.</aside>
+</section>
+
+<!-- 17 · CONJUNTA CON RANGO -->
+<section class="slide dark code-slide" id="p-rango" data-mode="proportion" data-p="0.1219" data-enter="rise">
+  <div class="head"><p class="eyebrow r">13 · Conjunta con rango · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Mujer <em>y</em> de al menos 30 años?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [16] · In [17]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:25px"># Tabla bivariada
+Tabla5 = pd.crosstab(df['RANGO EDAD'],
+                     df['GENERO'], margins=True)
+Tabla5
+
+# "al menos 30" = 30 a 34 + 35 a 39 + 40 y mas
+mujeres_30 = 678 + 455 + 588
+e = mujeres_30 / 14116 * 100
+print(f'P(Mujer y 30 o mas) = {e:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <div style="display:flex;gap:40px;align-items:flex-start">
+        <table class="t out tight" style="--d:100;font-size:26px;width:430px"><tr><th>Rango edad</th><th>Fem.</th><th>All</th></tr>
+          <tr><td>15 a 19</td><td>1299</td><td>2429</td></tr>
+          <tr><td>20 a 24</td><td>3655</td><td>6558</td></tr>
+          <tr><td>25 a 29</td><td>1318</td><td>2387</td></tr>
+          <tr class="hl"><td>30 a 34</td><td class="key">678</td><td>1130</td></tr>
+          <tr class="hl"><td>35 a 39</td><td class="key">455</td><td>720</td></tr>
+          <tr class="hl"><td>40 y más</td><td class="key">588</td><td>892</td></tr>
+          <tr><td>Total</td><td>7993</td><td class="key">14116</td></tr></table>
+        <div class="out" style="--d:350;display:flex;flex-direction:column;gap:14px;padding-top:20px">
+          <p class="num" style="font-size:120px"><span data-count="12.19" data-dec="2" data-on="run">12,19</span>%</p>
+          <p class="body muted">1.721 / 14.116</p>
+          <p class="body">Suma de 3 rangos de edad, dividida por el total general</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Aquí "al menos 30 años" no es una sola fila de la tabla: hay que sumar los rangos 30 a 34, 35 a 39 y 40 y más, en la columna de mujeres. Eso da 678 más 455 más 588, es decir 1.721 mujeres. Como es una probabilidad conjunta, dividimos por el total general de 14.116, y obtenemos 12,19%.</aside>
+</section>
+
+<!-- 18 · CONDICIONAL PARA DECIDIR -->
+<section class="slide dark code-slide" id="p-decision" data-mode="flow" data-enter="blur">
+  <div class="head"><p class="eyebrow r">14 · Condicional para decidir · P(Vespertino | tipo)</p><h2 class="h2 r" style="--d:120">¿Dónde abrir cupos <em>vespertinos</em>?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [18]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:25px"># Proporciones por fila (cada tipo suma 1)
+Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
+                     df['JORNADA'],
+                     normalize='index')
+
+# P(Vespertino | tipo)
+(Tabla6['Vespertino'] * 100).round(2)\
+    .sort_values(ascending=False)</pre></div>
+    <div class="panel" style="gap:26px"><div class="panel-top out"><span>Out [18]</span><span>% vespertino dentro de cada tipo</span></div>
+      <div class="out" style="--d:100;display:flex;flex-direction:column;gap:22px">
+        <div class="vb"><span>Centros de Formación Técnica</span><b>57,96%</b><div class="b"><i style="--w:57.96%;--d:300"></i></div></div>
+        <div class="vb"><span>Institutos Profesionales</span><b>46,57%</b><div class="b"><i style="--w:46.57%;--d:450"></i></div></div>
+        <div class="vb"><span>Universidades Privadas</span><b>42,80%</b><div class="b"><i style="--w:42.80%;--d:600"></i></div></div>
+        <div class="vb"><span>Universidades CRUCH</span><b>10,49%</b><div class="b"><i style="--w:10.49%;--d:750"></i></div></div>
+      </div>
+      <p class="lead out" style="--d:900;font-size:30px">En los <b style="font-weight:500">CFT</b>, 58 de cada 100 estudian vespertino: es donde más conviene abrir cupos.</p>
+    </div>
+  </div>
+  <aside class="notes">Esta pregunta apoya una decisión: si queremos abrir más cupos vespertinos para personas que trabajan, ¿dónde conviene hacerlo? Usamos crosstab con normalize='index', que calcula la proporción dentro de cada fila; eso es justamente la probabilidad condicional P(Vespertino dado el tipo de institución). En los CFT el 57,96% estudia vespertino, en los IP el 46,57%, en las universidades privadas el 42,80% y en las del CRUCH solo el 10,49%. La demanda vespertina se concentra en los CFT.</aside>
+</section>
+
+<!-- 15 · CONCLUSIONES -->
+<section class="slide light" id="conclusiones" data-mode="waves" data-enter="wipe">
+  <div class="head"><p class="eyebrow r" style="--d:300">15 · Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="concl r" style="--d:600"><p class="num" style="font-size:88px">r = 0,50</p><p class="lead">Matrícula y arancel se mueven juntos: relación positiva moderada.</p></div>
+    <div class="concl r" style="--d:750"><p class="num" style="font-size:88px">R² 25%</p><p class="lead">La matrícula sola no basta para predecir el arancel.</p></div>
+    <div class="concl r" style="--d:900"><p class="num" style="font-size:88px">50,43%</p><p class="lead">La U. de Tarapacá concentra 1 de cada 2 matrículas de la región.</p></div>
+    <div class="concl r" style="--d:1050"><p class="num" style="font-size:88px">17,49%</p><p class="lead">del total son mujeres en Carreras Técnicas.</p></div>
+    <div class="concl r" style="--d:1200"><p class="num" style="font-size:88px">90,86%</p><p class="lead">En Salud, 9 de cada 10 estudian en instituciones acreditadas.</p></div>
+  </div>
+  <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas.</aside>
+</section>
+
+<!-- 16 · CIERRE -->
+<section class="slide dark" id="cierre" data-mode="text" data-enter="blur" style="justify-content:flex-end;align-items:center;gap:24px;padding-bottom:150px">
+  <h2 class="sr">Gracias</h2>
+  <p class="lead r" style="--d:1600;font-size:48px;font-family:var(--f-display);font-style:italic">¿Preguntas?</p>
+  <p class="small r muted" style="--d:1800;text-align:center">[Integrantes del equipo] · DUOC UC</p>
+  <aside class="notes">Gracias por su atención. Quedamos atentos a sus preguntas; si quiere, podemos abrir el Colab y ejecutar cualquiera de las celdas en vivo.</aside>
+</section>
+
+</main>
+
+<nav id="bar" aria-label="Navegación de diapositivas">
+  <span class="count" id="count">01 / 20</span>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <button id="prev" type="button" aria-label="Diapositiva anterior">←</button>
+  <button id="next" type="button" aria-label="Diapositiva siguiente">→</button>
+  <select id="rate" aria-label="Velocidad de la voz"><option value="0.9">0,9×</option><option value="1" selected>1×</option><option value="1.15">1,15×</option><option value="1.3">1,3×</option></select>
+  <button id="nbtn" type="button" aria-pressed="false">Notas</button>
+  <button id="fs" type="button">Pantalla completa</button>
+</nav>
+<div id="notes" hidden><b>Notas del orador</b><span id="notesText"></span></div>
+
+<script>
+(()=>{
+const PTS=[[0,0,5],[0,350000,1],[0,1290738,216],[0,1321425,72],[0,1323533,278],[0,1358423,391],[0,1372550,215],[0,1404917,67],[0,1449917,47],[0,1464754,142],[0,1518906,150],[0,1559721,126],[0,1612369,134],[0,1664717,58],[50000,625000,44],[50000,1900000,18],[62000,1435000,14],[62000,1543000,2],[62000,1608000,3],[64000,1427000,130],[64000,1459000,54],[64000,1476000,78],[64000,1498000,56],[64000,1558000,86],[64000,1649000,98],[64000,1774000,6],[64000,2064000,190],[86000,1702000,1],[86000,1823000,1],[89000,1608000,84],[89000,1729000,134],[89000,1817000,45],[89000,1841000,26],[89000,1851000,121],[89000,1855000,28],[89000,1857000,71],[91000,1759000,18],[93000,1855000,19],[102500,824000,4],[105000,2338000,95],[105000,3313000,174],[116000,1996000,54],[117990,1499400,63],[120000,1376000,80],[120000,1470000,55],[120000,1670000,31],[120000,1823000,138],[120000,2160000,21],[120000,2450000,143],[122000,1452000,3],[122000,1544000,179],[134000,2684000,114],[134000,3085000,117],[134000,3305000,118],[134000,3416000,256],[145252,1750000,12],[150000,1400000,3],[155000,2857000,1300],[155000,3034000,210],[155000,3145000,123],[155000,3295000,81],[155000,3363000,162],[155000,3533000,2382],[155000,3559000,494],[155000,3631000,252],[155000,3745000,40],[155000,3775000,634],[155000,3805000,480],[155000,3995000,494],[155000,4015000,174],[155000,5595000,157],[168000,2684000,78],[179000,2524000,150],[182000,2189000,104],[199000,2818000,94],[212500,2125000,4],[220000,1652000,66],[220000,1716000,74],[220000,1850000,248],[220000,1890000,56],[220000,1908000,87],[220000,1960000,60],[220000,1990000,9],[220000,1998000,8],[220000,2044000,189],[220000,2048000,393],[220000,2052000,124],[220000,2064000,160],[220000,2068000,42],[220000,2110000,26],[220000,2168000,256],[267000,3000000,5],[270000,2800000,3],[290504,3000000,8]];
+const SLOPE=7.50245,INTER=1724716.316;
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const fmt=(v,d)=>v.toLocaleString('es-CL',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ---------- gráfico de dispersión ---------- */
+function chart(svg,withLine){
+  const L=96,R=820,T=20,B=500,xm=300000,ym=6000000;
+  const X=v=>L+(v/xm)*(R-L),Y=v=>B-(v/ym)*(B-T);
+  for(let v=0;v<=ym;v+=1000000){el('line',{x1:L,x2:R,y1:Y(v),y2:Y(v),class:'gr'},svg);el('text',{x:L-12,y:Y(v)+5,'text-anchor':'end'},svg).textContent=v?fmt(v/1e6,0)+' M':'0'}
+  for(let v=0;v<=xm;v+=50000){el('line',{x1:X(v),x2:X(v),y1:B,y2:B+6,class:'ax'},svg);el('text',{x:X(v),y:B+28,'text-anchor':'middle'},svg).textContent=v?fmt(v/1000,0)+' mil':'0'}
+  el('line',{x1:L,x2:R,y1:B,y2:B,class:'ax'},svg);el('line',{x1:L,x2:L,y1:T,y2:B,class:'ax'},svg);
+  el('text',{x:(L+R)/2,y:B+56,'text-anchor':'middle'},svg).textContent='VALOR MATRÍCULA (pesos)';
+  const yl=el('text',{x:20,y:(T+B)/2,'text-anchor':'middle',transform:`rotate(-90 20 ${(T+B)/2})`},svg);yl.textContent='VALOR ARANCEL (pesos)';
+  PTS.slice().sort((a,b)=>a[0]-b[0]).forEach((p,i)=>{const c=el('circle',{cx:X(p[0]),cy:Y(p[1]),r:Math.max(4,Math.min(13,2.2*Math.sqrt(Math.sqrt(p[2]))*1.6)),class:'pt'},svg);c.style.setProperty('--i',i);c.style.setProperty('--o',Math.min(.95,.35+Math.log10(p[2]+1)*.2))});
+  if(withLine){el('path',{d:`M${X(0)} ${Y(INTER)} L${X(xm)} ${Y(INTER+SLOPE*xm)}`,class:'reg',pathLength:1},svg);
+    const lb=el('text',{x:X(292000),y:Y(INTER+SLOPE*292000)-22,'text-anchor':'end'},svg);lb.textContent='y = 7,502x + 1.724.716';lb.style.fontSize='18px'}
+}
+chart(document.getElementById('ch1'),false);
+chart(document.getElementById('ch2'),true);
+
+/* ---------- paisaje a tinta ---------- */
+(function land(){
+  const s=document.getElementById('landscape');let k=0;
+  const add=(tag,a,delay,cls='d')=>{const e=el(tag,Object.assign({pathLength:1,class:cls},a),s);e.style.setProperty('--d',delay);return e};
+  const defs=el('defs',{},s);
+  const pom='M380 382 C500 300 580 172 620 130 C632 118 650 118 662 130 C700 172 770 262 840 330 L840 382 Z';
+  const par='M690 382 C820 298 928 134 974 80 C989 63 1012 63 1027 80 C1072 134 1182 298 1330 382 Z';
+  const c1=el('clipPath',{id:'cpPar'},defs);el('path',{d:par},c1);
+  const c2=el('clipPath',{id:'cpPom'},defs);el('path',{d:pom},c2);
+  const c3=el('clipPath',{id:'cpLake'},defs);el('rect',{x:0,y:384,width:1920,height:86},c3);
+  // cielo
+  add('circle',{cx:1580,cy:120,r:44,'stroke-width':1.6},0);
+  add('circle',{cx:1580,cy:120,r:64,'stroke-width':.8,opacity:.5},150);
+  [['M140 96 C260 84 360 100 480 90',1.2],['M1300 196 C1420 184 1540 200 1700 190',1.2],['M210 132 C300 126 360 134 430 128',.9]].forEach((c,i)=>add('path',{d:c[0],'stroke-width':c[1],opacity:.7},200+i*120));
+  [[1180,120,.7],[1240,98,.5],[1120,146,.45]].forEach((b,i)=>add('path',{d:'M0 0 C12 -10 24 -10 32 0 C40 -10 52 -10 64 0',transform:`translate(${b[0]} ${b[1]}) scale(${b[2]})`,'stroke-width':2.2/b[2]},500+i*120));
+  // cordones lejanos
+  add('path',{d:'M0 334 C90 304 170 296 250 312 C310 324 340 338 390 350','stroke-width':1.3,opacity:.75},300);
+  add('path',{d:'M1240 352 C1340 304 1450 284 1560 298 C1660 312 1770 262 1920 284','stroke-width':1.3,opacity:.75},350);
+  // Pomerape
+  const pm=el('path',{d:pom,class:'solid',stroke:'none'},s);
+  add('path',{d:pom,'stroke-width':2},400);
+  add('path',{d:'M596 152 L612 168 L626 154 L642 172 L656 152 L670 162 L684 150','stroke-width':1.6},900);
+  const hp=el('g',{'clip-path':'url(#cpPom)'},s);
+  for(let x=641,i=0;x<900;x+=12,i++){const e=el('path',{d:`M${x} 168 L${x+220} 400`,pathLength:1,class:'d','stroke-width':1,opacity:.55},hp);e.style.setProperty('--d',1000+i*25)}
+  // Parinacota
+  el('path',{d:par,class:'solid',stroke:'none'},s);
+  add('path',{d:par,'stroke-width':2.2},600);
+  add('path',{d:'M936 130 L954 148 L970 132 L988 158 L1004 134 L1020 152 L1038 130 L1064 130','stroke-width':1.8},1100);
+  const hq=el('g',{'clip-path':'url(#cpPar)'},s);
+  for(let x=1000,i=0;x<1360;x+=11,i++){const e=el('path',{d:`M${x} 150 L${x+260} 420`,pathLength:1,class:'d','stroke-width':1.05,opacity:.6},hq);e.style.setProperty('--d',1200+i*22)}
+  for(let x=760,i=0;x<990;x+=26,i++){const e=el('path',{d:`M${x} 300 L${x+40} 382`,pathLength:1,class:'d','stroke-width':.8,opacity:.35},hq);e.style.setProperty('--d',1500+i*30)}
+  // orilla y lago
+  add('path',{d:'M0 384 C300 378 600 388 900 382 C1200 376 1500 388 1920 382','stroke-width':1.6},800);
+  const rf=el('g',{'clip-path':'url(#cpLake)'},s);
+  [[par,2],[pom,1.6]].forEach((m,i)=>{const e=el('path',{d:m[0],transform:'matrix(1 0 0 -0.28 0 489)',pathLength:1,class:'d','stroke-width':m[1],opacity:.4,'stroke-dasharray':'1'},rf);e.style.setProperty('--d',1700+i*150)});
+  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<46;i++){const x=rnd()*1880,y=394+rnd()*72,w=18+rnd()*80;add('path',{d:`M${x} ${y} L${x+w} ${y}`,'stroke-width':.9,opacity:.5},1900+i*18)}
+  add('path',{d:'M0 472 C400 464 800 478 1200 470 C1500 464 1700 476 1920 470','stroke-width':1.8},1300);
+  // pastos (ichu)
+  for(let i=0;i<70;i++){const x=rnd()*1900,y=488+rnd()*60,h=14+rnd()*22;let d='';for(let j=-2;j<=2;j++){d+=`M${x} ${y} Q${x+j*3} ${y-h*.6} ${x+j*7} ${y-h+Math.abs(j)*3} `}add('path',{d,'stroke-width':1.1,opacity:.8},2100+i*14)}
+  // vicuñas
+  const vic='M0 -20 C8 -27 30 -27 40 -21 L46 -42 C47 -48 52 -50 55 -48 L59 -45 L55 -42 L50 -39 L47 -19 C45 -13 41 -11 38 -11 L0 -11 C-5 -12 -5 -17 0 -20 M40 -11 L42 9 M33 -11 L32 9 M7 -11 L5 9 M1 -12 L-2 9 M54 -48 L55 -54 M0 -20 C-5 -22 -7 -18 -5 -15';
+  [[1440,528,2.3,1],[1600,516,2,-1],[1730,540,1.8,1]].forEach((v,i)=>add('path',{d:vic,transform:`translate(${v[0]} ${v[1]}) scale(${v[2]*v[3]} ${v[2]})`,'stroke-width':1.6/v[2]},2400+i*200));
+})();
+
+/* ---------- resaltado de código ---------- */
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const RX=/(#.*$)|([fF]?'[^']*'|[fF]?"[^"]*")|\b(import|as|print|True|False|None|from|def|return)\b|\b(\d+(?:\.\d+)?)\b|([A-Za-z_]\w*)(?=\()/g;
+function hl(line){let out='',last=0;line.replace(RX,(m,c,s,k,n,f,idx)=>{out+=esc(line.slice(last,idx));const cl=c?'c':s?'s':k?'k':n?'n':'f';out+=`<span class="tk-${cl}">${esc(m)}</span>`;last=idx+m.length;return m});return out+esc(line.slice(last))}
+document.querySelectorAll('pre.code').forEach(pre=>{const lines=pre.textContent.replace(/\n$/,'').split('\n');pre.dataset.lines=lines.length;pre.innerHTML=lines.map((l,i)=>`<span class="ln" style="--i:${i}">${hl(l)||' '}</span>`).join('')});
+document.querySelectorAll('.waffle').forEach(w=>{const on=+w.dataset.on;for(let i=0;i<100;i++){const c=document.createElement('i');if(i<on)c.className='on';c.style.setProperty('--i',i);w.appendChild(c)}w.setAttribute('role','img');w.setAttribute('aria-label',on+' de 100 cuadros marcados')});
+
+/* ---------- escenario y navegación ---------- */
+const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')];
+let cur=-1,timers=[];
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`;stage.dataset.s=s}
+function countUp(e,delay){const to=+e.dataset.count,d=+e.dataset.dec||0;e.textContent=fmt(0,d);timers.push(setTimeout(()=>{const t0=performance.now(),dur=1400;const step=n=>{const k=Math.min(1,(n-t0)/dur),v=to*(1-Math.pow(1-k,4));e.textContent=fmt(k<1?v:to,d);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)},delay))}
+function go(i,fromHash){
+  i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;
+  timers.forEach(clearTimeout);timers=[];
+  if(cur>=0)slides[cur].classList.remove('active','running','ran');
+  cur=i;const s=slides[i];s.classList.add('active');
+  document.body.classList.toggle('is-light',s.classList.contains('light'));
+  document.getElementById('count').textContent=String(i+1).padStart(2,'0')+' / '+slides.length;
+  document.getElementById('fill').style.width=((i+1)/slides.length*100)+'%';
+  document.getElementById('notesText').textContent=(s.querySelector('aside.notes')||{}).textContent||'';
+  if(!fromHash){try{history.replaceState(null,'','#'+s.id)}catch(e){location.hash=s.id}}
+  setMode(s);
+  s.querySelectorAll('[data-count]:not([data-on])').forEach(e=>countUp(e,500));
+  if(s.classList.contains('code-slide')){
+    const pre=s.querySelector('pre.code'),n=+pre.dataset.lines,tEnd=reduce?0:n*70+450+500;
+    const st=s.querySelector('.st');st.textContent='escribiendo…';
+    timers.push(setTimeout(()=>{s.classList.add('running');st.textContent='ejecutando…'},tEnd));
+    timers.push(setTimeout(()=>{s.classList.remove('running');s.classList.add('ran');st.textContent='ejecutado ✓';s.querySelectorAll('[data-on="run"]').forEach(e=>countUp(e,300))},tEnd+(reduce?0:750)));
+  }
+}
+const next=()=>go(cur+1),prev=()=>go(cur-1);
+document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+document.getElementById('fs').onclick=()=>{const d=document;if(d.fullscreenElement)d.exitFullscreen?.();else d.documentElement.requestFullscreen?.().catch(()=>{})};
+const notes=document.getElementById('notes'),nb=document.getElementById('nbtn');
+const toggleNotes=()=>{notes.hidden=!notes.hidden;nb.setAttribute('aria-pressed',String(!notes.hidden))};nb.onclick=toggleNotes;
+addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){if(k===' '||k==='Enter'){if(e.target.tagName==='BUTTON')return}e.preventDefault();next()}
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev()}
+  else if(k==='Home')go(0);else if(k==='End')go(slides.length-1);
+  else if(k==='n'||k==='N')toggleNotes();else if(k==='f'||k==='F')document.getElementById('fs').click()});
+stage.addEventListener('click',e=>{if(e.target.closest('button,a'))return;(e.clientX<innerWidth*.25?prev:next)()});
+let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next:prev)();tx=null},{passive:true});
+let idleT;const wake=()=>{document.body.classList.remove('idle');clearTimeout(idleT);idleT=setTimeout(()=>document.body.classList.add('idle'),3000)};addEventListener('mousemove',wake);addEventListener('touchstart',wake,{passive:true});wake();
+addEventListener('hashchange',()=>{const i=slides.findIndex(s=>'#'+s.id===location.hash);if(i>=0)go(i,true)});
+
+/* ---------- partículas ---------- */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');
+let W,H,parts=[],mode='constellation',prob=.5,uni=1,textPts=null,inkC=[243,242,238],inkT=[243,242,238],mouse={x:-1e4,y:-1e4};
+function resize(){const D=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;cx.setTransform(D,0,0,D,0,0);
+  const N=Math.round(Math.min(420,Math.max(140,W*H/4200)));
+  while(parts.length<N)parts.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,r1:Math.random(),r2:Math.random(),r3:Math.random(),a:0,s:1});
+  parts.length=N;if(mode==='text')buildText();fit()}
+function buildText(){
+  const sc=+stage.dataset.s||1,ox=(W-1920*sc)/2,oy=(H-1080*sc)/2;
+  const c=document.createElement('canvas'),w=Math.max(1,Math.floor(W)),h=Math.max(1,Math.floor(H));c.width=w;c.height=h;const g=c.getContext('2d');
+  g.fillStyle='#000';g.textAlign='center';g.textBaseline='middle';g.font=`italic ${Math.round(330*sc)}px 'Instrument Serif', Georgia, serif`;
+  g.fillText('Gracias',ox+960*sc,oy+440*sc);
+  const data=g.getImageData(0,0,w,h).data,pts=[];const step=Math.max(3,Math.round(6*sc*1.4));
+  for(let y=0;y<h;y+=step)for(let x=0;x<w;x+=step)if(data[(y*w+x)*4+3]>128)pts.push([x,y]);
+  for(let i=pts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pts[i],pts[j]]=[pts[j],pts[i]]}
+  textPts=pts.slice(0,Math.floor(parts.length*.9));
+}
+function setMode(s){mode=s.dataset.mode||'constellation';prob=+s.dataset.p||.5;uni=+s.dataset.u||1;inkT=s.classList.contains('light')?[18,18,18]:[243,242,238];if(mode==='text'){document.fonts?.ready.then(buildText);buildText()}}
+addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});addEventListener('mouseleave',()=>{mouse.x=mouse.y=-1e4});
+const gauss=(a,b)=>Math.sqrt(-2*Math.log(a+1e-6))*Math.cos(6.2832*b);
+function frame(now){
+  const t=now/1000;for(let k=0;k<3;k++)inkC[k]+=(inkT[k]-inkC[k])*.05;
+  cx.clearRect(0,0,W,H);const m=Math.min(W,H),N=parts.length;
+  for(let i=0;i<N;i++){const p=parts[i];let tx=null,ty=null,ta=.55,sz=1,free=true,tele=false;
+    switch(mode){
+      case 'constellation':ta=.6;break;
+      case 'dim':ta=.18;break;
+      case 'grid':{const cols=Math.round(Math.sqrt(N*W/H)),rows=Math.ceil(N/cols),c=i%cols,r=Math.floor(i/cols);tx=(c+.5)/cols*W+Math.sin(t*.6+r*.5)*6;ty=(r+.5)/rows*H;ta=.22+.7*Math.pow(Math.max(0,Math.sin(t*1.3+p.r1*40)),12);break}
+      case 'wind':p.vx+=.02*(.6+p.r1)-p.vx*.02;p.vy+=Math.sin(t*.8+p.r2*9)*.004;ta=.35;sz=.8;break;
+      case 'flow':{const lane=Math.floor(p.r1*7);tx=(p.r2*(W+40)+t*(40+p.r3*70))%(W+40)-20;ty=H*(.22+.56*(lane+.5)/7)+Math.sin(tx/W*9.4+lane+t*.8)*30;ta=.3+.5*p.r3;tele=true;break}
+      case 'rain':tx=p.r1*W;ty=(p.r2*(H+20)+t*(50+p.r3*160))%(H+20)-10;ta=.15+.5*p.r3;sz=.8;tele=true;break;
+      case 'orbit':{const rad=(.16+p.r1*.36)*m,ang=p.r2*6.2832+t*(.08+(1-p.r1)*.22);tx=W*.5+Math.cos(ang)*rad*1.7;ty=H*.5+Math.sin(ang)*rad*.62;ta=.25+.5*(1-p.r1);break}
+      case 'orbit3':{const k=Math.floor(p.r1*3),rad=50+p.r2*160,ang=p.r3*6.2832+t*.35*(k%2?1:-1);tx=W*(.2+.3*k)+Math.cos(ang)*rad*1.2;ty=H*.88+Math.sin(ang)*rad*.22;ta=.4;break}
+      case 'correlation':{const u=p.r1,e=gauss(p.r2,p.r3)*.25,y=(.5*u+e+.6)/1.7;tx=W*(.06+.88*u)+Math.sin(t+p.r3*9)*4;ty=H*(.94-.88*Math.min(1,Math.max(0,y)));ta=.45;break}
+      case 'line':if(p.r1<.25){const u=p.r2;tx=W*(.04+.92*u);ty=H*(.84-.6*u)+Math.sin(t*1.4+p.r3*9)*3;ta=.95;sz=1.3}else ta=.2;break;
+      case 'proportion':if(p.r1<prob){ta=.95;sz=1.9}else ta=.14;break;
+      case 'universe':if(p.r2<uni){if(p.r1<prob){ta=.95;sz=1.9}else ta=.3}else ta=.03;break;
+      case 'waves':{const row=Math.floor(p.r1*5);tx=(p.r2*W+t*14)%W;ty=H*(.18+.16*row)+Math.sin(tx/W*6.2832*(1+row*.3)+t*(.5+row*.12))*24;ta=.35;tele=true;break}
+      case 'text':if(textPts&&i<textPts.length){tx=textPts[i][0];ty=textPts[i][1];ta=.95;sz=1.5}else ta=.12;break;
+    }
+    if(reduce&&tx!=null){p.x=tx;p.y=ty}
+    if(tx!=null){free=false;if(tele&&(Math.abs(tx-p.x)>W*.5||Math.abs(ty-p.y)>H*.5)){p.x=tx;p.y=ty;p.vx=p.vy=0}p.vx+=(tx-p.x)*.012;p.vy+=(ty-p.y)*.012;p.vx*=.86;p.vy*=.86}
+    else{if(mode!=='wind'){p.vx+=(Math.random()-.5)*.03;p.vy+=(Math.random()-.5)*.03;const sp=Math.hypot(p.vx,p.vy);if(sp>.45){p.vx*=.45/sp;p.vy*=.45/sp}}}
+    const dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;if(d2<16900&&!reduce){const f=(1-Math.sqrt(d2)/130)*.9;p.vx+=dx/Math.sqrt(d2+1)*f;p.vy+=dy/Math.sqrt(d2+1)*f}
+    if(!reduce){p.x+=p.vx;p.y+=p.vy}
+    if(free){if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10}
+    p.a+=(ta-p.a)*.05;p.s+=(sz-p.s)*.06;
+  }
+  const col=inkC.map(Math.round).join(',');
+  if(mode==='constellation'||mode==='orbit3'){const LD=mode==='orbit3'?90:130,L2=LD*LD;cx.lineWidth=.6;
+    for(let i=0;i<N;i++){const a=parts[i];for(let j=i+1;j<N;j++){const b=parts[j],dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy;if(d<L2){cx.strokeStyle=`rgba(${col},${(1-d/L2)*.22*Math.min(a.a,b.a)*1.6})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}}}
+  for(let i=0;i<N;i++){const p=parts[i];cx.fillStyle=`rgba(${col},${p.a})`;cx.beginPath();cx.arc(p.x,p.y,(.7+p.r3*1.4)*p.s,0,6.2832);cx.fill()}
+  requestAnimationFrame(frame);
+}
+
+addEventListener('resize',resize);
+fit();resize();
+const start=slides.findIndex(s=>'#'+s.id===location.hash);
+go(start>=0?start:0,true);
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
