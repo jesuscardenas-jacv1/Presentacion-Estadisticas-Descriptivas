@@ -113,6 +113,24 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+.peekable{cursor:pointer;border-radius:14px;padding:10px 14px;margin:-10px -14px;transition:background .25s,box-shadow .25s;outline:none}
+.peekable:hover,.peekable:focus-visible{background:rgba(18,18,18,.06)}
+.peekable.on{background:rgba(18,18,18,.08);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.peek-hint{font-family:var(--f-mono);font-size:18px;letter-spacing:.06em;color:var(--slate);opacity:.6;margin-top:6px}
+.peekable:hover .peek-hint,.peekable.on .peek-hint{opacity:1}
+.peek{position:absolute;left:128px;top:540px;width:1280px;z-index:3;background:#0E0E10;color:var(--bone);border:1px solid rgba(243,242,238,.18);border-radius:20px;padding:26px 32px 30px;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:peekin .45s cubic-bezier(.2,.7,.2,1) both}
+@keyframes peekin{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.peek-top{display:flex;align-items:center;gap:18px;margin-bottom:18px;font-family:var(--f-mono);font-size:20px;color:var(--mist)}
+.peek-top b{font-family:var(--f-display);font-weight:400;font-size:40px;color:var(--bone);letter-spacing:0}
+.peek-top .chip{border:1px solid rgba(243,242,238,.3);border-radius:999px;padding:4px 12px;font-size:17px;letter-spacing:.1em;text-transform:uppercase}
+.peek-top button{margin-left:auto;font:inherit;font-size:26px;line-height:1;color:var(--bone);background:transparent;border:1px solid rgba(243,242,238,.3);border-radius:50%;width:44px;height:44px;cursor:pointer}
+.peek-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:28px}
+.peek-grid > div{min-width:0}
+.peek-lbl{font-family:var(--f-mono);font-size:18px;color:var(--mist);margin-bottom:10px}
+.peek pre.code{font-size:21px;line-height:1.6}
+.slide.active .peek pre.code .ln{animation-delay:calc(var(--i) * 70ms + 100ms)}
+.peek .console{font-size:21px;white-space:pre;margin:0;opacity:0;animation:rise .5s ease both;animation-delay:var(--od)}
+
 .vb{display:grid;grid-template-columns:1fr auto;row-gap:10px;font-size:28px}
 .vb b{font-family:var(--f-display);font-weight:400;font-size:44px;line-height:1}
 .vb .b{grid-column:1 / -1;height:12px;background:rgba(243,242,238,.12);border-radius:6px;overflow:hidden}
@@ -234,10 +252,10 @@ aside.notes{display:none}
   <div class="head"><p class="eyebrow r" style="--d:300">02 · Arica y Parinacota</p><h2 class="h2 r" style="--d:420">¿Quiénes <em>estudian</em> en la región?</h2></div>
   <div style="display:grid;grid-template-columns:1fr 1.05fr;gap:90px">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px 48px">
-      <div class="r" style="--d:600"><p class="num" style="font-size:76px"><span data-count="56.62" data-dec="1">56,6</span>%</p><p class="small muted">son mujeres (7.993)</p></div>
-      <div class="r" style="--d:700"><p class="num" style="font-size:76px"><span data-count="23" data-dec="0">23</span> años</p><p class="small muted">mediana de edad</p></div>
-      <div class="r" style="--d:800"><p class="num" style="font-size:76px"><span data-count="46.46" data-dec="0">46</span>%</p><p class="small muted">tiene entre 20 y 24 años</p></div>
-      <div class="r" style="--d:900"><p class="num" style="font-size:76px">Arica</p><p class="small muted">comuna de todas las sedes</p></div>
+      <div class="r peekable" data-peek="mujeres" role="button" tabindex="0" aria-label="Ver código pandas: porcentaje de mujeres" style="--d:600"><p class="num" style="font-size:76px"><span data-count="56.62" data-dec="1">56,6</span>%</p><p class="small muted">son mujeres (7.993)</p><p class="peek-hint">&lt;/&gt; ver código</p></div>
+      <div class="r peekable" data-peek="edad" role="button" tabindex="0" aria-label="Ver código pandas: mediana de edad" style="--d:700"><p class="num" style="font-size:76px"><span data-count="23" data-dec="0">23</span> años</p><p class="small muted">mediana de edad</p><p class="peek-hint">&lt;/&gt; ver código</p></div>
+      <div class="r peekable" data-peek="rango" role="button" tabindex="0" aria-label="Ver código pandas: porcentaje por rango de edad" style="--d:800"><p class="num" style="font-size:76px"><span data-count="46.46" data-dec="0">46</span>%</p><p class="small muted">tiene entre 20 y 24 años</p><p class="peek-hint">&lt;/&gt; ver código</p></div>
+      <div class="r peekable" data-peek="comuna" role="button" tabindex="0" aria-label="Ver código pandas: comuna de las sedes" style="--d:900"><p class="num" style="font-size:76px">Arica</p><p class="small muted">comuna de todas las sedes</p><p class="peek-hint">&lt;/&gt; ver código</p></div>
     </div>
     <div class="bars r" style="--d:700">
       <p class="eyebrow" style="opacity:.6">Dónde estudian · matrículas por tipo</p>
@@ -248,6 +266,7 @@ aside.notes{display:none}
     </div>
   </div>
   <svg class="ink" id="landscape" viewBox="0 0 1920 560" style="position:absolute;left:0;bottom:0;width:1920px;height:560px" role="img" aria-label="Dibujo a tinta de los volcanes Parinacota y Pomerape sobre el lago Chungará, con vicuñas y pastos de altiplano en primer plano"></svg>
+  <div id="peek" class="peek" hidden role="dialog" aria-label="Código pandas"></div>
   <p class="small r" style="--d:2600;position:absolute;left:128px;bottom:96px;background:var(--paper);padding:6px 12px;color:var(--slate);font-family:var(--f-mono);font-size:18px;letter-spacing:.08em">Volcanes Parinacota y Pomerape · Lago Chungará · más de 4.500 m</p>
   <aside class="notes">Antes de los cálculos, una mirada a quiénes son los estudiantes. El 56,6% son mujeres, la mediana de edad es 23 años y casi la mitad tiene entre 20 y 24. Todas las sedes de la base están en la comuna de Arica. Por tipo de institución, las universidades del CRUCH concentran 7.849 matrículas, seguidas por los CFT con 3.594, los IP con 1.430 y las universidades privadas con 1.243. De fondo, los volcanes Parinacota y Pomerape sobre el lago Chungará, en el altiplano de la región.</aside>
 </section>
@@ -805,7 +824,6 @@ VALOR ARANCEL (PESOS)    956750.47  35.24</p>
   <div class="track"><div class="fill" id="fill"></div></div>
   <button id="prev" type="button" aria-label="Diapositiva anterior">←</button>
   <button id="next" type="button" aria-label="Diapositiva siguiente">→</button>
-  <select id="rate" aria-label="Velocidad de la voz"><option value="0.9">0,9×</option><option value="1" selected>1×</option><option value="1.15">1,15×</option><option value="1.3">1,3×</option></select>
   <button id="nbtn" type="button" aria-pressed="false">Notas</button>
   <button id="fs" type="button">Pantalla completa</button>
 </nav>
@@ -949,6 +967,7 @@ function go(i,fromHash){
   i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;
   timers.forEach(clearTimeout);timers=[];
   if(cur>=0)slides[cur].classList.remove('active','running','ran');
+  if(peekKey)closePeek();
   cur=i;const s=slides[i];s.classList.add('active');
   document.body.classList.toggle('is-light',s.classList.contains('light'));
   document.getElementById('count').textContent=String(i+1).padStart(2,'0')+' / '+slides.length;
@@ -974,7 +993,7 @@ addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=
   else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev()}
   else if(k==='Home')go(0);else if(k==='End')go(slides.length-1);
   else if(k==='n'||k==='N')toggleNotes();else if(k==='f'||k==='F')document.getElementById('fs').click()});
-stage.addEventListener('click',e=>{if(e.target.closest('button,a'))return;(e.clientX<innerWidth*.25?prev:next)()});
+stage.addEventListener('click',e=>{if(e.target.closest('button,a'))return;if(peekKey){closePeek();return}(e.clientX<innerWidth*.25?prev:next)()});
 let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
 addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next:prev)();tx=null},{passive:true});
 let idleT;const wake=()=>{document.body.classList.remove('idle');clearTimeout(idleT);idleT=setTimeout(()=>document.body.classList.add('idle'),3000)};addEventListener('mousemove',wake);addEventListener('touchstart',wake,{passive:true});wake();
@@ -1037,6 +1056,64 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 
+
+/* ---------- mini pantalla con el código pandas (diapositiva Parinacota) ---------- */
+var peekKey=null;
+const PEEK={
+  mujeres:{t:'56,6% son mujeres',code:`# Cantidad y porcentaje por genero
+conteo = df['GENERO'].value_counts()
+porcentaje = df['GENERO'].value_counts(normalize=True)
+porcentaje = (porcentaje * 100).round(2)
+print(conteo)
+print(porcentaje)`,out:`GENERO
+Femenino     7993
+Masculino    6123
+Name: count, dtype: int64
+GENERO
+Femenino     56.62
+Masculino    43.38
+Name: proportion, dtype: float64`},
+  edad:{t:'23 años · mediana de edad',code:`# Mediana de la edad: el valor del centro
+# al ordenar a los 14.116 estudiantes
+mediana = df['EDAD'].median()
+print(mediana)`,out:`23.0`},
+  rango:{t:'46% tiene entre 20 y 24 años',code:`# Porcentaje de estudiantes por rango de edad
+rangos = df['RANGO EDAD'].value_counts(normalize=True)
+rangos = (rangos * 100).round(2)
+print(rangos)`,out:`RANGO EDAD
+20 a 24     46.46
+15 a 19     17.21
+25 a 29     16.91
+30 a 34      8.01
+40 y mas     6.32
+35 a 39      5.10
+Name: proportion, dtype: float64`},
+  comuna:{t:'Arica · comuna de todas las sedes',code:`# Comuna de la sede de cada matricula
+print(df['COMUNA SEDE'].value_counts())
+
+# Cantidad de comunas distintas
+print(df['COMUNA SEDE'].nunique())`,out:`COMUNA SEDE
+Arica    14116
+Name: count, dtype: int64
+1`}};
+const peekEl=document.getElementById('peek');
+function openPeek(k,src){
+  const d=PEEK[k];if(!d||!peekEl)return;peekKey=k;
+  document.querySelectorAll('.peekable.on').forEach(x=>x.classList.remove('on'));src.classList.add('on');
+  const lines=d.code.split('\n');
+  peekEl.innerHTML=`<div class="peek-top"><span class="chip">pandas</span><b>${esc(d.t)}</b><button type="button" aria-label="Cerrar código">×</button></div>
+  <div class="peek-grid"><div><p class="peek-lbl">In · código</p><pre class="code">${lines.map((l,i)=>`<span class="ln" style="--i:${i}">${hl(l)||' '}</span>`).join('')}</pre></div>
+  <div><p class="peek-lbl">Out · resultado</p><pre class="console" style="--od:${lines.length*70+350}ms">${esc(d.out)}</pre></div></div>`;
+  peekEl.hidden=false;peekEl.querySelector('button').onclick=e=>{e.stopPropagation();closePeek()};
+}
+function closePeek(){if(!peekEl)return;peekKey=null;peekEl.hidden=true;peekEl.innerHTML='';document.querySelectorAll('.peekable.on').forEach(x=>x.classList.remove('on'))}
+document.querySelectorAll('[data-peek]').forEach(el=>{
+  el.addEventListener('click',e=>{e.stopPropagation();peekKey===el.dataset.peek?closePeek():openPeek(el.dataset.peek,el)});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();el.click()}});
+});
+if(peekEl)peekEl.addEventListener('click',e=>e.stopPropagation());
+document.addEventListener('click',()=>{if(peekKey)closePeek()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&peekKey)closePeek()});
 addEventListener('resize',resize);
 fit();resize();
 const start=slides.findIndex(s=>'#'+s.id===location.hash);
