@@ -128,3 +128,15 @@ Cada diapositiva tiene **notas del orador** con lo que hay que decir.
 Resultados (verificados con el Excel): 1) 4.853/14.116 = **34,38%** (29,07% + 16,60% − 11,29%) · 2) (678+455+588)/14.116 = **12,19%** · 3) P(Vespertino | tipo): CFT **57,96%**, IP 46,57%, U. privadas 42,80%, U. CRUCH 10,49%
 
 Estado: ✅ agregadas a la presentación (diapositivas 15–18, 20 en total) · ⬜ agregar las celdas al Colab (In [14]–[18])
+
+---
+
+## Lista de cotejo (Prof. Arlette Mella Suárez) · 13-11-2026
+
+Revisión de la presentación contra los 18 indicadores de la hoja:
+- Cumplían desde antes: 1–12; 15 y 16 (aporte de KanninoX, rama `asimetria-curtosis`, ya unida a `main`).
+- Completados: 13 (eje Y "Frecuencia" y eje X rotulado en los histogramas), 14 (diapositiva de media, mediana y moda), 17 (diapositiva de desviación estándar) y 18 (diapositiva que justifica por qué ninguna variable tiene forma de campana).
+- Ecuación del modelo expresada como y = a + bx: y = 1.724.716 + 7,502x.
+- Diapositivas reordenadas del punto 1 al 18; cada una indica arriba el punto que cubre (26 en total).
+- Colab corregido con las celdas nuevas (preguntas Lab 07, histogramas, medidas, desviación y conclusión de normalidad), ejecutado y verificado.
+- La hoja indica puntaje sobre 29, pero muestra 18 indicadores: falta revisar la segunda página.

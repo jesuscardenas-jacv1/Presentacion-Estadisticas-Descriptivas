@@ -91,6 +91,8 @@ table.t{width:100%;border-collapse:collapse;font-size:24px;font-variant-numeric:
 .t td{white-space:nowrap}
 .t.tight td{padding:8px 12px}
 .t tr.hl td{background:rgba(243,242,238,.1);font-weight:500}
+.light .t th{color:var(--slate);border-bottom-color:rgba(18,18,18,.25)}
+.light .t td{border-bottom-color:rgba(18,18,18,.12)}
 .t td.key{text-decoration:underline;text-underline-offset:6px}
 
 /* waffle */
@@ -200,7 +202,7 @@ aside.notes{display:none}
 <canvas id="fx" aria-hidden="true"></canvas>
 <main id="stage" aria-live="polite">
 
-<!-- 1 · PORTADA -->
+<!-- 01 · portada -->
 <section class="slide dark" id="portada" data-mode="constellation" data-enter="blur" style="justify-content:center;gap:40px">
   <p class="eyebrow r" style="--d:200">Estadística descriptiva · Python</p>
   <h1 class="display r" style="--d:350;font-size:176px;max-width:1300px">Matrículas de Educación <em>Superior</em></h1>
@@ -213,7 +215,7 @@ aside.notes{display:none}
   <aside class="notes">Presentamos el análisis estadístico de la base de matrículas de educación superior 2021 de la región de Arica y Parinacota, la misma base de la primera evaluación. Todo se hizo en Google Colab con Python (pandas, numpy, matplotlib y scikit-learn). En cada paso mostramos el código al lado de su resultado.</aside>
 </section>
 
-<!-- 2 · CONTEXTO -->
+<!-- 02 · contexto -->
 <section class="slide dark" id="contexto" data-mode="grid" data-enter="zoom">
   <div class="head"><p class="eyebrow r">01 · Contexto</p><h2 class="h2 r" style="--d:120">La base de datos</h2></div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:40px">
@@ -227,7 +229,7 @@ aside.notes{display:none}
   <aside class="notes">La base tiene 14.116 registros, uno por estudiante matriculado, y 28 variables: género, edad, institución, acreditación, carrera, área del conocimiento, valor de matrícula y de arancel, entre otras (son las que pasan abajo). Hay 11 instituciones agrupadas en 4 tipos: centros de formación técnica, institutos profesionales, universidades del CRUCH y universidades privadas.</aside>
 </section>
 
-<!-- 3 · PARINACOTA -->
+<!-- 03 · parinacota -->
 <section class="slide light" id="parinacota" data-mode="wind" data-enter="iris" style="gap:36px">
   <div class="head"><p class="eyebrow r" style="--d:300">02 · Arica y Parinacota</p><h2 class="h2 r" style="--d:420">¿Quiénes <em>estudian</em> en la región?</h2></div>
   <div style="display:grid;grid-template-columns:1fr 1.05fr;gap:90px">
@@ -250,7 +252,7 @@ aside.notes{display:none}
   <aside class="notes">Antes de los cálculos, una mirada a quiénes son los estudiantes. El 56,6% son mujeres, la mediana de edad es 23 años y casi la mitad tiene entre 20 y 24. Todas las sedes de la base están en la comuna de Arica. Por tipo de institución, las universidades del CRUCH concentran 7.849 matrículas, seguidas por los CFT con 3.594, los IP con 1.430 y las universidades privadas con 1.243. De fondo, los volcanes Parinacota y Pomerape sobre el lago Chungará, en el altiplano de la región.</aside>
 </section>
 
-<!-- 4 · FLUJO -->
+<!-- 04 · flujo -->
 <section class="slide dark" id="flujo" data-mode="flow" data-enter="wipe">
   <div class="head"><p class="eyebrow r" style="--d:300">03 · Método</p><h2 class="h2 r" style="--d:420">El flujo de <em>trabajo</em></h2></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0">
@@ -268,7 +270,7 @@ aside.notes{display:none}
   <aside class="notes">Este es el recorrido completo. Cargamos la base con pandas, medimos la asociación entre matrícula y arancel con covarianza y correlación, lo visualizamos con un gráfico de dispersión, ajustamos un modelo de regresión lineal con su coeficiente de determinación respondimos preguntas de probabilidad con tablas bivariadas y, al final, describimos la forma de cada variable con los coeficientes de asimetría y curtosis.</aside>
 </section>
 
-<!-- 5 · CARGA -->
+<!-- 05 · carga -->
 <section class="slide dark code-slide" id="carga" data-mode="rain" data-enter="blur">
   <div class="head"><p class="eyebrow r">04 · Carga de datos</p><h2 class="h2 r" style="--d:120">Leer la base con <em>pandas</em></h2></div>
   <div class="split">
@@ -290,9 +292,9 @@ df</pre></div>
   <aside class="notes">Con pd.read_excel cargamos el archivo en un DataFrame llamado df. Al mostrarlo, pandas confirma el tamaño: 14.116 filas por 28 columnas. A la derecha están las columnas que usamos: los valores de matrícula y arancel para la asociación y el modelo, y las variables categóricas para las tablas de probabilidad.</aside>
 </section>
 
-<!-- 6 · PREGUNTA -->
+<!-- 06 · pregunta -->
 <section class="slide dark" id="pregunta" data-mode="orbit" data-enter="zoom" style="justify-content:center;gap:56px">
-  <p class="eyebrow r" style="--d:200">Parte 1 · Asociación entre variables</p>
+  <p class="eyebrow r" style="--d:200">Parte A · Correlación y regresión lineal · puntos 1 a 7</p>
   <h2 class="display r" style="--d:350;font-size:132px;max-width:1500px">¿El valor de la matrícula <em>explica</em> el valor del arancel?</h2>
   <div class="r" style="--d:700;display:flex;gap:80px">
     <div><p class="eyebrow" style="opacity:.6">x · independiente</p><p style="font-family:var(--f-mono);font-size:32px;margin-top:10px">VALOR MATRICULA (PESOS)</p></div>
@@ -301,9 +303,34 @@ df</pre></div>
   <aside class="notes">Esta pregunta guía la primera parte. La matrícula es la variable independiente, x, y el arancel es la variable dependiente, y. Queremos saber si cuando sube la matrícula también sube el arancel, con qué fuerza, y si podemos modelarlo con una recta.</aside>
 </section>
 
-<!-- 7 · ASOCIACIÓN -->
+<!-- 07 · dispersion -->
+<section class="slide dark code-slide" id="dispersion" data-mode="dim" data-enter="blur">
+  <div class="head"><p class="eyebrow r">Punto 1 · Gráfico de dispersión</p><h2 class="h2 r" style="--d:120">Relación entre matrícula y <em>arancel</em></h2></div>
+  <div class="split" style="grid-template-columns:1fr 1.02fr">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [3]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:22px"># Declaramos las variables
+valores_indep = df_ASOC['VALOR MATRICULA (PESOS)']
+valor_dep = df_ASOC['VALOR ARANCEL (PESOS)']
+
+# Grafico
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.scatter(valores_indep, valor_dep, alpha=0.6)
+ax.set_title(
+    'Relación entre gastos de Matrícula y Arancel')
+ax.set_xlabel('VALOR MATRICULA (PESOS)')
+ax.set_ylabel('VALOR ARANCEL (PESOS)')
+ax.grid(True, linestyle='--', alpha=0.7)
+plt.show()</pre></div>
+    <div class="panel" style="padding:24px 24px 16px"><div class="panel-top out"><span>Out [3]</span><span>Relación entre gastos de Matrícula y Arancel</span></div>
+      <svg class="chart out" id="ch1" viewBox="0 0 840 560" style="--d:0;width:100%;height:auto" role="img" aria-label="Gráfico de dispersión: valor de matrícula en el eje x contra valor de arancel en el eje y; los puntos forman franjas verticales y tienden a subir"></svg>
+    </div>
+  </div>
+  <aside class="notes">Con matplotlib dibujamos cada matrícula como un punto: x es la matrícula, y es el arancel. La nube sube hacia la derecha, lo que confirma la relación positiva. Se ven franjas verticales: muchas carreras cobran la misma matrícula pero aranceles distintos, y eso explica por qué la correlación es solo moderada. Aquí cada punto es una combinación matrícula–arancel y su intensidad indica cuántos estudiantes la comparten.</aside>
+</section>
+
+<!-- 08 · asociacion -->
 <section class="slide dark code-slide" id="asociacion" data-mode="correlation" data-enter="rise">
-  <div class="head"><p class="eyebrow r">05 · Asociación</p><h2 class="h2 r" style="--d:120">Covarianza y <em>correlación</em></h2></div>
+  <div class="head"><p class="eyebrow r">Puntos 2 y 3 · Covarianza y su signo</p><h2 class="h2 r" style="--d:120">Covarianza y <em>correlación</em></h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [2]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code"># Covarianza
@@ -327,34 +354,9 @@ print(corr)</pre></div>
   <aside class="notes">La covarianza da 30.456.470.119. Es un número enorme porque está en pesos al cuadrado, así que no mide fuerza; lo que importa es el signo: positivo, relación directa. Para medir la fuerza usamos la correlación de Pearson, que va de −1 a +1: r = 0,4996, una correlación positiva moderada. Las partículas del fondo están dibujando una nube con esa misma correlación.</aside>
 </section>
 
-<!-- 8 · DISPERSIÓN -->
-<section class="slide dark code-slide" id="dispersion" data-mode="dim" data-enter="blur">
-  <div class="head"><p class="eyebrow r">06 · Gráfico de dispersión</p><h2 class="h2 r" style="--d:120">Relación entre matrícula y <em>arancel</em></h2></div>
-  <div class="split" style="grid-template-columns:1fr 1.02fr">
-    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [3]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
-<pre class="code" style="font-size:22px"># Declaramos las variables
-valores_indep = df_ASOC['VALOR MATRICULA (PESOS)']
-valor_dep = df_ASOC['VALOR ARANCEL (PESOS)']
-
-# Grafico
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.scatter(valores_indep, valor_dep, alpha=0.6)
-ax.set_title(
-    'Relación entre gastos de Matrícula y Arancel')
-ax.set_xlabel('VALOR MATRICULA (PESOS)')
-ax.set_ylabel('VALOR ARANCEL (PESOS)')
-ax.grid(True, linestyle='--', alpha=0.7)
-plt.show()</pre></div>
-    <div class="panel" style="padding:24px 24px 16px"><div class="panel-top out"><span>Out [3]</span><span>Relación entre gastos de Matrícula y Arancel</span></div>
-      <svg class="chart out" id="ch1" viewBox="0 0 840 560" style="--d:0;width:100%;height:auto" role="img" aria-label="Gráfico de dispersión: valor de matrícula en el eje x contra valor de arancel en el eje y; los puntos forman franjas verticales y tienden a subir"></svg>
-    </div>
-  </div>
-  <aside class="notes">Con matplotlib dibujamos cada matrícula como un punto: x es la matrícula, y es el arancel. La nube sube hacia la derecha, lo que confirma la relación positiva. Se ven franjas verticales: muchas carreras cobran la misma matrícula pero aranceles distintos, y eso explica por qué la correlación es solo moderada. Aquí cada punto es una combinación matrícula–arancel y su intensidad indica cuántos estudiantes la comparten.</aside>
-</section>
-
-<!-- 9 · REGRESIÓN -->
+<!-- 09 · regresion -->
 <section class="slide dark code-slide" id="regresion" data-mode="line" data-enter="rise">
-  <div class="head"><p class="eyebrow r">07 · Modelo lineal</p><h2 class="h2 r" style="--d:120">Regresión lineal con <em>numpy</em></h2></div>
+  <div class="head"><p class="eyebrow r">Puntos 4 y 6 · Modelo lineal y R²</p><h2 class="h2 r" style="--d:120">Regresión lineal con <em>numpy</em></h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [4]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:22px">modelo_lineal = np.polyfit(Valores_indep,
@@ -387,9 +389,9 @@ El coeficiente de determinación es 25.0%</p>
   <aside class="notes">Con np.polyfit de grado 1 ajustamos la recta de mínimos cuadrados, que nos entrega la pendiente y el intercepto. Con np.polyval calculamos el arancel que predice el modelo para cada matrícula, y con r2_score de scikit-learn comparamos esas predicciones con los valores reales. Resultado: pendiente 7,502, intercepto 1.724.716 y R² de 25%. En el fondo, una de cada cuatro partículas se alinea con la recta.</aside>
 </section>
 
-<!-- 10 · INTERPRETACIÓN -->
+<!-- 10 · interpretacion -->
 <section class="slide light" id="interpretacion" data-mode="dim" data-enter="iris">
-  <div class="head"><p class="eyebrow r" style="--d:300">08 · Interpretación del modelo</p><h2 class="h2 r" style="--d:420;font-size:104px">y = 7,502x + 1.724.716</h2></div>
+  <div class="head"><p class="eyebrow r" style="--d:300">Puntos 4, 5 y 7 · Interpretación del modelo</p><h2 class="h2 r" style="--d:420;font-size:104px">y = 1.724.716 + 7,502x</h2><p class="small r muted" style="--d:520;font-family:var(--f-mono)">forma y = a + bx · a = intercepto = 1.724.716 · b = pendiente = 7,502</p></div>
   <div style="flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:64px;min-height:0">
     <svg class="chart now r" id="ch2" viewBox="0 0 840 560" style="--d:500;width:100%;height:auto" role="img" aria-label="Dispersión de matrícula contra arancel con la recta de regresión y = 7,502x + 1.724.716"></svg>
     <div style="display:flex;flex-direction:column;justify-content:space-between">
@@ -398,23 +400,25 @@ El coeficiente de determinación es 25.0%</p>
       <div class="card r" style="--d:1300;padding-top:22px"><p class="eyebrow" style="opacity:.6">R² · determinación</p><p class="num" style="font-size:72px;margin:8px 0">25,0%</p><p class="body">La matrícula explica ¼ de la variación del arancel; el 75% depende de otros factores. <span style="font-family:var(--f-mono);font-size:22px">(0,4996² ≈ 0,25)</span></p></div>
     </div>
   </div>
-  <aside class="notes">La ecuación es y = 7,502x + 1.724.716. La pendiente dice que por cada peso adicional de matrícula el arancel aumenta en promedio 7,50 pesos. El intercepto indica que, con matrícula cero, el arancel base estimado sería 1.724.716 pesos; en la base sí hay carreras con matrícula 0. El R² de 25% significa que la matrícula sola explica una cuarta parte de la variación del arancel, coherente con la correlación: 0,4996 al cuadrado es aproximadamente 0,25. Hay relación, pero el modelo no basta para predecir el arancel con precisión.</aside>
+  <aside class="notes">La ecuación, en la forma y = a + bx, es y = 1.724.716 + 7,502x: a es el intercepto y b la pendiente. La pendiente dice que por cada peso adicional de matrícula el arancel aumenta en promedio 7,50 pesos. El intercepto indica que, con matrícula cero, el arancel base estimado sería 1.724.716 pesos; en la base sí hay carreras con matrícula 0. El R² de 25% significa que la matrícula sola explica una cuarta parte de la variación del arancel, coherente con la correlación: 0,4996 al cuadrado es aproximadamente 0,25. Hay relación, pero el modelo no basta para predecir el arancel con precisión.</aside>
 </section>
 
-<!-- 11 · PROBABILIDAD -->
-<section class="slide dark" id="probabilidad" data-mode="orbit3" data-enter="zoom" style="justify-content:center;gap:72px">
-  <div class="head"><p class="eyebrow r" style="--d:200">Parte 2 · Probabilidad</p><h2 class="display r" style="--d:350;font-size:140px">Tres preguntas a la <em>base</em></h2></div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px">
-    <div class="r" style="--d:600"><p class="num" style="font-size:88px">P(A)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Simple</p><p class="body" style="margin-top:12px">¿Que un estudiante al azar sea de la Universidad de Tarapacá?</p></div>
-    <div class="r" style="--d:750"><p class="num" style="font-size:88px">P(A ∩ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Conjunta</p><p class="body" style="margin-top:12px">¿Que sea de género femenino y esté en Carreras Técnicas?</p></div>
-    <div class="r" style="--d:900"><p class="num" style="font-size:88px">P(A | B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Condicional</p><p class="body" style="margin-top:12px">Si es del área de Salud, ¿que su institución esté acreditada?</p></div>
+<!-- 11 · probabilidad -->
+<section class="slide dark" id="probabilidad" data-mode="orbit3" data-enter="zoom" style="justify-content:center;gap:64px">
+  <div class="head"><p class="eyebrow r" style="--d:200">Parte B · Probabilidades · puntos 8 a 12</p><h2 class="display r" style="--d:350;font-size:130px">Seis preguntas a la <em>base</em></h2></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:48px">
+    <div class="r" style="--d:600"><p class="num" style="font-size:80px">P(A)</p><hr class="rule" style="margin:20px 0"><p class="eyebrow" style="opacity:.6">Punto 8 · Clásica</p><p class="body" style="margin-top:12px">¿Universidad de Tarapacá?</p></div>
+    <div class="r" style="--d:720"><p class="num" style="font-size:80px">P(A ∪ B)</p><hr class="rule" style="margin:20px 0"><p class="eyebrow" style="opacity:.6">Punto 9 · Unión</p><p class="body" style="margin-top:12px">¿Vespertina <b style="font-weight:500">o</b> No acreditada?</p></div>
+    <div class="r" style="--d:840"><p class="num" style="font-size:80px">P(A ∩ B)</p><hr class="rule" style="margin:20px 0"><p class="eyebrow" style="opacity:.6">Punto 10 · Intersección</p><p class="body" style="margin-top:12px">¿Femenino <b style="font-weight:500">y</b> Carreras Técnicas?<br>¿Mujer <b style="font-weight:500">y</b> 30 años o más?</p></div>
+    <div class="r" style="--d:960"><p class="num" style="font-size:80px">P(A | B)</p><hr class="rule" style="margin:20px 0"><p class="eyebrow" style="opacity:.6">Punto 11 · Condicional</p><p class="body" style="margin-top:12px">Si es de Salud, ¿acreditada?<br>¿Vespertino según tipo de institución?</p></div>
   </div>
-  <aside class="notes">En la segunda parte respondimos tres preguntas: una simple, la probabilidad de un solo evento; una conjunta, que ocurran dos eventos a la vez; y una condicional, la probabilidad de un evento sabiendo que ya ocurrió otro, donde el universo se reduce. Para las tres usamos tablas bivariadas con pd.crosstab y margins=True, que agrega los totales.</aside>
+  <p class="body r muted" style="--d:1150">Punto 12: cada resultado se expresa en porcentaje y se interpreta en el contexto de la región.</p>
+  <aside class="notes">En la parte de probabilidades respondimos seis preguntas con tablas bivariadas, usando pd.crosstab con margins=True para tener los totales. Una probabilidad clásica, casos favorables sobre casos totales; una unión, donde hay que restar la intersección; dos intersecciones, que se dividen por el total general; y dos condicionales, donde el universo se reduce al evento que condiciona. Todos los resultados los expresamos en porcentaje y los interpretamos en el contexto de la región.</aside>
 </section>
 
-<!-- 12 · P SIMPLE -->
+<!-- 12 · p-simple -->
 <section class="slide dark code-slide" id="p-simple" data-mode="proportion" data-p="0.5043" data-enter="blur">
-  <div class="head"><p class="eyebrow r">09 · Probabilidad simple · P(A)</p><h2 class="h2 r" style="--d:120">¿Universidad de <em>Tarapacá</em>?</h2></div>
+  <div class="head"><p class="eyebrow r">Punto 8 · Probabilidad clásica · P(A)</p><h2 class="h2 r" style="--d:120">¿Universidad de <em>Tarapacá</em>?</h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [8] · In [9]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code"># Tabla bivariada
@@ -439,79 +443,9 @@ print(f'la probabilidad de que ... '
   <aside class="notes">Construimos una tabla bivariada de institución por género con pd.crosstab; margins=True agrega la fila y columna All con los totales. Los casos favorables son 7.119 estudiantes de la Universidad de Tarapacá, sobre un total de 14.116. La probabilidad simple es 50,43%: uno de cada dos estudiantes de la región estudia en la U. de Tarapacá. En el fondo, la mitad de las partículas se iluminan.</aside>
 </section>
 
-<!-- 13 · P CONJUNTA -->
-<section class="slide dark code-slide" id="p-conjunta" data-mode="proportion" data-p="0.1749" data-enter="rise">
-  <div class="head"><p class="eyebrow r">10 · Probabilidad conjunta · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Femenino <em>y</em> Carreras Técnicas?</h2></div>
-  <div class="split">
-    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [10] · In [11]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
-<pre class="code"># Tabla bivariada
-Tabla2 = pd.crosstab(df['NIVEL CARRERA'],
-                     df['GENERO'], margins=True)
-Tabla2
-
-# P(A ∩ B) = intersección / total
-b = (2469 / 14116) * 100
-print(f'la probabilidad de que ... '
-      f'es de {b:.2f}%')</pre></div>
-    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
-      <table class="t out" style="--d:100"><tr><th>Nivel carrera</th><th>Fem.</th><th>Masc.</th><th>All</th></tr>
-        <tr><td>C. Profesionales</td><td>5456</td><td>4545</td><td>10001</td></tr>
-        <tr class="hl"><td>C. Técnicas</td><td class="key">2469</td><td>1518</td><td>3987</td></tr>
-        <tr><td>Total (All)</td><td>7993</td><td>6123</td><td class="key">14116</td></tr></table>
-      <p class="small muted out" style="--d:200">Se omiten Magíster, Doctorado y Postítulo (128 en total).</p>
-      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
-        <div class="waffle" data-on="17"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="17.49" data-dec="2" data-on="run">17,49</span>%</p><p class="body muted" style="margin-top:10px">2.469 / 14.116<br>intersección ÷ total general</p></div>
-      </div>
-    </div>
-  </div>
-  <aside class="notes">Cruzamos nivel de carrera con género. Buscamos la intersección: estudiantes que son de género femenino y están en carreras técnicas a la vez, que son 2.469. Como es conjunta, se divide por el total general de 14.116, no por el total de la fila. Resultado: 17,49%. Si dividiéramos por el total de carreras técnicas estaríamos calculando una condicional, que es otra pregunta.</aside>
-</section>
-
-<!-- 14 · P CONDICIONAL -->
-<section class="slide dark code-slide" id="p-condicional" data-mode="universe" data-p="0.9086" data-u="0.2054" data-enter="blur">
-  <div class="head"><p class="eyebrow r">11 · Probabilidad condicional · P(A | B)</p><h2 class="h2 r" style="--d:120">Si es de Salud, ¿<em>acreditada</em>?</h2></div>
-  <div class="split">
-    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [12] · In [13]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
-<pre class="code"># Tabla bivariada
-Tabla1 = pd.crosstab(
-    df['ACREDITACION INSTITUCIONAL'],
-    df['AREA CONOCIMIENTO'], margins=True)
-Tabla1
-
-# P(A|B) = intersección / total de B
-c = (2634 / 2899) * 100
-print(f'la probabilidad ... '
-      f'es de : {c:.2f}%')</pre></div>
-    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
-      <table class="t out" style="--d:100"><tr><th>Acreditación</th><th>Salud</th><th>All</th></tr>
-        <tr class="hl"><td>ACREDITADA</td><td class="key">2634</td><td>11773</td></tr>
-        <tr><td>NO ACREDITADA</td><td>265</td><td>2343</td></tr>
-        <tr><td>Total (All)</td><td class="key">2899</td><td>14116</td></tr></table>
-      <p class="small muted out" style="--d:200">Solo la columna Salud, de las 10 áreas.</p>
-      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
-        <div class="waffle" data-on="91"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="90.86" data-dec="2" data-on="run">90,86</span>%</p><p class="body muted" style="margin-top:10px">2.634 / 2.899<br>el universo se reduce a Salud</p></div>
-      </div>
-    </div>
-  </div>
-  <aside class="notes">En la condicional ya sabemos algo del estudiante: es del área de Salud. Eso reduce el universo: no dividimos por 14.116, sino por los 2.899 estudiantes de Salud. De ellos, 2.634 están en instituciones acreditadas: 90,86%, nueve de cada diez. En el fondo, la mayoría de las partículas se apagan (quedan solo las de Salud) y de esas se ilumina el 91%.</aside>
-</section>
-
-<!-- 15 · PARTE 3 -->
-<section class="slide dark" id="lab07" data-mode="orbit3" data-enter="iris" style="justify-content:center;gap:64px">
-  <div class="head"><p class="eyebrow r" style="--d:300">Parte 3 · Nuevas preguntas · referencia Laboratorio 07</p><h2 class="display r" style="--d:420;font-size:130px">Tres preguntas <em>más</em></h2></div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:56px">
-    <div class="r" style="--d:650"><p class="num" style="font-size:80px">P(A ∪ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Unión</p><p class="lead" style="margin-top:12px;font-size:32px">¿Jornada Vespertina <b style="font-weight:500">o</b> institución No acreditada?</p></div>
-    <div class="r" style="--d:800"><p class="num" style="font-size:80px">P(A ∩ B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Conjunta con rango</p><p class="lead" style="margin-top:12px;font-size:32px">¿Mujer <b style="font-weight:500">y</b> de al menos 30 años?</p></div>
-    <div class="r" style="--d:950"><p class="num" style="font-size:80px">P(A | B)</p><hr class="rule" style="margin:22px 0"><p class="eyebrow" style="opacity:.6">Condicional para decidir</p><p class="lead" style="margin-top:12px;font-size:32px">¿En qué tipo de institución es más probable estudiar en jornada Vespertina?</p></div>
-  </div>
-  <aside class="notes">Siguiendo el Laboratorio 07, formulamos tres preguntas nuevas a nuestra base, con tipos de probabilidad que no habíamos usado: una unión, que usa el "o"; una conjunta con un rango de edad, donde hay que sumar varias categorías; y una condicional comparativa, pensada para apoyar una decisión.</aside>
-</section>
-
-<!-- 16 · UNIÓN -->
+<!-- 13 · p-union -->
 <section class="slide dark code-slide" id="p-union" data-mode="proportion" data-p="0.3438" data-enter="blur">
-  <div class="head"><p class="eyebrow r">12 · Unión · P(A ∪ B)</p><h2 class="h2 r" style="--d:120">¿Vespertina <em>o</em> No acreditada?</h2></div>
+  <div class="head"><p class="eyebrow r">Punto 9 · Unión · P(A ∪ B)</p><h2 class="h2 r" style="--d:120">¿Vespertina <em>o</em> No acreditada?</h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [14] · In [15]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:25px"># Tabla bivariada
@@ -539,9 +473,38 @@ print(f'P(Vespertino o No acreditada)'
   <aside class="notes">Para la unión usamos la tabla de jornada por acreditación. La probabilidad de "A o B" es la de A más la de B menos la intersección: 29,07% de vespertinos, más 16,60% de no acreditadas, menos 11,29% que cumplen ambas. Si no restamos, contaríamos dos veces a esos 1.594 estudiantes. El resultado es 34,38%: un tercio de los estudiantes estudia de vespertino o en una institución no acreditada.</aside>
 </section>
 
-<!-- 17 · CONJUNTA CON RANGO -->
+<!-- 14 · p-conjunta -->
+<section class="slide dark code-slide" id="p-conjunta" data-mode="proportion" data-p="0.1749" data-enter="rise">
+  <div class="head"><p class="eyebrow r">Punto 10 · Intersección · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Femenino <em>y</em> Carreras Técnicas?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [10] · In [11]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Tabla bivariada
+Tabla2 = pd.crosstab(df['NIVEL CARRERA'],
+                     df['GENERO'], margins=True)
+Tabla2
+
+# P(A ∩ B) = intersección / total
+b = (2469 / 14116) * 100
+print(f'la probabilidad de que ... '
+      f'es de {b:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100"><tr><th>Nivel carrera</th><th>Fem.</th><th>Masc.</th><th>All</th></tr>
+        <tr><td>C. Profesionales</td><td>5456</td><td>4545</td><td>10001</td></tr>
+        <tr class="hl"><td>C. Técnicas</td><td class="key">2469</td><td>1518</td><td>3987</td></tr>
+        <tr><td>Total (All)</td><td>7993</td><td>6123</td><td class="key">14116</td></tr></table>
+      <p class="small muted out" style="--d:200">Se omiten Magíster, Doctorado y Postítulo (128 en total).</p>
+      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
+        <div class="waffle" data-on="17"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="17.49" data-dec="2" data-on="run">17,49</span>%</p><p class="body muted" style="margin-top:10px">2.469 / 14.116<br>intersección ÷ total general</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Cruzamos nivel de carrera con género. Buscamos la intersección: estudiantes que son de género femenino y están en carreras técnicas a la vez, que son 2.469. Como es conjunta, se divide por el total general de 14.116, no por el total de la fila. Resultado: 17,49%. Si dividiéramos por el total de carreras técnicas estaríamos calculando una condicional, que es otra pregunta.</aside>
+</section>
+
+<!-- 15 · p-rango -->
 <section class="slide dark code-slide" id="p-rango" data-mode="proportion" data-p="0.1219" data-enter="rise">
-  <div class="head"><p class="eyebrow r">13 · Conjunta con rango · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Mujer <em>y</em> de al menos 30 años?</h2></div>
+  <div class="head"><p class="eyebrow r">Punto 10 · Intersección con rango · P(A ∩ B)</p><h2 class="h2 r" style="--d:120">¿Mujer <em>y</em> de al menos 30 años?</h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [16] · In [17]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:25px"># Tabla bivariada
@@ -574,9 +537,39 @@ print(f'P(Mujer y 30 o mas) = {e:.2f}%')</pre></div>
   <aside class="notes">Aquí "al menos 30 años" no es una sola fila de la tabla: hay que sumar los rangos 30 a 34, 35 a 39 y 40 y más, en la columna de mujeres. Eso da 678 más 455 más 588, es decir 1.721 mujeres. Como es una probabilidad conjunta, dividimos por el total general de 14.116, y obtenemos 12,19%.</aside>
 </section>
 
-<!-- 18 · CONDICIONAL PARA DECIDIR -->
+<!-- 16 · p-condicional -->
+<section class="slide dark code-slide" id="p-condicional" data-mode="universe" data-p="0.9086" data-u="0.2054" data-enter="blur">
+  <div class="head"><p class="eyebrow r">Puntos 11 y 12 · Condicional · P(A | B)</p><h2 class="h2 r" style="--d:120">Si es de Salud, ¿<em>acreditada</em>?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [12] · In [13]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code"># Tabla bivariada
+Tabla1 = pd.crosstab(
+    df['ACREDITACION INSTITUCIONAL'],
+    df['AREA CONOCIMIENTO'], margins=True)
+Tabla1
+
+# P(A|B) = intersección / total de B
+c = (2634 / 2899) * 100
+print(f'la probabilidad ... '
+      f'es de : {c:.2f}%')</pre></div>
+    <div class="panel"><div class="panel-top out"><span>Out</span><span>resultado</span></div>
+      <table class="t out" style="--d:100"><tr><th>Acreditación</th><th>Salud</th><th>All</th></tr>
+        <tr class="hl"><td>ACREDITADA</td><td class="key">2634</td><td>11773</td></tr>
+        <tr><td>NO ACREDITADA</td><td>265</td><td>2343</td></tr>
+        <tr><td>Total (All)</td><td class="key">2899</td><td>14116</td></tr></table>
+      <p class="small muted out" style="--d:200">Solo la columna Salud, de las 10 áreas.</p>
+      <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
+        <div class="waffle" data-on="91"></div>
+        <div><p class="num" style="font-size:120px"><span data-count="90.86" data-dec="2" data-on="run">90,86</span>%</p><p class="body muted" style="margin-top:10px">2.634 / 2.899<br>el universo se reduce a Salud</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">En la condicional ya sabemos algo del estudiante: es del área de Salud. Eso reduce el universo: no dividimos por 14.116, sino por los 2.899 estudiantes de Salud. De ellos, 2.634 están en instituciones acreditadas: 90,86%, nueve de cada diez. En el fondo, la mayoría de las partículas se apagan (quedan solo las de Salud) y de esas se ilumina el 91%.</aside>
+</section>
+
+<!-- 17 · p-decision -->
 <section class="slide dark code-slide" id="p-decision" data-mode="flow" data-enter="blur">
-  <div class="head"><p class="eyebrow r">14 · Condicional para decidir · P(Vespertino | tipo)</p><h2 class="h2 r" style="--d:120">¿Dónde abrir cupos <em>vespertinos</em>?</h2></div>
+  <div class="head"><p class="eyebrow r">Puntos 11 y 12 · Condicional para decidir</p><h2 class="h2 r" style="--d:120">¿Dónde abrir cupos <em>vespertinos</em>?</h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [18]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:25px"># Proporciones por fila (cada tipo suma 1)
@@ -600,9 +593,65 @@ Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
   <aside class="notes">Esta pregunta apoya una decisión: si queremos abrir más cupos vespertinos para personas que trabajan, ¿dónde conviene hacerlo? Usamos crosstab con normalize='index', que calcula la proporción dentro de cada fila; eso es justamente la probabilidad condicional P(Vespertino dado el tipo de institución). En los CFT el 57,96% estudia vespertino, en los IP el 46,57%, en las universidades privadas el 42,80% y en las del CRUCH solo el 10,49%. La demanda vespertina se concentra en los CFT.</aside>
 </section>
 
-<!-- 19 · PARTE 4 · FORMA DE LA DISTRIBUCIÓN -->
+<!-- 18 · histogramas -->
+<section class="slide dark code-slide" id="histogramas" data-mode="dim" data-enter="rise">
+  <div class="head"><p class="eyebrow r">Parte C · Punto 13 · Histogramas</p><h2 class="h2 r" style="--d:120">Ver la forma de cada <em>variable</em></h2></div>
+  <div class="split" style="grid-template-columns:1fr 1.02fr">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [19]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:21px">variables = ['EDAD', 'VALOR MATRICULA (PESOS)',
+             'VALOR ARANCEL (PESOS)']
+
+fig, axs = plt.subplots(3, 1, figsize=(10, 9))
+for ax, col in zip(axs, variables):
+    ax.hist(df[col], bins=30, edgecolor='white')
+    ax.axvline(df[col].mean(), linestyle='--',
+               label='media')
+    ax.axvline(df[col].median(), label='mediana')
+    ax.set_title(f'Histograma de {col}')
+    ax.set_xlabel(col)
+    ax.set_ylabel('Frecuencia')
+    ax.legend()
+plt.tight_layout()
+plt.show()</pre></div>
+    <div class="panel" style="padding:24px 28px 18px;gap:6px"><div class="panel-top out"><span>Out [19]</span><span>30 intervalos · <span style="letter-spacing:-.1em">- -</span> media · — mediana</span></div>
+      <svg class="chart hist out" id="h-edad" viewBox="0 0 800 220" style="--d:0;width:100%;height:auto" role="img" aria-label="Histograma de edad: la mayoría entre 18 y 24 años, con una cola larga hacia la derecha hasta los 75; la media 25,5 queda a la derecha de la mediana 23"></svg>
+      <svg class="chart hist out" id="h-matricula" viewBox="0 0 800 220" style="--d:200;width:100%;height:auto" role="img" aria-label="Histograma de valor de matrícula: gran pico en 155.000 pesos y un grupo en 0 pesos que alarga la cola a la izquierda; la media 131.952 queda a la izquierda de la mediana 155.000"></svg>
+      <svg class="chart hist out" id="h-arancel" viewBox="0 0 800 220" style="--d:400;width:100%;height:auto" role="img" aria-label="Histograma de valor de arancel: valores repartidos entre 1,3 y 4 millones sin un pico dominante; media y mediana casi juntas"></svg>
+    </div>
+  </div>
+  <aside class="notes">Construimos un histograma de 30 intervalos para cada variable numérica, con título, el eje X con la variable y el eje Y con la frecuencia, es decir, cuántos estudiantes caen en cada intervalo. La línea punteada es la media y la continua, la mediana. En la edad, casi dos de cada tres estudiantes tienen 24 años o menos, pero hay estudiantes de hasta 75 años que alargan la cola a la derecha y empujan la media (25,5) por sobre la mediana (23). En la matrícula, el gran pico está en 155.000 pesos y hay 1.902 estudiantes con matrícula 0 que alargan la cola a la izquierda: la media (131.952) queda bajo la mediana. En el arancel los valores se reparten entre 1,3 y 4 millones sin un pico dominante, por eso es achatado, y la media y la mediana quedan cerca.</aside>
+</section>
+
+<!-- 19 · tendencia -->
+<section class="slide dark code-slide" id="tendencia" data-mode="grid" data-enter="blur">
+  <div class="head"><p class="eyebrow r">Punto 14 · Media, mediana y moda</p><h2 class="h2 r" style="--d:120">¿Dónde está el <em>centro</em>?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [20]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:24px"># Medidas de tendencia central
+medidas = pd.DataFrame({
+    'media':   df[variables].mean(),
+    'mediana': df[variables].median(),
+    'moda':    df[variables].mode().iloc[0]})
+print(medidas.round(2))</pre></div>
+    <div class="panel" style="gap:22px"><div class="panel-top out"><span>Out [20]</span><span>resultado</span></div>
+      <p class="console out" style="--d:100;font-size:18px;white-space:pre">                              media    mediana     moda
+EDAD                          25.54       23.0       19
+VALOR MATRICULA (PESOS)   131952.35   155000.0   155000
+VALOR ARANCEL (PESOS)    2714573.78  2857000.0  3533000</p>
+      <table class="t out" style="--d:250;font-size:25px"><tr><th>Variable</th><th>Media</th><th>Mediana</th><th>Moda</th></tr>
+        <tr><td>Edad (años)</td><td>25,54</td><td>23</td><td>19</td></tr>
+        <tr><td>Matrícula</td><td>$131.952</td><td>$155.000</td><td>$155.000</td></tr>
+        <tr><td>Arancel</td><td>$2.714.574</td><td>$2.857.000</td><td>$3.533.000</td></tr></table>
+      <p class="body out" style="--d:400">En ninguna variable coinciden las tres medidas: los datos <b style="font-weight:500">no son simétricos</b>.</p>
+      <p class="small muted out" style="--d:500">Edad: media &gt; mediana &gt; moda · Matrícula y arancel: media &lt; mediana ≤ moda</p>
+    </div>
+  </div>
+  <aside class="notes">Calculamos las tres medidas de tendencia central para las variables numéricas: con mean(), median() y mode() de pandas, juntas en un DataFrame. En la edad, la media es 25,54 años, la mediana 23 y la moda 19: la media queda arriba porque unos pocos estudiantes mayores la tiran hacia la derecha. En la matrícula, la media es 131.952 pesos, pero la mediana y la moda son 155.000: los estudiantes con matrícula cero bajan la media. En el arancel, la media es 2.714.574, la mediana 2.857.000 y la moda 3.533.000. Que las tres medidas no coincidan ya nos adelanta que las distribuciones no son simétricas.</aside>
+</section>
+
+<!-- 20 · forma -->
 <section class="slide light" id="forma" data-mode="skew" data-enter="iris" style="gap:40px">
-  <div class="head"><p class="eyebrow r" style="--d:300">Parte 4 · Forma de la distribución</p><h2 class="h2 r" style="--d:420">Asimetría y <em>curtosis</em></h2></div>
+  <div class="head"><p class="eyebrow r" style="--d:300">Puntos 15 y 16 · ¿Qué miden?</p><h2 class="h2 r" style="--d:420">Asimetría y <em>curtosis</em></h2></div>
   <div class="shape-grid">
     <div class="shape-col r" style="--d:600">
       <div class="shape-top"><p class="num" style="font-size:60px">Asimetría</p><p class="small" style="font-family:var(--f-mono)">df[col].skew()</p></div>
@@ -627,11 +676,11 @@ Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
   <aside class="notes">Hasta ahora miramos relaciones entre variables. Ahora miramos la forma de cada variable por separado, con dos coeficientes. La asimetría dice hacia qué lado se estira la cola: si es positiva, hay pocos valores muy altos que alargan la cola a la derecha y tiran la media por sobre la mediana; si es negativa, pasa lo contrario; cerca de cero es simétrica. La curtosis compara qué tan apuntada es la distribución respecto de la normal: positiva es leptocúrtica, con un pico alto y colas largas; cerca de cero es mesocúrtica; negativa es platicúrtica, achatada. En pandas se calculan con skew() y kurt(); kurt() entrega el exceso de curtosis, por eso la normal vale 0 y no 3.</aside>
 </section>
 
-<!-- 20 · CÁLCULO ASIMETRÍA Y CURTOSIS -->
+<!-- 21 · asimetria-curtosis -->
 <section class="slide dark code-slide" id="asimetria-curtosis" data-mode="skew" data-enter="blur">
-  <div class="head"><p class="eyebrow r">15 · Asimetría y curtosis</p><h2 class="h2 r" style="--d:120">Tres variables, tres <em>formas</em></h2></div>
+  <div class="head"><p class="eyebrow r">Puntos 15 y 16 · Asimetría y curtosis</p><h2 class="h2 r" style="--d:120">Tres variables, tres <em>formas</em></h2></div>
   <div class="split">
-    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [19]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [21]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:23px"># Coeficiente de asimetria y curtosis
 variables = ['EDAD',
              'VALOR MATRICULA (PESOS)',
@@ -643,7 +692,7 @@ curtosis = df[variables].kurt()   # 0 = normal
 resumen = pd.DataFrame({'asimetria': asimetria,
                         'curtosis': curtosis})
 print(resumen.round(4))</pre></div>
-    <div class="panel" style="gap:18px"><div class="panel-top out"><span>Out [19]</span><span>resultado</span></div>
+    <div class="panel" style="gap:18px"><div class="panel-top out"><span>Out [21]</span><span>resultado</span></div>
       <p class="console out" style="--d:100;font-size:19px;white-space:pre">                         asimetria  curtosis
 EDAD                        1.8238    3.5899
 VALOR MATRICULA (PESOS)    -0.8906    0.0874
@@ -661,37 +710,9 @@ VALOR ARANCEL (PESOS)       0.0580   -0.8083</p>
   <aside class="notes">Calculamos los dos coeficientes para las tres variables numéricas que más usamos: la edad, el valor de la matrícula y el valor del arancel. Con df[variables].skew() y .kurt() pandas calcula cada coeficiente por columna, y los juntamos en un DataFrame de resumen. La edad tiene asimetría 1,82, claramente positiva, y curtosis 3,59, leptocúrtica. La matrícula tiene asimetría −0,89, negativa, y curtosis 0,09, prácticamente como la normal. El arancel tiene asimetría 0,06, casi simétrico, y curtosis −0,81, platicúrtico. Justo nos tocó un ejemplo de cada caso.</aside>
 </section>
 
-<!-- 21 · HISTOGRAMAS -->
-<section class="slide dark code-slide" id="histogramas" data-mode="dim" data-enter="rise">
-  <div class="head"><p class="eyebrow r">16 · Histogramas</p><h2 class="h2 r" style="--d:120">Ver la forma de cada <em>variable</em></h2></div>
-  <div class="split" style="grid-template-columns:1fr 1.02fr">
-    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [20]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
-<pre class="code" style="font-size:21px">import matplotlib.pyplot as plt
-
-fig, axs = plt.subplots(3, 1, figsize=(10, 9))
-for ax, col in zip(axs, variables):
-    ax.hist(df[col], bins=30, edgecolor='white')
-    ax.axvline(df[col].mean(), linestyle='--',
-               label='media')
-    ax.axvline(df[col].median(), label='mediana')
-    ax.set_title(f'{col} · '
-                 f'As = {df[col].skew():.2f} · '
-                 f'K = {df[col].kurt():.2f}')
-    ax.legend()
-plt.tight_layout()
-plt.show()</pre></div>
-    <div class="panel" style="padding:24px 28px 18px;gap:6px"><div class="panel-top out"><span>Out [20]</span><span>30 intervalos · <span style="letter-spacing:-.1em">- -</span> media · — mediana</span></div>
-      <svg class="chart hist out" id="h-edad" viewBox="0 0 800 220" style="--d:0;width:100%;height:auto" role="img" aria-label="Histograma de edad: la mayoría entre 18 y 24 años, con una cola larga hacia la derecha hasta los 75; la media 25,5 queda a la derecha de la mediana 23"></svg>
-      <svg class="chart hist out" id="h-matricula" viewBox="0 0 800 220" style="--d:200;width:100%;height:auto" role="img" aria-label="Histograma de valor de matrícula: gran pico en 155.000 pesos y un grupo en 0 pesos que alarga la cola a la izquierda; la media 131.952 queda a la izquierda de la mediana 155.000"></svg>
-      <svg class="chart hist out" id="h-arancel" viewBox="0 0 800 220" style="--d:400;width:100%;height:auto" role="img" aria-label="Histograma de valor de arancel: valores repartidos entre 1,3 y 4 millones sin un pico dominante; media y mediana casi juntas"></svg>
-    </div>
-  </div>
-  <aside class="notes">Con un histograma de 30 intervalos por variable se ve lo que dicen los coeficientes. La línea punteada es la media y la continua, la mediana. En la edad, casi dos de cada tres estudiantes tienen 24 años o menos, pero hay estudiantes de hasta 75 años que alargan la cola a la derecha y empujan la media (25,5) por sobre la mediana (23). En la matrícula, el gran pico está en 155.000 pesos y hay 1.902 estudiantes con matrícula 0 que alargan la cola a la izquierda: la media (131.952) queda bajo la mediana. En el arancel los valores se reparten entre 1,3 y 4 millones sin un pico dominante, por eso es achatado, y la media y la mediana quedan cerca.</aside>
-</section>
-
-<!-- 22 · INTERPRETACIÓN DE LA FORMA -->
+<!-- 22 · forma-interpretacion -->
 <section class="slide light" id="forma-interpretacion" data-mode="dim" data-enter="wipe">
-  <div class="head"><p class="eyebrow r" style="--d:300">17 · Interpretación de la forma</p><h2 class="h2 r" style="--d:420">Lo que dice cada <em>coeficiente</em></h2></div>
+  <div class="head"><p class="eyebrow r" style="--d:300">Puntos 15 y 16 · Interpretación</p><h2 class="h2 r" style="--d:420">Lo que dice cada <em>coeficiente</em></h2></div>
   <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:56px;min-height:0">
     <div class="card r" style="--d:600;padding-top:22px;display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="opacity:.6">Edad</p><p class="num" style="font-size:64px">As 1,82 · K 3,59</p><p class="body" style="font-weight:500">Asimétrica positiva · leptocúrtica</p><p class="small" style="font-family:var(--f-mono)">media 25,5 &gt; mediana 23 &gt; moda 19</p><p class="body">El 63,7% tiene 24 años o menos; unos pocos estudiantes mayores (hasta 75) estiran la cola a la derecha y suben la media.</p></div>
     <div class="card r" style="--d:800;padding-top:22px;display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="opacity:.6">Valor matrícula</p><p class="num" style="font-size:64px">As −0,89 · K 0,09</p><p class="body" style="font-weight:500">Asimétrica negativa · ≈ mesocúrtica</p><p class="small" style="font-family:var(--f-mono)">media $131.952 &lt; mediana $155.000</p><p class="body">Casi la mitad (49,5%) paga $155.000; los 1.902 estudiantes con matrícula $0 forman la cola izquierda y bajan la media.</p></div>
@@ -701,21 +722,75 @@ plt.show()</pre></div>
   <aside class="notes">Resumen de la forma. La edad es asimétrica positiva y leptocúrtica: se concentra en los jóvenes de 18 a 24 años, con pocos estudiantes mayores que alargan la cola; media mayor que mediana mayor que moda, el orden típico de la asimetría positiva. La matrícula es asimétrica negativa: casi la mitad de los estudiantes, el 49,5%, paga 155.000 pesos, que es a la vez la mediana y la moda, y los 1.902 con matrícula cero bajan la media; su curtosis es casi cero. El arancel es casi simétrico pero platicúrtico: no hay un arancel dominante, los valores se reparten en un rango amplio. La consecuencia práctica: cuando la distribución es asimétrica, la mediana representa mejor al estudiante típico que la media. Además, la concentración de la matrícula en pocos valores es la que produce las franjas verticales de la dispersión y ayuda a entender el R² bajo.</aside>
 </section>
 
-<!-- 23 · CONCLUSIONES -->
+<!-- 23 · desviacion -->
+<section class="slide dark code-slide" id="desviacion" data-mode="waves" data-enter="rise">
+  <div class="head"><p class="eyebrow r">Punto 17 · Desviación estándar</p><h2 class="h2 r" style="--d:120">¿Qué tan <em>dispersos</em> están los datos?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [22]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:24px"># Desviacion estandar (muestral)
+desv = df[variables].std()
+
+# Coeficiente de variacion: desv / media
+cv = desv / df[variables].mean() * 100
+
+print(pd.DataFrame({'desv_est': desv,
+                    'cv_%': cv}).round(2))</pre></div>
+    <div class="panel" style="gap:16px"><div class="panel-top out"><span>Out [22]</span><span>resultado</span></div>
+      <p class="console out" style="--d:100;font-size:19px;white-space:pre">                          desv_est   cv_%
+EDAD                          7.43  29.10
+VALOR MATRICULA (PESOS)   63717.98  48.29
+VALOR ARANCEL (PESOS)    956750.47  35.24</p>
+      <div class="out" style="--d:300">
+        <div class="kv"><span>Edad</span><b><span data-count="7.43" data-dec="2" data-on="run">7,43</span> años</b></div>
+        <div class="kv"><span>Matrícula</span><b>$<span data-count="63718" data-dec="0" data-on="run">63.718</span></b></div>
+        <div class="kv"><span>Arancel</span><b>$<span data-count="956750" data-dec="0" data-on="run">956.750</span></b></div>
+      </div>
+      <p class="body out" style="--d:500">En promedio, la edad se aleja <b style="font-weight:500">7,4 años</b> de su media (25,5). Comparando con su media (CV), la matrícula es la más dispersa: <b style="font-weight:500">48%</b>.</p>
+    </div>
+  </div>
+  <aside class="notes">La desviación estándar mide cuánto se alejan, en promedio, los datos de su media. Usamos std() de pandas, que calcula la desviación estándar muestral. La edad tiene una desviación de 7,43 años: un estudiante típico está a unos 7 años de la media de 25,5. La matrícula tiene 63.718 pesos y el arancel 956.750 pesos. Como están en escalas distintas, las comparamos con el coeficiente de variación, que es la desviación dividida por la media: la matrícula es la más dispersa en relación a su media, con 48%, luego el arancel con 35% y la edad con 29%.</aside>
+</section>
+
+<!-- 24 · normalidad -->
+<section class="slide light" id="normalidad" data-mode="wind" data-enter="iris">
+  <div class="head"><p class="eyebrow r" style="--d:300">Parte D · Punto 18 · Análisis de normalidad</p><h2 class="h2 r" style="--d:420">¿Tienen forma de <em>campana</em>? No.</h2></div>
+  <div style="flex:1;display:grid;grid-template-columns:1.55fr 1fr;gap:64px;min-height:0;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:30px">
+      <table class="t r" style="--d:600;font-size:27px"><tr><th>Variable</th><th>Simétrica<br>As ≈ 0</th><th>Curtosis<br>≈ 0</th><th>Media ≈ med.<br>≈ moda</th><th>¿Campana?</th></tr>
+        <tr><td>Edad</td><td>No · 1,82</td><td>No · 3,59</td><td>No · 25,5 · 23 · 19</td><td class="key">No</td></tr>
+        <tr><td>Matrícula</td><td>No · −0,89</td><td>Sí · 0,09</td><td>No · 132 · 155 · 155 mil</td><td class="key">No</td></tr>
+        <tr><td>Arancel</td><td>Sí · 0,06</td><td>No · −0,81</td><td>No · 2,71 · 2,86 · 3,53 M</td><td class="key">No</td></tr></table>
+      <p class="body r" style="--d:900">Una campana (distribución normal) cumple las <b style="font-weight:500">tres</b> condiciones a la vez. Ninguna de nuestras variables lo hace:</p>
+      <ul class="body r" style="--d:1000;margin:0;padding-left:28px;display:flex;flex-direction:column;gap:8px">
+        <li><b style="font-weight:500">Edad:</b> cola larga a la derecha; pocos estudiantes mayores (hasta 75 años).</li>
+        <li><b style="font-weight:500">Matrícula:</b> concentrada en pocos valores fijos ($0 y $155.000), con picos aislados.</li>
+        <li><b style="font-weight:500">Arancel:</b> casi simétrico, pero ancho y achatado, con varios picos y sin un centro dominante.</li>
+      </ul>
+    </div>
+    <figure class="r" style="--d:700;margin:0;display:flex;flex-direction:column;gap:16px">
+      <svg class="ink curve" data-curve="mes" data-mark="1" viewBox="0 0 240 178" style="width:100%;height:auto" role="img" aria-label="Curva normal de referencia: simétrica, con media, mediana y moda en el mismo punto"></svg>
+      <figcaption class="body" style="color:var(--slate)"><b style="font-weight:500;color:var(--ink)">Referencia: la campana normal</b><br>simétrica · curtosis ≈ 0 · media = mediana = moda</figcaption>
+      <p class="lead" style="font-size:30px;margin-top:12px">Por eso, para describir al estudiante típico usamos la <b style="font-weight:500">mediana</b>.</p>
+    </figure>
+  </div>
+  <aside class="notes">El último punto pregunta si los histogramas tienen forma de campana, es decir, si se parecen a una distribución normal. La respuesta es no, para las tres variables. Una distribución normal cumple tres condiciones a la vez: es simétrica, con asimetría cercana a cero; tiene curtosis cercana a cero; y su media, mediana y moda coinciden. La edad no cumple ninguna: tiene una cola larga a la derecha porque hay pocos estudiantes mayores, hasta 75 años. La matrícula tiene curtosis casi cero, pero es asimétrica negativa y se concentra en unos pocos valores fijos, como 0 y 155.000 pesos, así que su histograma son picos aislados. El arancel es casi simétrico, pero platicúrtico: ancho y achatado, con varios picos, y su media, mediana y moda están lejos entre sí. Como ninguna variable es normal, la mediana describe mejor al estudiante típico que la media.</aside>
+</section>
+
+<!-- 25 · conclusiones -->
 <section class="slide light" id="conclusiones" data-mode="waves" data-enter="wipe">
-  <div class="head"><p class="eyebrow r" style="--d:300">18 · Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
+  <div class="head"><p class="eyebrow r" style="--d:300">Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
     <div class="concl r" style="--d:600"><p class="num" style="font-size:88px">r = 0,50</p><p class="lead">Matrícula y arancel se mueven juntos: relación positiva moderada.</p></div>
     <div class="concl r" style="--d:750"><p class="num" style="font-size:88px">R² 25%</p><p class="lead">La matrícula sola no basta para predecir el arancel.</p></div>
     <div class="concl r" style="--d:900"><p class="num" style="font-size:88px">50,43%</p><p class="lead">La U. de Tarapacá concentra 1 de cada 2 matrículas de la región.</p></div>
     <div class="concl r" style="--d:1050"><p class="num" style="font-size:88px">17,49%</p><p class="lead">del total son mujeres en Carreras Técnicas.</p></div>
     <div class="concl r" style="--d:1200"><p class="num" style="font-size:88px">90,86%</p><p class="lead">En Salud, 9 de cada 10 estudian en instituciones acreditadas.</p></div>
-    <div class="concl r" style="--d:1350"><p class="num" style="font-size:88px">As 1,82</p><p class="lead">Edad con cola a la derecha: la mediana (23 años) la describe mejor.</p></div>
+    <div class="concl r" style="--d:1350"><p class="num" style="font-size:88px">No normal</p><p class="lead">Ninguna variable tiene forma de campana: la mediana describe mejor el centro.</p></div>
   </div>
-  <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: la edad es asimétrica positiva (1,82) y leptocúrtica, así que la mediana de 23 años describe mejor al estudiante típico que la media; la matrícula es asimétrica negativa y el arancel, casi simétrico pero achatado.</aside>
+  <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: ninguna de las tres variables tiene forma de campana: la edad es asimétrica positiva, la matrícula asimétrica negativa y el arancel achatado, así que la mediana describe mejor al estudiante típico que la media.</aside>
 </section>
 
-<!-- 24 · CIERRE -->
+<!-- 26 · cierre -->
 <section class="slide dark" id="cierre" data-mode="text" data-enter="blur" style="justify-content:flex-end;align-items:center;gap:24px;padding-bottom:150px">
   <h2 class="sr">Gracias</h2>
   <p class="lead r" style="--d:1600;font-size:48px;font-family:var(--f-display);font-style:italic">¿Preguntas?</p>
@@ -726,7 +801,7 @@ plt.show()</pre></div>
 </main>
 
 <nav id="bar" aria-label="Navegación de diapositivas">
-  <span class="count" id="count">01 / 24</span>
+  <span class="count" id="count">01 / 26</span>
   <div class="track"><div class="fill" id="fill"></div></div>
   <button id="prev" type="button" aria-label="Diapositiva anterior">←</button>
   <button id="next" type="button" aria-label="Diapositiva siguiente">→</button>
@@ -755,7 +830,7 @@ function chart(svg,withLine){
   const yl=el('text',{x:20,y:(T+B)/2,'text-anchor':'middle',transform:`rotate(-90 20 ${(T+B)/2})`},svg);yl.textContent='VALOR ARANCEL (pesos)';
   PTS.slice().sort((a,b)=>a[0]-b[0]).forEach((p,i)=>{const c=el('circle',{cx:X(p[0]),cy:Y(p[1]),r:Math.max(4,Math.min(13,2.2*Math.sqrt(Math.sqrt(p[2]))*1.6)),class:'pt'},svg);c.style.setProperty('--i',i);c.style.setProperty('--o',Math.min(.95,.35+Math.log10(p[2]+1)*.2))});
   if(withLine){el('path',{d:`M${X(0)} ${Y(INTER)} L${X(xm)} ${Y(INTER+SLOPE*xm)}`,class:'reg',pathLength:1},svg);
-    const lb=el('text',{x:X(292000),y:Y(INTER+SLOPE*292000)-22,'text-anchor':'end'},svg);lb.textContent='y = 7,502x + 1.724.716';lb.style.fontSize='18px'}
+    const lb=el('text',{x:X(292000),y:Y(INTER+SLOPE*292000)-22,'text-anchor':'end'},svg);lb.textContent='y = 1.724.716 + 7,502x';lb.style.fontSize='18px'}
 }
 chart(document.getElementById('ch1'),false);
 chart(document.getElementById('ch2'),true);
@@ -790,19 +865,24 @@ chart(document.getElementById('ch2'),true);
 /* ---------- histogramas de forma (30 intervalos, como plt.hist) ---------- */
 (function hists(){
   const H={
-    'h-edad':{t:'EDAD · As = 1,82 · K = 3,59',lo:18,hi:75,mean:25.54,med:23,f:v=>fmt(v,0)+' años',ticks:[20,30,40,50,60,70],
+    'h-edad':{t:'Histograma de EDAD',xl:'EDAD (años)',lo:18,hi:75,mean:25.54,med:23,f:v=>fmt(v,0)+' años',ticks:[20,30,40,50,60,70],
       h:[2429,2364,2647,1920,1087,927,410,422,396,150,273,237,182,160,128,115,98,57,42,12,25,10,6,10,6,1,0,0,1,1]},
-    'h-matricula':{t:'VALOR MATRÍCULA · As = −0,89 · K = 0,09',lo:0,hi:290504,mean:131952,med:155000,f:v=>v?fmt(v/1000,0)+' mil':'0',ticks:[0,50000,100000,150000,200000,250000],
+    'h-matricula':{t:'Histograma de VALOR MATRÍCULA',xl:'VALOR MATRÍCULA (pesos)',lo:0,hi:290504,mean:131952,med:155000,f:v=>v?fmt(v/1000,0)+' mil':'0',ticks:[0,50000,100000,150000,200000,250000],
       h:[1902,0,0,0,0,62,717,0,2,546,273,54,713,605,0,15,6983,78,254,0,94,4,1798,0,0,0,0,8,0,8]},
-    'h-arancel':{t:'VALOR ARANCEL · As = 0,06 · K = −0,81',lo:0,hi:5595000,mean:2714574,med:2857000,f:v=>v?fmt(v/1e6,0)+' M':'0',ticks:[0,1e6,2e6,3e6,4e6,5e6],
+    'h-arancel':{t:'Histograma de VALOR ARANCEL',xl:'VALOR ARANCEL (pesos)',lo:0,hi:5595000,mean:2714574,med:2857000,f:v=>v?fmt(v/1e6,0)+' M':'0',ticks:[0,1e6,2e6,3e6,4e6,5e6],
       h:[5,1,0,44,4,0,216,1629,1136,942,874,927,95,293,192,1397,463,373,2800,746,1154,668,0,0,0,0,0,0,0,157]}};
   for(const id in H){
-    const svg=document.getElementById(id),d=H[id],L=20,R=780,T=34,B=182,n=d.h.length,mx=Math.max(...d.h);
+    const svg=document.getElementById(id),d=H[id],L=96,R=788,T=30,B=158,n=d.h.length,mx=Math.max(...d.h);
     const X=v=>L+(v-d.lo)/(d.hi-d.lo)*(R-L),bw=(R-L)/n,dl=parseFloat(svg.style.getPropertyValue('--d'))||0;
     el('text',{x:L,y:20,class:'ttl'},svg).textContent=d.t;
+    { const p10=Math.pow(10,Math.floor(Math.log10(mx))),st=[1,2,2.5,5,10].map(v=>v*p10).find(v=>mx/v<=3),Yv=v=>B-(v/mx)*(B-T);
+      for(let v=0;v<=mx;v+=st){el('line',{x1:L-5,x2:L,y1:Yv(v),y2:Yv(v),class:'ax'},svg);el('text',{x:L-10,y:Yv(v)+5,'text-anchor':'end'},svg).textContent=fmt(v,0)}
+      el('line',{x1:L,x2:L,y1:T,y2:B,class:'ax'},svg);
+      el('text',{x:16,y:(T+B)/2,'text-anchor':'middle',transform:`rotate(-90 16 ${(T+B)/2})`},svg).textContent='Frecuencia';
+      el('text',{x:(L+R)/2,y:214,'text-anchor':'middle'},svg).textContent=d.xl; }
     d.h.forEach((c,i)=>{if(!c)return;const h=Math.max(1.5,(c/mx)*(B-T));const r=el('rect',{x:L+i*bw+1,y:B-h,width:bw-2,height:h,class:'hb'},svg);r.style.setProperty('--i',i);r.style.setProperty('--d',dl)});
     el('line',{x1:L,x2:R,y1:B,y2:B,class:'ax'},svg);
-    d.ticks.forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:B,y2:B+5,class:'ax'},svg);el('text',{x:X(v),y:B+24,'text-anchor':'middle'},svg).textContent=d.f(v)});
+    d.ticks.forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:B,y2:B+5,class:'ax'},svg);el('text',{x:X(v),y:B+22,'text-anchor':'middle'},svg).textContent=d.f(v)});
     el('line',{x1:X(d.mean),x2:X(d.mean),y1:T-6,y2:B,class:'mean'},svg).style.setProperty('--d',dl);
     el('line',{x1:X(d.med),x2:X(d.med),y1:T-6,y2:B,class:'med'},svg).style.setProperty('--d',dl);
   }

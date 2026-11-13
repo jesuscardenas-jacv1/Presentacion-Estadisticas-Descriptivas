@@ -28,14 +28,29 @@ graficos/         ← gráficos exportados en PNG
 docs/             ← documento de avance del proyecto (puntos, resultados, correcciones)
 ```
 
-## Contenido (24 diapositivas)
+## Contenido (26 diapositivas, en el orden de la lista de cotejo)
 
-1. Portada · 2. La base de datos · 3. ¿Quiénes estudian? (paisaje de Parinacota) · 4. Flujo de trabajo
-5. Carga de datos · 6. Pregunta de investigación · 7. Covarianza y correlación · 8. Gráfico de dispersión · 9. Regresión lineal · 10. Interpretación
-11. Probabilidad: 3 preguntas · 12. Simple · 13. Conjunta · 14. Condicional
-15. Nuevas preguntas (Lab 07) · 16. Unión · 17. Conjunta con rango · 18. Condicional para decidir
-19. Forma de la distribución · 20. Asimetría y curtosis · 21. Histogramas · 22. Interpretación de la forma
-23. Conclusiones · 24. Cierre
+Cada diapositiva indica arriba qué punto de la lista de cotejo cubre.
+
+| # | Diapositiva | Punto |
+|---|---|---|
+| 1–5 | Portada · La base de datos · ¿Quiénes estudian? · Flujo de trabajo · Carga de datos | Contexto |
+| 6 | Pregunta de investigación (X = matrícula, Y = arancel) | **Parte A** |
+| 7 | Gráfico de dispersión | 1 |
+| 8 | Covarianza y su signo (+ correlación) | 2 · 3 |
+| 9 | Modelo de regresión lineal y R² | 4 · 6 |
+| 10 | Interpretación: y = a + bx, pendiente y R² | 4 · 5 · 7 |
+| 11 | Seis preguntas de probabilidad | **Parte B** |
+| 12 | Probabilidad clásica | 8 |
+| 13 | Unión | 9 |
+| 14–15 | Intersección (2 preguntas) | 10 |
+| 16–17 | Condicional (2 preguntas) | 11 · 12 |
+| 18 | Histogramas con título y ejes | **Parte C** · 13 |
+| 19 | Media, mediana y moda | 14 |
+| 20–22 | Asimetría y curtosis: qué miden, cálculo e interpretación | 15 · 16 |
+| 23 | Desviación estándar | 17 |
+| 24 | ¿Forma de campana? No, y por qué | **Parte D** · 18 |
+| 25–26 | Conclusiones · Cierre | |
 
 ### Resultados principales
 
@@ -53,6 +68,9 @@ docs/             ← documento de avance del proyecto (puntos, resultados, corr
 | Edad: asimetría · curtosis | 1,8238 (positiva) · 3,5899 (leptocúrtica) |
 | Matrícula: asimetría · curtosis | −0,8906 (negativa) · 0,0874 (≈ mesocúrtica) |
 | Arancel: asimetría · curtosis | 0,0580 (≈ simétrica) · −0,8083 (platicúrtica) |
+| Media · mediana · moda (edad) | 25,54 · 23 · 19 años |
+| Desviación estándar | Edad 7,43 años · Matrícula $63.718 · Arancel $956.750 |
+| ¿Forma de campana? | No en ninguna variable |
 
 ## Cómo editar la presentación
 
@@ -76,7 +94,7 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 **Otros detalles**
 - Elementos con clase `r` y `style="--d:300"` aparecen con 300 ms de retraso.
 - Las notas del orador van en `<aside class="notes">…</aside>` al final de cada `<section>`.
-- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 24`) en la barra de navegación.
+- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 26`) en la barra de navegación.
 
 ## Trabajo en equipo
 
@@ -87,4 +105,3 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 ## Pendientes
 
 - [ ] Reemplazar `[Integrantes del equipo]`, `[Asignatura]` y `[Docente]` en la portada y el cierre
-- [ ] Agregar al Colab las celdas de las preguntas nuevas (In [14]–[18])
