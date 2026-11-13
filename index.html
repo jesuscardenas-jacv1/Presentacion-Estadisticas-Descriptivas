@@ -643,7 +643,7 @@ plt.show()</pre></div>
 
 <!-- 19 · tendencia -->
 <section class="slide dark code-slide" id="tendencia" data-mode="grid" data-enter="blur">
-  <div class="head"><p class="eyebrow r">Punto 14 · Media, mediana y moda</p><h2 class="h2 r" style="--d:120">¿Dónde está el <em>centro</em>?</h2></div>
+  <div class="head"><p class="eyebrow r">Puntos 14 y 19 · Media, mediana y moda</p><h2 class="h2 r" style="--d:120">¿Dónde está el <em>centro</em>?</h2></div>
   <div class="split">
     <div class="panel r" style="--d:250"><div class="panel-top"><span>In [20]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
 <pre class="code" style="font-size:24px"># Medidas de tendencia central
@@ -661,11 +661,11 @@ VALOR ARANCEL (PESOS)    2714573.78  2857000.0  3533000</p>
         <tr><td>Edad (años)</td><td>25,54</td><td>23</td><td>19</td></tr>
         <tr><td>Matrícula</td><td>$131.952</td><td>$155.000</td><td>$155.000</td></tr>
         <tr><td>Arancel</td><td>$2.714.574</td><td>$2.857.000</td><td>$3.533.000</td></tr></table>
-      <p class="body out" style="--d:400">En ninguna variable coinciden las tres medidas: los datos <b style="font-weight:500">no son simétricos</b>.</p>
+      <p class="body out" style="--d:400">Las tres medidas <b style="font-weight:500">no son similares</b> en ninguna variable: los datos no son simétricos.</p>
       <p class="small muted out" style="--d:500">Edad: media &gt; mediana &gt; moda · Matrícula y arancel: media &lt; mediana ≤ moda</p>
     </div>
   </div>
-  <aside class="notes">Calculamos las tres medidas de tendencia central para las variables numéricas: con mean(), median() y mode() de pandas, juntas en un DataFrame. En la edad, la media es 25,54 años, la mediana 23 y la moda 19: la media queda arriba porque unos pocos estudiantes mayores la tiran hacia la derecha. En la matrícula, la media es 131.952 pesos, pero la mediana y la moda son 155.000: los estudiantes con matrícula cero bajan la media. En el arancel, la media es 2.714.574, la mediana 2.857.000 y la moda 3.533.000. Que las tres medidas no coincidan ya nos adelanta que las distribuciones no son simétricas.</aside>
+  <aside class="notes">Calculamos las tres medidas de tendencia central para las variables numéricas: con mean(), median() y mode() de pandas, juntas en un DataFrame. En la edad, la media es 25,54 años, la mediana 23 y la moda 19: la media queda arriba porque unos pocos estudiantes mayores la tiran hacia la derecha. En la matrícula, la media es 131.952 pesos, pero la mediana y la moda son 155.000: los estudiantes con matrícula cero bajan la media. En el arancel, la media es 2.714.574, la mediana 2.857.000 y la moda 3.533.000. Conclusión: en ninguna de las tres variables la media, la mediana y la moda son similares, y eso ya nos adelanta que las distribuciones no son simétricas.</aside>
 </section>
 
 <!-- 20 · forma -->
@@ -770,32 +770,67 @@ VALOR ARANCEL (PESOS)    956750.47  35.24</p>
   <aside class="notes">La desviación estándar mide cuánto se alejan, en promedio, los datos de su media. Usamos std() de pandas, que calcula la desviación estándar muestral. La edad tiene una desviación de 7,43 años: un estudiante típico está a unos 7 años de la media de 25,5. La matrícula tiene 63.718 pesos y el arancel 956.750 pesos. Como están en escalas distintas, las comparamos con el coeficiente de variación, que es la desviación dividida por la media: la matrícula es la más dispersa en relación a su media, con 48%, luego el arancel con 35% y la edad con 29%.</aside>
 </section>
 
-<!-- 24 · normalidad -->
+<!-- 24 · regla empirica -->
+<section class="slide dark code-slide" id="regla-empirica" data-mode="waves" data-enter="blur">
+  <div class="head"><p class="eyebrow r">Parte D · Puntos 21 y 22 · Regla empírica</p><h2 class="h2 r" style="--d:120">¿Cuántos datos caen a <em>1 y 2</em> desviaciones?</h2></div>
+  <div class="split">
+    <div class="panel r" style="--d:250"><div class="panel-top"><span>In [23]</span><span class="status"><i></i><em class="st">listo para ejecutar</em></span></div>
+<pre class="code" style="font-size:21px"># Regla empirica: % de datos a 1 y 2 desv.
+filas = {}
+for col in variables:
+    m, s = df[col].mean(), df[col].std()
+    filas[col] = {
+      '1s_%': df[col].between(m - s, m + s)
+                     .mean() * 100,
+      '2s_%': df[col].between(m - 2*s, m + 2*s)
+                     .mean() * 100}
+
+regla = pd.DataFrame(filas).T
+regla['dif_68'] = regla['1s_%'] - 68
+regla['dif_95'] = regla['2s_%'] - 95
+print(regla.round(2))</pre></div>
+    <div class="panel" style="gap:16px"><div class="panel-top out"><span>Out [23]</span><span>resultado</span></div>
+      <p class="console out" style="--d:100;font-size:17px;white-space:pre">                          1s_%   2s_%  dif_68  dif_95
+EDAD                     81.77  93.95   13.77   -1.05
+VALOR MATRICULA (PESOS)  67.46  86.41   -0.54   -8.59
+VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
+      <table class="t out" style="--d:250;font-size:23px"><tr><th>Variable</th><th>A 1 desviación<br>esperado 68 %</th><th>A 2 desviaciones<br>esperado 95 %</th></tr>
+        <tr><td>Edad</td><td><b>81,77 %</b> · No</td><td><b>93,95 %</b> · Sí</td></tr>
+        <tr><td>Matrícula</td><td><b>67,46 %</b> · Sí</td><td><b>86,41 %</b> · No</td></tr>
+        <tr><td>Arancel</td><td><b>62,91 %</b> · No</td><td><b>98,53 %</b> · No</td></tr></table>
+      <p class="small muted out" style="--d:400">Criterio: se considera que cumple si queda a ±2 puntos del valor esperado.</p>
+      <p class="body out" style="--d:500">Ninguna variable cumple <b style="font-weight:500">las dos</b> referencias de la normal a la vez.</p>
+    </div>
+  </div>
+  <aside class="notes">Si una variable fuera normal, cerca del 68% de los datos estaría a una desviación estándar de la media, y cerca del 95% a dos desviaciones. Para cada variable calculamos la media y la desviación, y con between() contamos qué porcentaje de los estudiantes cae dentro de cada intervalo. Consideramos que cumple si queda a no más de 2 puntos del valor esperado. En la edad, el 81,77% está a una desviación, muy por sobre el 68%, porque los datos se amontonan entre los 18 y los 24 años; a dos desviaciones hay 93,95%, cerca del 95%. En la matrícula, a una desviación hay 67,46%, casi exacto, pero a dos desviaciones baja a 86,41%, porque los 1.902 estudiantes con matrícula cero quedan fuera del intervalo. En el arancel, a una desviación hay 62,91%, por debajo, porque la distribución es achatada, y a dos desviaciones 98,53%, por encima, porque casi no tiene colas. Ninguna variable cumple las dos referencias a la vez.</aside>
+</section>
+
+<!-- 25 · normalidad -->
 <section class="slide light" id="normalidad" data-mode="wind" data-enter="iris">
-  <div class="head"><p class="eyebrow r" style="--d:300">Parte D · Punto 18 · Análisis de normalidad</p><h2 class="h2 r" style="--d:420">¿Tienen forma de <em>campana</em>? No.</h2></div>
-  <div style="flex:1;display:grid;grid-template-columns:1.55fr 1fr;gap:64px;min-height:0;align-items:start">
+  <div class="head"><p class="eyebrow r" style="--d:300">Parte D · Puntos 18, 20 y 23 · Análisis de normalidad</p><h2 class="h2 r" style="--d:420">¿Tienen forma de <em>campana</em>? No.</h2></div>
+  <div style="flex:1;display:grid;grid-template-columns:2.4fr 1fr;gap:48px;min-height:0;align-items:start">
     <div style="display:flex;flex-direction:column;gap:30px">
-      <table class="t r" style="--d:600;font-size:27px"><tr><th>Variable</th><th>Simétrica<br>As ≈ 0</th><th>Curtosis<br>≈ 0</th><th>Media ≈ med.<br>≈ moda</th><th>¿Campana?</th></tr>
-        <tr><td>Edad</td><td>No · 1,82</td><td>No · 3,59</td><td>No · 25,5 · 23 · 19</td><td class="key">No</td></tr>
-        <tr><td>Matrícula</td><td>No · −0,89</td><td>Sí · 0,09</td><td>No · 132 · 155 · 155 mil</td><td class="key">No</td></tr>
-        <tr><td>Arancel</td><td>Sí · 0,06</td><td>No · −0,81</td><td>No · 2,71 · 2,86 · 3,53 M</td><td class="key">No</td></tr></table>
-      <p class="body r" style="--d:900">Una campana (distribución normal) cumple las <b style="font-weight:500">tres</b> condiciones a la vez. Ninguna de nuestras variables lo hace:</p>
+      <table class="t r" style="--d:600;font-size:22px"><tr><th>Variable</th><th>Asimetría<br>±0,5</th><th>Curtosis<br>±0,5</th><th>Media ≈ med.<br>≈ moda</th><th>68 %<br>a 1 desv.</th><th>95 %<br>a 2 desv.</th><th>¿Normal?</th></tr>
+        <tr><td>Edad</td><td>No · 1,82</td><td>No · 3,59</td><td>No · 25,5 · 23 · 19</td><td>No · 81,8 %</td><td>Sí · 94,0 %</td><td class="key">No</td></tr>
+        <tr><td>Matrícula</td><td>No · −0,89</td><td>Sí · 0,09</td><td>No · 132 · 155 · 155 mil</td><td>Sí · 67,5 %</td><td>No · 86,4 %</td><td class="key">No</td></tr>
+        <tr><td>Arancel</td><td>Sí · 0,06</td><td>No · −0,81</td><td>No · 2,71 · 2,86 · 3,53 M</td><td>No · 62,9 %</td><td>No · 98,5 %</td><td class="key">No</td></tr></table>
+      <p class="body r" style="--d:900">Una distribución normal cumple las <b style="font-weight:500">cinco</b> condiciones a la vez. Ninguna de nuestras variables lo hace:</p>
       <ul class="body r" style="--d:1000;margin:0;padding-left:28px;display:flex;flex-direction:column;gap:8px">
-        <li><b style="font-weight:500">Edad:</b> cola larga a la derecha; pocos estudiantes mayores (hasta 75 años).</li>
-        <li><b style="font-weight:500">Matrícula:</b> concentrada en pocos valores fijos ($0 y $155.000), con picos aislados.</li>
-        <li><b style="font-weight:500">Arancel:</b> casi simétrico, pero ancho y achatado, con varios picos y sin un centro dominante.</li>
+        <li><b style="font-weight:500">Edad:</b> cumple 1 de 5; cola larga a la derecha y 82 % amontonado a 1 desviación.</li>
+        <li><b style="font-weight:500">Matrícula:</b> cumple 2 de 5; concentrada en $0 y $155.000, y a 2 desviaciones solo hay 86 %.</li>
+        <li><b style="font-weight:500">Arancel:</b> cumple 1 de 5; simétrico, pero achatado: pocos datos cerca de la media (63 %).</li>
       </ul>
     </div>
     <figure class="r" style="--d:700;margin:0;display:flex;flex-direction:column;gap:16px">
       <svg class="ink curve" data-curve="mes" data-mark="1" viewBox="0 0 240 178" style="width:100%;height:auto" role="img" aria-label="Curva normal de referencia: simétrica, con media, mediana y moda en el mismo punto"></svg>
-      <figcaption class="body" style="color:var(--slate)"><b style="font-weight:500;color:var(--ink)">Referencia: la campana normal</b><br>simétrica · curtosis ≈ 0 · media = mediana = moda</figcaption>
+      <figcaption class="body" style="color:var(--slate)"><b style="font-weight:500;color:var(--ink)">Referencia: la campana normal</b><br>simétrica · curtosis ≈ 0 · media = mediana = moda · 68 % a 1 desv. · 95 % a 2 desv.</figcaption>
       <p class="lead" style="font-size:30px;margin-top:12px">Por eso, para describir al estudiante típico usamos la <b style="font-weight:500">mediana</b>.</p>
     </figure>
   </div>
-  <aside class="notes">El último punto pregunta si los histogramas tienen forma de campana, es decir, si se parecen a una distribución normal. La respuesta es no, para las tres variables. Una distribución normal cumple tres condiciones a la vez: es simétrica, con asimetría cercana a cero; tiene curtosis cercana a cero; y su media, mediana y moda coinciden. La edad no cumple ninguna: tiene una cola larga a la derecha porque hay pocos estudiantes mayores, hasta 75 años. La matrícula tiene curtosis casi cero, pero es asimétrica negativa y se concentra en unos pocos valores fijos, como 0 y 155.000 pesos, así que su histograma son picos aislados. El arancel es casi simétrico, pero platicúrtico: ancho y achatado, con varios picos, y su media, mediana y moda están lejos entre sí. Como ninguna variable es normal, la mediana describe mejor al estudiante típico que la media.</aside>
+  <aside class="notes">Juntamos todos los criterios para concluir si las variables se distribuyen de forma normal. Una distribución normal cumple cinco condiciones a la vez: asimetría y curtosis dentro del intervalo de −0,5 a 0,5; media, mediana y moda similares; cerca del 68% de los datos a una desviación de la media, y cerca del 95% a dos desviaciones. La edad cumple solo una: tiene asimetría y curtosis altas, la media, la mediana y la moda son distintas, y el 82% de los datos está a una desviación, porque se amontonan entre los 18 y 24 años; solo se acerca al 95% a dos desviaciones. La matrícula cumple dos: curtosis cercana a cero y 67,5% a una desviación, pero es asimétrica negativa y a dos desviaciones solo hay 86%, por los estudiantes con matrícula cero. El arancel cumple una: es simétrico, pero es achatado, solo el 63% está a una desviación y su media, mediana y moda están lejos entre sí. Conclusión: ninguna de las tres variables se distribuye de forma normal, por eso la mediana describe mejor al estudiante típico que la media.</aside>
 </section>
 
-<!-- 25 · conclusiones -->
+<!-- 26 · conclusiones -->
 <section class="slide light" id="conclusiones" data-mode="waves" data-enter="wipe">
   <div class="head"><p class="eyebrow r" style="--d:300">Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
@@ -809,7 +844,7 @@ VALOR ARANCEL (PESOS)    956750.47  35.24</p>
   <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: ninguna de las tres variables tiene forma de campana: la edad es asimétrica positiva, la matrícula asimétrica negativa y el arancel achatado, así que la mediana describe mejor al estudiante típico que la media.</aside>
 </section>
 
-<!-- 26 · cierre -->
+<!-- 27 · cierre -->
 <section class="slide dark" id="cierre" data-mode="text" data-enter="blur" style="justify-content:flex-end;align-items:center;gap:24px;padding-bottom:150px">
   <h2 class="sr">Gracias</h2>
   <p class="lead r" style="--d:1600;font-size:48px;font-family:var(--f-display);font-style:italic">¿Preguntas?</p>
@@ -820,7 +855,7 @@ VALOR ARANCEL (PESOS)    956750.47  35.24</p>
 </main>
 
 <nav id="bar" aria-label="Navegación de diapositivas">
-  <span class="count" id="count">01 / 26</span>
+  <span class="count" id="count">01 / 27</span>
   <div class="track"><div class="fill" id="fill"></div></div>
   <button id="prev" type="button" aria-label="Diapositiva anterior">←</button>
   <button id="next" type="button" aria-label="Diapositiva siguiente">→</button>

@@ -140,3 +140,9 @@ Revisión de la presentación contra los 18 indicadores de la hoja:
 - Diapositivas reordenadas del punto 1 al 18; cada una indica arriba el punto que cubre (26 en total).
 - Colab corregido con las celdas nuevas (preguntas Lab 07, histogramas, medidas, desviación y conclusión de normalidad), ejecutado y verificado.
 - La hoja indica puntaje sobre 29, pero muestra 18 indicadores: falta revisar la segunda página.
+
+### Segunda página (puntos 19 a 29)
+- 19 (media, mediana y moda similares) y 20 (asimetría y curtosis en [−0,5 ; 0,5]) ya estaban; se explicitó la conclusión "no son similares".
+- 21 y 22 agregados: diapositiva 24 y celda In [23] del Colab con el % de datos a 1 y 2 desviaciones, comparado con 68 % y 95 % (criterio ±2 puntos). Edad 81,77 % / 93,95 % · Matrícula 67,46 % / 86,41 % · Arancel 62,91 % / 98,53 %.
+- 23: la diapositiva de normalidad (ahora la 25) concluye con los cinco criterios juntos; ninguna variable es normal.
+- 24 a 29 (presentación): dependen de la exposición; sigue pendiente completar integrantes, asignatura y docente en portada y cierre.
