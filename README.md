@@ -28,7 +28,7 @@ graficos/         ← gráficos exportados en PNG
 docs/             ← documento de avance del proyecto (puntos, resultados, correcciones)
 ```
 
-## Contenido (26 diapositivas, en el orden de la lista de cotejo)
+## Contenido (27 diapositivas, en el orden de la lista de cotejo)
 
 Cada diapositiva indica arriba qué punto de la lista de cotejo cubre.
 
@@ -46,11 +46,12 @@ Cada diapositiva indica arriba qué punto de la lista de cotejo cubre.
 | 14–15 | Intersección (2 preguntas) | 10 |
 | 16–17 | Condicional (2 preguntas) | 11 · 12 |
 | 18 | Histogramas con título y ejes | **Parte C** · 13 |
-| 19 | Media, mediana y moda | 14 |
+| 19 | Media, mediana y moda (¿son similares?) | 14 · 19 |
 | 20–22 | Asimetría y curtosis: qué miden, cálculo e interpretación | 15 · 16 |
 | 23 | Desviación estándar | 17 |
-| 24 | ¿Forma de campana? No, y por qué | **Parte D** · 18 |
-| 25–26 | Conclusiones · Cierre | |
+| 24 | Regla empírica: % de datos a 1 y 2 desviaciones vs 68 % y 95 % | **Parte D** · 21 · 22 |
+| 25 | ¿Distribución normal? No: los cinco criterios juntos | 18 · 20 · 23 |
+| 26–27 | Conclusiones · Cierre | |
 
 ### Resultados principales
 
@@ -70,7 +71,9 @@ Cada diapositiva indica arriba qué punto de la lista de cotejo cubre.
 | Arancel: asimetría · curtosis | 0,0580 (≈ simétrica) · −0,8083 (platicúrtica) |
 | Media · mediana · moda (edad) | 25,54 · 23 · 19 años |
 | Desviación estándar | Edad 7,43 años · Matrícula $63.718 · Arancel $956.750 |
-| ¿Forma de campana? | No en ninguna variable |
+| % a 1 desviación (normal: 68 %) | Edad 81,77 % · Matrícula 67,46 % · Arancel 62,91 % |
+| % a 2 desviaciones (normal: 95 %) | Edad 93,95 % · Matrícula 86,41 % · Arancel 98,53 % |
+| ¿Distribución normal? | No en ninguna variable |
 
 ## Cómo editar la presentación
 
@@ -94,7 +97,7 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 **Otros detalles**
 - Elementos con clase `r` y `style="--d:300"` aparecen con 300 ms de retraso.
 - Las notas del orador van en `<aside class="notes">…</aside>` al final de cada `<section>`.
-- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 26`) en la barra de navegación.
+- Al agregar o quitar diapositivas, actualiza el contador inicial (`01 / 27`) en la barra de navegación.
 
 ## Trabajo en equipo
 
