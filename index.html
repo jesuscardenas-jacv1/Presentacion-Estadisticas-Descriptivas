@@ -76,7 +76,17 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:24px;line-height:1.65;colo
 pre.code .ln{display:block;opacity:0;clip-path:inset(0 100% 0 0)}
 .slide.active pre.code .ln{animation:type .5s steps(18) both;animation-delay:calc(var(--i) * 70ms + 450ms)}
 @keyframes type{from{opacity:1;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
-.tk-c{color:#6F6E69;font-style:italic} .tk-s{color:#BEBDB7;font-style:italic} .tk-k{color:#FFFFFF;font-weight:500} .tk-n{color:#FFFFFF;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:5px} .tk-f{color:#FFFFFF}
+/* colores tipo Google Colab (tema oscuro) */
+.tk-c{color:#6A9955;font-style:italic}  /* comentarios: verde */
+.tk-s{color:#CE9178}                    /* textos entre comillas: naranjo */
+.tk-k{color:#C586C0}                    /* import, as, for, in: morado */
+.tk-b{color:#569CD6}                    /* True, False, None: azul */
+.tk-m{color:#4EC9B0}                    /* pd, np, plt: turquesa */
+.tk-a{color:#9CDCFE}                    /* argumentos: margins=, normalize=: celeste */
+.tk-n{color:#B5CEA8}                    /* números: verde claro */
+.tk-f{color:#DCDCAA}                    /* funciones y métodos: amarillo */
+pre.code{color:#D4D4D4}
+.panel:has(pre.code){background:#1E1E1E}
 .console{font-family:var(--f-mono);font-size:24px;line-height:1.6;color:var(--bone);background:rgba(243,242,238,.05);border-radius:12px;padding:20px 24px;white-space:pre-wrap}
 .kv{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(243,242,238,.14)}
 .kv:last-child{border-bottom:0}
@@ -988,8 +998,8 @@ chart(document.getElementById('ch2'),true);
 
 /* ---------- resaltado de código ---------- */
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const RX=/(#.*$)|([fF]?'[^']*'|[fF]?"[^"]*")|\b(import|as|print|True|False|None|from|def|return)\b|\b(\d+(?:\.\d+)?)\b|([A-Za-z_]\w*)(?=\()/g;
-function hl(line){let out='',last=0;line.replace(RX,(m,c,s,k,n,f,idx)=>{out+=esc(line.slice(last,idx));const cl=c?'c':s?'s':k?'k':n?'n':'f';out+=`<span class="tk-${cl}">${esc(m)}</span>`;last=idx+m.length;return m});return out+esc(line.slice(last))}
+const RX=/(#.*$)|([fF]?'[^']*'|[fF]?"[^"]*")|\b(import|as|from|for|in|if|else|elif|def|return|lambda|with|and|or|not|is)\b|\b(True|False|None)\b|\b(pd|np|plt|ticker)\b|\b([A-Za-z_]\w*)(?==(?!=))|\b(\d+(?:\.\d+)?)\b|([A-Za-z_]\w*)(?=\()/g;
+function hl(line){let out='',last=0;line.replace(RX,(m,c,s,k,b,mo,a,n,f,idx)=>{out+=esc(line.slice(last,idx));const cl=c?'c':s?'s':k?'k':b?'b':mo?'m':a?'a':n?'n':'f';out+=`<span class="tk-${cl}">${esc(m)}</span>`;last=idx+m.length;return m});return out+esc(line.slice(last))}
 document.querySelectorAll('pre.code').forEach(pre=>{const lines=pre.textContent.replace(/\n$/,'').split('\n');pre.dataset.lines=lines.length;pre.innerHTML=lines.map((l,i)=>`<span class="ln" style="--i:${i}">${hl(l)||' '}</span>`).join('')});
 document.querySelectorAll('.waffle').forEach(w=>{const on=+w.dataset.on;for(let i=0;i<100;i++){const c=document.createElement('i');if(i<on)c.className='on';c.style.setProperty('--i',i);w.appendChild(c)}w.setAttribute('role','img');w.setAttribute('aria-label',on+' de 100 cuadros marcados')});
 
