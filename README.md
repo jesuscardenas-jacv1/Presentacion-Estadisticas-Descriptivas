@@ -108,4 +108,4 @@ Todo está en `index.html`. Cada diapositiva es un `<section class="slide">` den
 
 ## Pendientes
 
-- [ ] Reemplazar `[Integrantes del equipo]`, `[Asignatura]` y `[Docente]` en la portada y el cierre
+- [x] Reemplazar `[Integrantes del equipo]`, `[Asignatura]` y `[Docente]` en la portada y el cierre

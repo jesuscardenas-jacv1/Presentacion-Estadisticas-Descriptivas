@@ -111,7 +111,7 @@ Cada diapositiva tiene **notas del orador** con lo que hay que decir.
 
 ## Pendientes / ideas
 
-- [ ] Reemplazar `[Integrantes del equipo]`, `[Asignatura]` y `[Docente]` en portada y cierre
+- [x] Reemplazar `[Integrantes del equipo]`, `[Asignatura]` y `[Docente]` en portada y cierre
 - [ ] Subir `Proyecto_Segunda_Presentacion_CORREGIDO.ipynb` a Colab y ejecutarlo con el Excel
 - [ ] Repartir diapositivas entre los integrantes y ensayar
 
@@ -145,7 +145,7 @@ Revisión de la presentación contra los 18 indicadores de la hoja:
 - 19 (media, mediana y moda similares) y 20 (asimetría y curtosis en [−0,5 ; 0,5]) ya estaban; se explicitó la conclusión "no son similares".
 - 21 y 22 agregados: diapositiva 24 y celda In [23] del Colab con el % de datos a 1 y 2 desviaciones, comparado con 68 % y 95 % (criterio ±2 puntos). Edad 81,77 % / 93,95 % · Matrícula 67,46 % / 86,41 % · Arancel 62,91 % / 98,53 %.
 - 23: la diapositiva de normalidad (ahora la 25) concluye con los cinco criterios juntos; ninguna variable es normal.
-- 24 a 29 (presentación): dependen de la exposición; sigue pendiente completar integrantes, asignatura y docente en portada y cierre.
+- 24 a 29 (presentación): dependen de la exposición. Integrantes, sección y docente ya están en portada y cierre.
 
 ### 17-11-2026 · Análisis sin la edad
 - La presentación quitó la diapositiva de "qué miden" asimetría y curtosis, y dejó el análisis de una variable solo con matrícula y arancel (26 diapositivas).
