@@ -123,6 +123,12 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+#histogramas svg.hist{cursor:zoom-in}
+.zoomv{position:absolute;inset:0;z-index:6;background:#09090A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:70px 110px;cursor:zoom-out;animation:peekin .35s cubic-bezier(.2,.7,.2,1) both}
+.zoomv svg{width:100%;height:auto;max-height:860px}
+.zoomv svg text{font-size:13px}
+.zoomv p{font-family:var(--f-mono);font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);margin:0}
+
 .torpedo{position:absolute;left:128px;bottom:34px;max-width:1500px;margin:0;font-size:17px;line-height:1.4;opacity:.42;z-index:2;pointer-events:none;transition:opacity .3s}
 .torpedo b{font-family:var(--f-mono);font-weight:500;font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin-right:6px}
 .slide.light .torpedo{background:rgba(236,235,230,.82);padding:4px 10px;margin-left:-10px;border-radius:6px}
@@ -1055,6 +1061,7 @@ function go(i,fromHash){
   if(cur>=0)slides[cur].classList.remove('active','running','ran');
   if(peekKey)closePeek();
   if(typeof closeTip==='function')closeTip();
+  if(typeof closeZoom==='function')closeZoom();
   cur=i;const s=slides[i];s.classList.add('active');
   document.body.classList.toggle('is-light',s.classList.contains('light'));
   document.getElementById('count').textContent=String(i+1).padStart(2,'0')+' / '+slides.length;
@@ -1080,7 +1087,7 @@ addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=
   else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev()}
   else if(k==='Home')go(0);else if(k==='End')go(slides.length-1);
   else if(k==='n'||k==='N')toggleNotes();else if(k==='f'||k==='F')document.getElementById('fs').click()});
-stage.addEventListener('click',e=>{if(e.target.closest('button,a'))return;if(peekKey){closePeek();return}if(tipEl){closeTip();return}(e.clientX<innerWidth*.25?prev:next)()});
+stage.addEventListener('click',e=>{if(e.target.closest('button,a'))return;if(peekKey){closePeek();return}if(tipEl){closeTip();return}if(zoomEl){closeZoom();return}(e.clientX<innerWidth*.25?prev:next)()});
 let tx=null;addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
 addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx<0?next:prev)();tx=null},{passive:true});
 let idleT;const wake=()=>{document.body.classList.remove('idle');clearTimeout(idleT);idleT=setTimeout(()=>document.body.classList.add('idle'),3000)};addEventListener('mousemove',wake);addEventListener('touchstart',wake,{passive:true});wake();
@@ -1201,6 +1208,20 @@ document.querySelectorAll('[data-peek]').forEach(el=>{
 if(peekEl)peekEl.addEventListener('click',e=>e.stopPropagation());
 document.addEventListener('click',()=>{if(peekKey)closePeek()});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&peekKey)closePeek()});
+
+/* ---------- histogramas a pantalla completa (solo diapositiva de histogramas) ---------- */
+var zoomEl=null;
+function closeZoom(){if(zoomEl){zoomEl.remove();zoomEl=null}}
+document.querySelectorAll('#histogramas svg.hist').forEach(svg=>{
+  svg.addEventListener('click',e=>{e.stopPropagation();closeZoom();
+    const sec=document.getElementById('histogramas');
+    zoomEl=document.createElement('div');zoomEl.className='zoomv';zoomEl.setAttribute('role','dialog');zoomEl.setAttribute('aria-label','Histograma ampliado');
+    const c=svg.cloneNode(true);c.removeAttribute('id');c.classList.remove('out');
+    zoomEl.appendChild(c);const hint=document.createElement('p');hint.textContent='- - media · — mediana · clic o Esc para cerrar';zoomEl.appendChild(hint);
+    zoomEl.addEventListener('click',ev=>{ev.stopPropagation();closeZoom()});
+    sec.appendChild(zoomEl)});
+});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&zoomEl)closeZoom()});
 addEventListener('resize',resize);
 fit();resize();
 const start=slides.findIndex(s=>'#'+s.id===location.hash);
