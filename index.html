@@ -123,6 +123,10 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+.torpedo{position:absolute;left:128px;bottom:34px;max-width:1500px;margin:0;font-size:17px;line-height:1.4;opacity:.42;z-index:2;pointer-events:none;transition:opacity .3s}
+.torpedo b{font-family:var(--f-mono);font-weight:500;font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin-right:6px}
+.slide.light .torpedo{background:rgba(236,235,230,.82);padding:4px 10px;margin-left:-10px;border-radius:6px}
+
 .who{position:absolute;top:52px;right:64px;width:58px;height:58px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:19px;letter-spacing:.06em;opacity:.5;z-index:2;pointer-events:none}
 .who::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1px dashed currentColor;opacity:.45}
 .slide.active .who{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:.6s}
@@ -256,6 +260,7 @@ aside.notes{display:none}
     <p class="small"><span class="muted">Docente</span><br>Arlette Mella Suárez</p>
   </div>
   <aside class="notes">Presentamos el análisis estadístico de la base de matrículas de educación superior 2021 de la región de Arica y Parinacota, la misma base de la primera evaluación. Todo se hizo en Google Colab con Python (pandas, numpy, matplotlib y scikit-learn). En cada paso mostramos el código al lado de su resultado.</aside>
+  <p class="torpedo"><b>Idea:</b> Describir la educación superior de Arica y Parinacota 2021 con estadística descriptiva en Python <span>· Por qué importa: son datos reales de la región, analizados paso a paso con código y resultado.</span></p>
 </section>
 
 <!-- 02 · contexto -->
@@ -270,6 +275,7 @@ aside.notes{display:none}
   <p class="body r muted" style="--d:900;max-width:1200px">Base de matrículas 2021 de la región de Arica y Parinacota, la misma que trabajamos en la Evaluación 1.</p>
   <div class="marquee" aria-hidden="true"><span>ID · GENERO · EDAD · RANGO EDAD · AÑO INGRESO · SEMESTRE INGRESO · TIPO DE INSTITUCION · NOMBRE DE INSTITUCION · ACREDITACION INSTITUCIONAL · PERIODO DE ACREDITACION · AÑOS DE ACREDITACION · NOMBRE CARRERA · REQUISITO INGRESO · VIA DE INGRESO · MODALIDAD · JORNADA · TIPO PLAN CARRERA · NIVEL DE ESTUDIO CARRERA · NIVEL CARRERA · AREA CONOCIMIENTO · DURACION PLAN DE ESTUDIO · DURACION PROCESO TITULACION · DURACION TOTAL CARRERA · VALOR MATRICULA · VALOR ARANCEL · REGION SEDE · PROVINCIA SEDE · COMUNA SEDE ·</span><span>ID · GENERO · EDAD · RANGO EDAD · AÑO INGRESO · SEMESTRE INGRESO · TIPO DE INSTITUCION · NOMBRE DE INSTITUCION · ACREDITACION INSTITUCIONAL · PERIODO DE ACREDITACION · AÑOS DE ACREDITACION · NOMBRE CARRERA · REQUISITO INGRESO · VIA DE INGRESO · MODALIDAD · JORNADA · TIPO PLAN CARRERA · NIVEL DE ESTUDIO CARRERA · NIVEL CARRERA · AREA CONOCIMIENTO · DURACION PLAN DE ESTUDIO · DURACION PROCESO TITULACION · DURACION TOTAL CARRERA · VALOR MATRICULA · VALOR ARANCEL · REGION SEDE · PROVINCIA SEDE · COMUNA SEDE ·</span></div>
   <aside class="notes">La base tiene 14.116 registros, uno por estudiante matriculado, y 28 variables: género, edad, institución, acreditación, carrera, área del conocimiento, valor de matrícula y de arancel, entre otras (son las que pasan abajo). Hay 11 instituciones agrupadas en 4 tipos: centros de formación técnica, institutos profesionales, universidades del CRUCH y universidades privadas.</aside>
+  <p class="torpedo"><b>Resultado:</b> 14.116 estudiantes · 28 variables · 11 instituciones <span>· Por qué importa: es la población completa de la región, así que los porcentajes la representan entera.</span></p>
 </section>
 
 <!-- 03 · parinacota -->
@@ -294,6 +300,7 @@ aside.notes{display:none}
   <div id="peek" class="peek" hidden role="dialog" aria-label="Código pandas"></div>
   <p class="small r" style="--d:2600;position:absolute;left:128px;bottom:96px;background:var(--paper);padding:6px 12px;color:var(--slate);font-family:var(--f-mono);font-size:18px;letter-spacing:.08em">Volcanes Parinacota y Pomerape · Lago Chungará · más de 4.500 m</p>
   <aside class="notes">Antes de los cálculos, una mirada a quiénes son los estudiantes. El 56,6% son mujeres, la mediana de edad es 23 años y casi la mitad tiene entre 20 y 24. Todas las sedes de la base están en la comuna de Arica. Por tipo de institución, las universidades del CRUCH concentran 7.849 matrículas, seguidas por los CFT con 3.594, los IP con 1.430 y las universidades privadas con 1.243. De fondo, los volcanes Parinacota y Pomerape sobre el lago Chungará, en el altiplano de la región.</aside>
+  <p class="torpedo" style="bottom:auto;top:40px"><b>Resultado:</b> mayoría de mujeres (56,6 %), jóvenes (mediana 23 años) y concentrados en el CRUCH <span>· Por qué importa: define a quiénes describen todos los cálculos que vienen.</span></p>
 </section>
 
 <!-- 04 · flujo -->
@@ -312,6 +319,7 @@ aside.notes{display:none}
   </div>
   <p class="body r muted" style="--d:1650">Google Colab · pandas · numpy · matplotlib · scikit-learn</p>
   <aside class="notes">Este es el recorrido completo. Cargamos la base con pandas, medimos la asociación entre matrícula y arancel con covarianza y correlación, lo visualizamos con un gráfico de dispersión, ajustamos un modelo de regresión lineal con su coeficiente de determinación respondimos preguntas de probabilidad con tablas bivariadas y, al final, describimos la forma de cada variable con los coeficientes de asimetría y curtosis.</aside>
+  <p class="torpedo"><b>Idea:</b> cargar → relacionar → modelar → probabilidades → forma <span>· Por qué importa: cada paso usa lo que encontró el anterior.</span></p>
 </section>
 
 <!-- 05 · carga -->
@@ -334,6 +342,7 @@ df</pre></div>
     </div>
   </div>
   <aside class="notes">Con pd.read_excel cargamos el archivo en un DataFrame llamado df. Al mostrarlo, pandas confirma el tamaño: 14.116 filas por 28 columnas. A la derecha están las columnas que usamos: los valores de matrícula y arancel para la asociación y el modelo, y las variables categóricas para las tablas de probabilidad.</aside>
+  <p class="torpedo"><b>Resultado:</b> 14.116 filas × 28 columnas cargadas completas <span>· Por qué importa: confirma que no se perdieron datos antes de analizar.</span></p>
 </section>
 
 <!-- 06 · pregunta -->
@@ -345,6 +354,7 @@ df</pre></div>
     <div><p class="eyebrow" style="opacity:.6">y · dependiente</p><p style="font-family:var(--f-mono);font-size:32px;margin-top:10px">VALOR ARANCEL (PESOS)</p></div>
   </div>
   <aside class="notes">Esta pregunta guía la primera parte. La matrícula es la variable independiente, x, y el arancel es la variable dependiente, y. Queremos saber si cuando sube la matrícula también sube el arancel, con qué fuerza, y si podemos modelarlo con una recta.</aside>
+  <p class="torpedo"><b>Idea:</b> X = matrícula (explica) · Y = arancel (se explica) <span>· Por qué importa: definir bien las variables es la base de la correlación y la regresión.</span></p>
 </section>
 
 <!-- 07 · dispersion -->
@@ -370,6 +380,7 @@ plt.show()</pre></div>
     </div>
   </div>
   <aside class="notes">Con matplotlib dibujamos cada matrícula como un punto: x es la matrícula, y es el arancel. La nube sube hacia la derecha, lo que confirma la relación positiva. Se ven franjas verticales: muchas carreras cobran la misma matrícula pero aranceles distintos, y eso explica por qué la correlación es solo moderada. Aquí cada punto es una combinación matrícula–arancel y su intensidad indica cuántos estudiantes la comparten.</aside>
+  <p class="torpedo"><b>Resultado:</b> la nube sube hacia la derecha, con mucha dispersión <span>· Por qué importa: muestra a simple vista una relación positiva, pero no perfecta.</span></p>
 </section>
 
 <!-- 08 · asociacion -->
@@ -396,6 +407,7 @@ print(corr)</pre></div>
     </div>
   </div>
   <aside class="notes">La covarianza da 30.456.470.119. Es un número enorme porque está en pesos al cuadrado, así que no mide fuerza; lo que importa es el signo: positivo, relación directa. Para medir la fuerza usamos la correlación de Pearson, que va de −1 a +1: r = 0,4996, una correlación positiva moderada. Las partículas del fondo están dibujando una nube con esa misma correlación.</aside>
+  <p class="torpedo"><b>Resultado:</b> covarianza positiva (relación directa) · r = 0,50 (moderada) <span>· Por qué importa: la covarianza da la dirección y la correlación, la fuerza.</span></p>
 </section>
 
 <!-- 09 · regresion -->
@@ -431,6 +443,7 @@ El coeficiente de determinación es 25.0%</p>
     </div>
   </div>
   <aside class="notes">Con np.polyfit de grado 1 ajustamos la recta de mínimos cuadrados, que nos entrega la pendiente y el intercepto. Con np.polyval calculamos el arancel que predice el modelo para cada matrícula, y con r2_score de scikit-learn comparamos esas predicciones con los valores reales. Resultado: pendiente 7,502, intercepto 1.724.716 y R² de 25%. En el fondo, una de cada cuatro partículas se alinea con la recta.</aside>
+  <p class="torpedo"><b>Resultado:</b> pendiente 7,502 · intercepto 1.724.716 · R² 25 % <span>· Por qué importa: permite estimar el arancel a partir de la matrícula y medir qué tan bien lo hace.</span></p>
 </section>
 
 <!-- 10 · interpretacion -->
@@ -445,6 +458,7 @@ El coeficiente de determinación es 25.0%</p>
     </div>
   </div>
   <aside class="notes">La ecuación, en la forma y = a + bx, es y = 1.724.716 + 7,502x: a es el intercepto y b la pendiente. La pendiente dice que por cada peso adicional de matrícula el arancel aumenta en promedio 7,50 pesos. El intercepto indica que, con matrícula cero, el arancel base estimado sería 1.724.716 pesos; en la base sí hay carreras con matrícula 0. El R² de 25% significa que la matrícula sola explica una cuarta parte de la variación del arancel, coherente con la correlación: 0,4996 al cuadrado es aproximadamente 0,25. Hay relación, pero el modelo no basta para predecir el arancel con precisión.</aside>
+  <p class="torpedo"><b>Resultado:</b> +$1 de matrícula → +$7,50 de arancel · la matrícula explica el 25 % <span>· Por qué importa: la matrícula sola no basta para predecir el arancel.</span></p>
 </section>
 
 <!-- 11 · probabilidad -->
@@ -458,6 +472,7 @@ El coeficiente de determinación es 25.0%</p>
   </div>
   <p class="body r muted" style="--d:1150">Punto 12: cada resultado se expresa en porcentaje y se interpreta en el contexto de la región.</p>
   <aside class="notes">En la parte de probabilidades respondimos seis preguntas con tablas bivariadas, usando pd.crosstab con margins=True para tener los totales. Una probabilidad clásica, casos favorables sobre casos totales; una unión, donde hay que restar la intersección; dos intersecciones, que se dividen por el total general; y dos condicionales, donde el universo se reduce al evento que condiciona. Todos los resultados los expresamos en porcentaje y los interpretamos en el contexto de la región.</aside>
+  <p class="torpedo"><b>Idea:</b> simple · unión (o) · intersección (y) · condicional (dado que) <span>· Por qué importa: el total por el que se divide cambia la pregunta.</span></p>
 </section>
 
 <!-- 12 · p-simple -->
@@ -485,6 +500,7 @@ print(f'la probabilidad de que ... '
     </div>
   </div>
   <aside class="notes">Construimos una tabla bivariada de institución por género con pd.crosstab; margins=True agrega la fila y columna All con los totales. Los casos favorables son 7.119 estudiantes de la Universidad de Tarapacá, sobre un total de 14.116. La probabilidad simple es 50,43%: uno de cada dos estudiantes de la región estudia en la U. de Tarapacá. En el fondo, la mitad de las partículas se iluminan.</aside>
+  <p class="torpedo"><b>Resultado:</b> 50,43 %, 1 de cada 2 estudiantes <span>· Por qué importa: una sola universidad concentra la mitad de la matrícula regional.</span></p>
 </section>
 
 <!-- 13 · p-union -->
@@ -515,6 +531,7 @@ print(f'P(Vespertino o No acreditada)'
     </div>
   </div>
   <aside class="notes">Para la unión usamos la tabla de jornada por acreditación. La probabilidad de "A o B" es la de A más la de B menos la intersección: 29,07% de vespertinos, más 16,60% de no acreditadas, menos 11,29% que cumplen ambas. Si no restamos, contaríamos dos veces a esos 1.594 estudiantes. El resultado es 34,38%: un tercio de los estudiantes estudia de vespertino o en una institución no acreditada.</aside>
+  <p class="torpedo"><b>Resultado:</b> 34,38 % · se resta la intersección (11,29 %) <span>· Por qué importa: sin restar, contaríamos dos veces a 1.594 estudiantes.</span></p>
 </section>
 
 <!-- 14 · p-conjunta -->
@@ -544,6 +561,7 @@ print(f'la probabilidad de que ... '
     </div>
   </div>
   <aside class="notes">Cruzamos nivel de carrera con género. Buscamos la intersección: estudiantes que son de género femenino y están en carreras técnicas a la vez, que son 2.469. Como es conjunta, se divide por el total general de 14.116, no por el total de la fila. Resultado: 17,49%. Si dividiéramos por el total de carreras técnicas estaríamos calculando una condicional, que es otra pregunta.</aside>
+  <p class="torpedo"><b>Resultado:</b> 17,49 % · se divide por el total general <span>· Por qué importa: mide cuántos cumplen las dos condiciones a la vez en toda la región.</span></p>
 </section>
 
 <!-- 15 · p-rango -->
@@ -579,6 +597,7 @@ print(f'P(Mujer y 30 o mas) = {e:.2f}%')</pre></div>
     </div>
   </div>
   <aside class="notes">Aquí "al menos 30 años" no es una sola fila de la tabla: hay que sumar los rangos 30 a 34, 35 a 39 y 40 y más, en la columna de mujeres. Eso da 678 más 455 más 588, es decir 1.721 mujeres. Como es una probabilidad conjunta, dividimos por el total general de 14.116, y obtenemos 12,19%.</aside>
+  <p class="torpedo"><b>Resultado:</b> 12,19 % · se suman 3 rangos de edad <span>· Por qué importa: "al menos 30" agrupa varias categorías antes de dividir.</span></p>
 </section>
 
 <!-- 16 · p-condicional -->
@@ -609,6 +628,7 @@ print(f'la probabilidad ... '
     </div>
   </div>
   <aside class="notes">En la condicional ya sabemos algo del estudiante: es del área de Salud. Eso reduce el universo: no dividimos por 14.116, sino por los 2.899 estudiantes de Salud. De ellos, 2.634 están en instituciones acreditadas: 90,86%, nueve de cada diez. En el fondo, la mayoría de las partículas se apagan (quedan solo las de Salud) y de esas se ilumina el 91%.</aside>
+  <p class="torpedo"><b>Resultado:</b> 90,86 % · el total se reduce a Salud (2.899) <span>· Por qué importa: casi todos los estudiantes de Salud están en instituciones acreditadas.</span></p>
 </section>
 
 <!-- 17 · p-decision -->
@@ -635,6 +655,7 @@ Tabla6 = pd.crosstab(df['TIPO DE INSTITUCION'],
     </div>
   </div>
   <aside class="notes">Esta pregunta apoya una decisión: si queremos abrir más cupos vespertinos para personas que trabajan, ¿dónde conviene hacerlo? Usamos crosstab con normalize='index', que calcula la proporción dentro de cada fila; eso es justamente la probabilidad condicional P(Vespertino dado el tipo de institución). En los CFT el 57,96% estudia vespertino, en los IP el 46,57%, en las universidades privadas el 42,80% y en las del CRUCH solo el 10,49%. La demanda vespertina se concentra en los CFT.</aside>
+  <p class="torpedo"><b>Resultado:</b> CFT 58 % vespertino vs. CRUCH 10 % <span>· Por qué importa: la probabilidad condicional sirve para decidir dónde abrir cupos.</span></p>
 </section>
 
 <!-- 18 · histogramas -->
@@ -663,6 +684,7 @@ plt.show()</pre></div>
     </div>
   </div>
   <aside class="notes">Construimos un histograma de 30 intervalos para el valor de la matrícula y el valor del arancel, con título, el eje X con la variable y el eje Y con la frecuencia, es decir, cuántos estudiantes caen en cada intervalo. La línea punteada es la media y la continua, la mediana. En la matrícula, el gran pico está en 155.000 pesos y hay 1.902 estudiantes con matrícula 0 que alargan la cola a la izquierda: la media (131.952) queda bajo la mediana. En el arancel los valores se reparten entre 1,3 y 4 millones sin un pico dominante, por eso es achatado, y la media y la mediana quedan cerca.</aside>
+  <p class="torpedo"><b>Resultado:</b> ninguna variable se reparte de forma pareja <span>· Por qué importa: ver la forma antes de resumir evita conclusiones engañosas.</span></p>
 </section>
 
 <!-- 19 · tendencia -->
@@ -688,6 +710,7 @@ VALOR ARANCEL (PESOS)    2714573.78  2857000.0  3533000</p>
     </div>
   </div>
   <aside class="notes">Calculamos las tres medidas de tendencia central para el valor de la matrícula y el valor del arancel: con mean(), median() y mode() de pandas, juntas en un DataFrame. En la matrícula, la media es 131.952 pesos, pero la mediana y la moda son 155.000: los estudiantes con matrícula cero bajan la media. En el arancel, la media es 2.714.574, la mediana 2.857.000 y la moda 3.533.000. Conclusión: en ninguna de las dos variables la media, la mediana y la moda son similares, y eso ya nos adelanta que las distribuciones no son simétricas.</aside>
+  <p class="torpedo"><b>Resultado:</b> media < mediana ≤ moda en las dos variables <span>· Por qué importa: si las tres no coinciden, los datos no son simétricos.</span></p>
 </section>
 
 <!-- 20 · asimetria-curtosis -->
@@ -719,6 +742,7 @@ VALOR ARANCEL (PESOS)       0.0580   -0.8083</p>
     </div>
   </div>
   <aside class="notes">Calculamos los dos coeficientes para el valor de la matrícula y el valor del arancel. Con df[variables].skew() y .kurt() pandas calcula cada coeficiente por columna, y los juntamos en un DataFrame de resumen. La matrícula tiene asimetría −0,89, negativa, y curtosis 0,09, prácticamente como la normal. El arancel tiene asimetría 0,06, casi simétrico, y curtosis −0,81, platicúrtico.</aside>
+  <p class="torpedo"><b>Resultado:</b> matrícula: As −0,89 (cola izquierda) · arancel: As 0,06 y K −0,81 (achatado) <span>· Por qué importa: indica hacia dónde se cargan los datos y qué tan puntiagudos son.</span></p>
 </section>
 
 <!-- 21 · forma-interpretacion -->
@@ -730,6 +754,7 @@ VALOR ARANCEL (PESOS)       0.0580   -0.8083</p>
   </div>
   <p class="lead r" style="--d:1250;font-size:30px;max-width:1600px">Con asimetría marcada, como en la matrícula, la <b style="font-weight:500">mediana</b> describe mejor el centro que la media.</p>
   <aside class="notes">Resumen de la forma. La matrícula es asimétrica negativa: casi la mitad de los estudiantes, el 49,5%, paga 155.000 pesos, que es a la vez la mediana y la moda, y los 1.902 con matrícula cero bajan la media; su curtosis es casi cero. El arancel es casi simétrico pero platicúrtico: no hay un arancel dominante, los valores se reparten en un rango amplio. La consecuencia práctica: cuando la distribución es asimétrica, la mediana representa mejor al estudiante típico que la media. Además, la concentración de la matrícula en pocos valores es la que produce las franjas verticales de la dispersión y ayuda a entender el R² bajo.</aside>
+  <p class="torpedo"><b>Resultado:</b> matrícula asimétrica negativa · arancel simétrico y achatado <span>· Por qué importa: con asimetría, la mediana describe mejor el centro que la media.</span></p>
 </section>
 
 <!-- 22 · desviacion -->
@@ -757,6 +782,7 @@ VALOR ARANCEL (PESOS)    956750.47  35.24</p>
     </div>
   </div>
   <aside class="notes">La desviación estándar mide cuánto se alejan, en promedio, los datos de su media. Usamos std() de pandas, que calcula la desviación estándar muestral. La matrícula tiene una desviación de 63.718 pesos y el arancel de 956.750 pesos. Como están en escalas distintas, las comparamos con el coeficiente de variación, que es la desviación dividida por la media: la matrícula es más dispersa en relación a su media, con 48%, que el arancel, con 35%.</aside>
+  <p class="torpedo"><b>Resultado:</b> matrícula $63.718 (CV 48 %) · arancel $956.750 (CV 35 %) <span>· Por qué importa: mide qué tan distintos son los valores entre sí.</span></p>
 </section>
 
 <!-- 23 · regla empirica -->
@@ -790,6 +816,7 @@ VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
     </div>
   </div>
   <aside class="notes">Si una variable fuera normal, cerca del 68% de los datos estaría a una desviación estándar de la media, y cerca del 95% a dos desviaciones. Para cada variable calculamos la media y la desviación, y con between() contamos qué porcentaje de los estudiantes cae dentro de cada intervalo. Consideramos que cumple si queda a no más de 2 puntos del valor esperado. En la matrícula, a una desviación hay 67,46%, casi exacto, pero a dos desviaciones baja a 86,41%, porque los 1.902 estudiantes con matrícula cero quedan fuera del intervalo. En el arancel, a una desviación hay 62,91%, por debajo, porque la distribución es achatada, y a dos desviaciones 98,53%, por encima, porque casi no tiene colas. Ninguna variable cumple las dos referencias a la vez.</aside>
+  <p class="torpedo"><b>Resultado:</b> matrícula 67 % y 86 % · arancel 63 % y 99 % (esperado 68 % y 95 %) <span>· Por qué importa: si los datos no calzan con 68 % y 95 %, no son normales.</span></p>
 </section>
 
 <!-- 24 · normalidad -->
@@ -813,6 +840,7 @@ VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
     </figure>
   </div>
   <aside class="notes">Juntamos todos los criterios para concluir si las variables se distribuyen de forma normal. Una distribución normal cumple cinco condiciones a la vez: asimetría y curtosis dentro del intervalo de −0,5 a 0,5; media, mediana y moda similares; cerca del 68% de los datos a una desviación de la media, y cerca del 95% a dos desviaciones. La matrícula cumple dos: curtosis cercana a cero y 67,5% a una desviación, pero es asimétrica negativa y a dos desviaciones solo hay 86%, por los estudiantes con matrícula cero. El arancel cumple una: es simétrico, pero es achatado, solo el 63% está a una desviación y su media, mediana y moda están lejos entre sí. Conclusión: ninguna de las dos variables se distribuye de forma normal, por eso la mediana describe mejor al estudiante típico que la media.</aside>
+  <p class="torpedo"><b>Resultado:</b> ninguna variable tiene forma de campana <span>· Por qué importa: por eso usamos la mediana y no solo el promedio.</span></p>
 </section>
 
 <!-- 25 · conclusiones -->
@@ -827,6 +855,7 @@ VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
     <div class="concl r" style="--d:1350"><p class="num" style="font-size:88px">No normal</p><p class="lead">Ninguna variable tiene forma de campana: la mediana describe mejor el centro.</p></div>
   </div>
   <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: ninguna de las dos variables tiene forma de campana: la matrícula es asimétrica negativa y el arancel achatado, así que la mediana describe mejor al estudiante típico que la media.</aside>
+  <p class="torpedo"><b>Resultado:</b> relación moderada · matrícula concentrada en una universidad · datos no normales <span>· Por qué importa: responde la pregunta inicial con evidencia.</span></p>
 </section>
 
 <!-- 26 · cierre -->
@@ -835,6 +864,7 @@ VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
   <p class="lead r" style="--d:1600;font-size:48px;font-family:var(--f-display);font-style:italic">¿Preguntas?</p>
   <p class="small r muted" style="--d:1800;text-align:center">Jesús Cárdenas · Ramón Osorio · Lucas Saldivia · DUOC UC</p>
   <aside class="notes">Gracias por su atención. Quedamos atentos a sus preguntas; si quiere, podemos abrir el Colab y ejecutar cualquiera de las celdas en vivo.</aside>
+  <p class="torpedo"><b>Apoyo:</b> todo el código está en el Colab y en GitHub <span>· Por qué importa: se puede ejecutar cualquier celda en vivo.</span></p>
 </section>
 
 </main>
