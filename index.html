@@ -123,6 +123,8 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+.concl-lbl{white-space:nowrap;font-family:var(--f-mono);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-top:6px}
+
 #histogramas svg.hist{cursor:zoom-in}
 .zoomv{position:absolute;inset:0;z-index:6;background:#09090A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:70px 110px;cursor:zoom-out;animation:peekin .35s cubic-bezier(.2,.7,.2,1) both}
 .zoomv svg{width:100%;height:auto;max-height:860px}
@@ -212,7 +214,7 @@ aside.notes{display:none}
 .light .chart text{fill:var(--slate)} .light .chart .ax{stroke:rgba(18,18,18,.4)} .light .chart .gr{stroke:rgba(18,18,18,.08)} .light .chart .pt{fill:var(--ink)} .light .chart .reg{stroke:var(--ink)}
 .slide.active .chart.now .pt{animation:pop .6s cubic-bezier(.2,1.4,.4,1) forwards;animation-delay:calc(var(--i) * 8ms + 300ms)}
 .light .card{border-top:1px solid rgba(18,18,18,.3)}
-.concl{display:grid;grid-template-columns:330px 1fr;align-items:baseline;gap:40px;padding:18px 0;border-bottom:1px solid rgba(18,18,18,.16)}
+.concl{display:grid;grid-template-columns:330px 1fr;align-items:center;gap:40px;padding:12px 0;border-bottom:1px solid rgba(18,18,18,.16)}
 .concl:last-child{border-bottom:0}
 /* forma de la distribución */
 .shape-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:72px;min-height:0}
@@ -853,12 +855,12 @@ VALOR ARANCEL (PESOS)    62.91  98.53   -5.09    3.53</p>
 <section class="slide light" id="conclusiones" data-mode="waves" data-enter="wipe">
   <div class="head"><p class="eyebrow r" style="--d:300">Conclusiones</p><h2 class="h2 r" style="--d:420">Lo que nos dicen los <em>datos</em></h2></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
-    <div class="concl r" style="--d:600"><p class="num" style="font-size:88px">r = 0,50</p><p class="lead">Matrícula y arancel se mueven juntos: relación positiva moderada.</p></div>
-    <div class="concl r" style="--d:750"><p class="num" style="font-size:88px">R² 25%</p><p class="lead">La matrícula sola no basta para predecir el arancel.</p></div>
-    <div class="concl r" style="--d:900"><p class="num" style="font-size:88px">50,43%</p><p class="lead">La U. de Tarapacá concentra 1 de cada 2 matrículas de la región.</p></div>
-    <div class="concl r" style="--d:1050"><p class="num" style="font-size:88px">17,49%</p><p class="lead">del total son mujeres en Carreras Técnicas.</p></div>
-    <div class="concl r" style="--d:1200"><p class="num" style="font-size:88px">90,86%</p><p class="lead">En Salud, 9 de cada 10 estudian en instituciones acreditadas.</p></div>
-    <div class="concl r" style="--d:1350"><p class="num" style="font-size:88px">No normal</p><p class="lead">Ninguna variable tiene forma de campana: la mediana describe mejor el centro.</p></div>
+    <div class="concl r" style="--d:600"><div><p class="num" style="font-size:68px;white-space:nowrap">r = 0,50</p><p class="concl-lbl">Correlación de Pearson</p></div><p class="lead">Matrícula y arancel se mueven juntos: relación positiva moderada.</p></div>
+    <div class="concl r" style="--d:750"><div><p class="num" style="font-size:68px;white-space:nowrap">R² 25%</p><p class="concl-lbl">Coef. de determinación</p></div><p class="lead">La matrícula sola no basta para predecir el arancel.</p></div>
+    <div class="concl r" style="--d:900"><div><p class="num" style="font-size:68px;white-space:nowrap">50,43%</p><p class="concl-lbl">Probabilidad simple</p></div><p class="lead">La U. de Tarapacá concentra 1 de cada 2 matrículas de la región.</p></div>
+    <div class="concl r" style="--d:1050"><div><p class="num" style="font-size:68px;white-space:nowrap">17,49%</p><p class="concl-lbl">Prob. intersección</p></div><p class="lead">del total son mujeres en Carreras Técnicas.</p></div>
+    <div class="concl r" style="--d:1200"><div><p class="num" style="font-size:68px;white-space:nowrap">90,86%</p><p class="concl-lbl">Prob. condicional</p></div><p class="lead">En Salud, 9 de cada 10 estudian en instituciones acreditadas.</p></div>
+    <div class="concl r" style="--d:1350"><div><p class="num" style="font-size:68px;white-space:nowrap">No normal</p><p class="concl-lbl">Análisis de normalidad</p></div><p class="lead">Ninguna variable tiene forma de campana: la mediana describe mejor el centro.</p></div>
   </div>
   <aside class="notes">Existe una relación positiva moderada entre matrícula y arancel, pero el modelo lineal solo explica el 25% de la variación, así que el arancel depende también de otras cosas. En probabilidad, la Universidad de Tarapacá concentra la mitad de las matrículas; el 17,49% de los estudiantes son mujeres en carreras técnicas; y en Salud más del 90% estudia en instituciones acreditadas. Por último, la forma de las variables: ninguna de las dos variables tiene forma de campana: la matrícula es asimétrica negativa y el arancel achatado, así que la mediana describe mejor al estudiante típico que la media.</aside>
   <p class="torpedo"><b>Resultado:</b> relación moderada · matrícula concentrada en una universidad · datos no normales <span>· Por qué importa: responde la pregunta inicial con evidencia.</span></p>
