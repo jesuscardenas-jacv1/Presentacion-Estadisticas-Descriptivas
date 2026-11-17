@@ -146,3 +146,8 @@ Revisión de la presentación contra los 18 indicadores de la hoja:
 - 21 y 22 agregados: diapositiva 24 y celda In [23] del Colab con el % de datos a 1 y 2 desviaciones, comparado con 68 % y 95 % (criterio ±2 puntos). Edad 81,77 % / 93,95 % · Matrícula 67,46 % / 86,41 % · Arancel 62,91 % / 98,53 %.
 - 23: la diapositiva de normalidad (ahora la 25) concluye con los cinco criterios juntos; ninguna variable es normal.
 - 24 a 29 (presentación): dependen de la exposición; sigue pendiente completar integrantes, asignatura y docente en portada y cierre.
+
+### 17-11-2026 · Análisis sin la edad
+- La presentación quitó la diapositiva de "qué miden" asimetría y curtosis, y dejó el análisis de una variable solo con matrícula y arancel (26 diapositivas).
+- Colab alineado: histogramas, medidas, asimetría y curtosis, desviación, regla empírica y conclusión de normalidad sin EDAD; re-ejecutado completo y salidas verificadas contra la presentación.
+- `graficos/histogramas_asimetria_curtosis.png` regenerado con las dos variables.
