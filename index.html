@@ -123,6 +123,10 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+.who{position:absolute;top:52px;right:64px;width:58px;height:58px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:19px;letter-spacing:.06em;opacity:.5;z-index:2;pointer-events:none}
+.who::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1px dashed currentColor;opacity:.45}
+.slide.active .who{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:.6s}
+
 .wf-note{font-size:19px;line-height:1.4;color:var(--mist);opacity:.75;margin-top:12px;max-width:380px}
 
 .chart .hit{fill:transparent;cursor:crosshair;outline:none}
@@ -1009,6 +1013,10 @@ document.querySelectorAll('.waffle').forEach(w=>{const on=+w.dataset.on;for(let 
 /* ---------- escenario y navegación ---------- */
 const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')];
 let cur=-1,timers=[];
+/* ---------- iniciales de quién presenta cada diapositiva (Lucas → Jesús → Ramón) ---------- */
+const WHO=[['LS','Lucas Saldivia'],['JC','Jesús Cárdenas'],['RO','Ramón Osorio']];
+slides.forEach((sl,i)=>{const [ini,nom]=WHO[i%3];const b=document.createElement('div');b.className='who';b.textContent=ini;b.setAttribute('aria-label','Presenta '+nom);b.title=nom;sl.appendChild(b)});
+
 function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`;stage.dataset.s=s}
 function countUp(e,delay){const to=+e.dataset.count,d=+e.dataset.dec||0;e.textContent=fmt(0,d);timers.push(setTimeout(()=>{const t0=performance.now(),dur=1400;const step=n=>{const k=Math.min(1,(n-t0)/dur),v=to*(1-Math.pow(1-k,4));e.textContent=fmt(k<1?v:to,d);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)},delay))}
 function go(i,fromHash){
