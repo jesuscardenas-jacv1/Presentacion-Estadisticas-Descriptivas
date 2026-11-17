@@ -123,6 +123,8 @@ body.is-light #bar button:hover,body.is-light #bar button:focus-visible{color:va
 #notes{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);width:min(820px, calc(100% - 32px));box-sizing:border-box;background:rgba(9,9,10,.92);color:var(--bone);border:1px solid rgba(243,242,238,.2);border-radius:14px;padding:18px 22px;font-size:15px;line-height:1.55;z-index:6;max-height:40vh;overflow:auto}
 #notes b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:6px}
 aside.notes{display:none}
+.wf-note{font-size:19px;line-height:1.4;color:var(--mist);opacity:.75;margin-top:12px;max-width:380px}
+
 .chart .hit{fill:transparent;cursor:crosshair;outline:none}
 .chart .pt.sel{stroke:var(--bone);stroke-width:3;fill:var(--bone);opacity:1!important}
 .light .chart .pt.sel{stroke:var(--ink);fill:var(--ink)}
@@ -474,7 +476,7 @@ print(f'la probabilidad de que ... '
         <tr><td>Total (All)</td><td>7993</td><td>6123</td><td class="key">14116</td></tr></table>
       <div class="out" style="--d:300;display:flex;gap:40px;align-items:center;margin-top:10px">
         <div class="waffle" data-on="50"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="50.43" data-dec="2" data-on="run">50,43</span>%</p><p class="body muted" style="margin-top:10px">7.119 / 14.116<br>≈ 1 de cada 2 estudiantes</p></div>
+        <div><p class="num" style="font-size:120px"><span data-count="50.43" data-dec="2" data-on="run">50,43</span>%</p><p class="body muted" style="margin-top:10px">7.119 / 14.116<br>≈ 1 de cada 2 estudiantes</p><p class="wf-note">De cada 100 estudiantes de la región, 50 están en la U. de Tarapacá.</p></div>
       </div>
     </div>
   </div>
@@ -504,7 +506,7 @@ print(f'P(Vespertino o No acreditada)'
         <tr><td>Total (All)</td><td>11773</td><td class="key">2343</td><td>14116</td></tr></table>
       <div class="out" style="--d:350;display:flex;gap:40px;align-items:center">
         <div class="waffle" data-on="34"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="34.38" data-dec="2" data-on="run">34,38</span>%</p><p class="body muted" style="margin-top:10px">29,07% + 16,60% − 11,29%<br>se resta la intersección</p></div>
+        <div><p class="num" style="font-size:120px"><span data-count="34.38" data-dec="2" data-on="run">34,38</span>%</p><p class="body muted" style="margin-top:10px">29,07% + 16,60% − 11,29%<br>se resta la intersección</p><p class="wf-note">De cada 100 estudiantes, 34 estudian de vespertino o en una institución no acreditada.</p></div>
       </div>
     </div>
   </div>
@@ -533,7 +535,7 @@ print(f'la probabilidad de que ... '
       <p class="small muted out" style="--d:200">Se omiten Magíster, Doctorado y Postítulo (128 en total).</p>
       <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
         <div class="waffle" data-on="17"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="17.49" data-dec="2" data-on="run">17,49</span>%</p><p class="body muted" style="margin-top:10px">2.469 / 14.116<br>intersección ÷ total general</p></div>
+        <div><p class="num" style="font-size:120px"><span data-count="17.49" data-dec="2" data-on="run">17,49</span>%</p><p class="body muted" style="margin-top:10px">2.469 / 14.116<br>intersección ÷ total general</p><p class="wf-note">De cada 100 estudiantes, 17 son mujeres y además estudian una carrera técnica.</p></div>
       </div>
     </div>
   </div>
@@ -598,7 +600,7 @@ print(f'la probabilidad ... '
       <p class="small muted out" style="--d:200">Solo la columna Salud, de las 10 áreas.</p>
       <div class="out" style="--d:300;display:flex;gap:40px;align-items:center">
         <div class="waffle" data-on="91"></div>
-        <div><p class="num" style="font-size:120px"><span data-count="90.86" data-dec="2" data-on="run">90,86</span>%</p><p class="body muted" style="margin-top:10px">2.634 / 2.899<br>el universo se reduce a Salud</p></div>
+        <div><p class="num" style="font-size:120px"><span data-count="90.86" data-dec="2" data-on="run">90,86</span>%</p><p class="body muted" style="margin-top:10px">2.634 / 2.899<br>el universo se reduce a Salud</p><p class="wf-note">De cada 100 estudiantes de Salud, 91 estudian en una institución acreditada.</p></div>
       </div>
     </div>
   </div>
